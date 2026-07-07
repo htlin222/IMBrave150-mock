@@ -1,0 +1,4 @@
+numpy>=1.26
+pandas>=2.0
+lifelines>=0.27
+matplotlib>=3.8

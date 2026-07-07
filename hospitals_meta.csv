@@ -1,0 +1,11 @@
+hospital_id,hospital_name,hospital_type,hospital_region,ehr_vendor,n_patients
+H01,Northshore University,Academic,Asia excluding Japan,Alpha,320
+H02,Riverside General,Community,Rest of World,Beta,285
+H03,Metropolitan Cancer Ctr,Academic,Asia excluding Japan,Gamma,240
+H04,St Aldys Community,Community,Rest of World,Alpha,95
+H05,Lakeside Regional,Regional,Asia excluding Japan,Beta,180
+H06,Harbor City Medical,Academic,Rest of World,Gamma,210
+H07,Pinecrest Community,Community,Asia excluding Japan,Alpha,75
+H08,Eastgate University,Academic,Rest of World,Beta,155
+H09,Valley District,Community,Asia excluding Japan,Gamma,110
+H10,Summit General,Regional,Rest of World,Alpha,130
