@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>How I do real-world data analysis with Claude Code — IMbrave150</title>
+  <link rel="stylesheet" href="assets/studio.css">
+  <link rel="stylesheet" href="assets/deck.css">
+</head>
+<body>
+
+  <!-- deck: scenes are injected by deck.js from STORYBOARD -->
+  <div id="deck"></div>
+
+  <!-- top-left scene counter -->
+  <div id="scene-counter" class="scene-counter">00 / 00</div>
+
+  <!-- top-right controls (fade until hover) -->
+  <div id="hud">
+    <button data-act="prev" title="Previous (←)">←</button>
+    <button data-act="next" title="Next (→)">→</button>
+    <button data-act="overview" title="Overview (O)">Overview</button>
+    <button data-act="speaker" title="Presenter mode (S)">Presenter</button>
+    <button data-act="full" title="Fullscreen (F)">⤢</button>
+    <button data-act="help" title="Shortcuts (?)">?</button>
+  </div>
+
+  <!-- bottom progress + chapter ticks -->
+  <div id="progress"><div class="fill"></div></div>
+  <div id="chapters"></div>
+
+  <!-- presenter (speaker) pane -->
+  <aside id="speaker">
+    <div class="sp-clock"><span class="big run">00:00</span><span class="sub">elapsed · target ~60 min</span></div>
+    <div class="sp-now-label">Now presenting <button class="sp-lang" data-act="lang" title="Toggle notes language (i)">中文</button></div>
+    <div class="sp-title">—</div>
+    <div class="sp-act">—</div>
+    <div class="sp-notes"></div>
+    <div class="sp-step">—</div>
+    <div class="sp-next">Up next<div class="nx">—</div></div>
+    <div class="sp-bar">
+      <button data-act="prev">← Back</button>
+      <button data-act="next">Next →</button>
+      <button data-act="speaker">Exit presenter</button>
+    </div>
+  </aside>
+
+  <!-- keyboard help overlay -->
+  <div id="help">
+    <div class="card">
+      <h3>Keyboard</h3>
+      <div class="kb">
+        <kbd>→ / Space</kbd><span class="d">Next beat / next scene</span>
+        <kbd>←</kbd><span class="d">Previous beat / scene</span>
+        <kbd>↑ / ↓</kbd><span class="d">Jump whole scene</span>
+        <kbd>S</kbd><span class="d">Presenter mode (notes + clock)</span>
+        <kbd>i</kbd><span class="d">Toggle speaker notes 中/EN</span>
+        <kbd>O</kbd><span class="d">Overview grid</span>
+        <kbd>F</kbd><span class="d">Fullscreen</span>
+        <kbd>C</kbd><span class="d">Chapter dots</span>
+        <kbd>Home / End</kbd><span class="d">First / last scene</span>
+        <kbd>?</kbd><span class="d">This help</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- click-to-zoom dialog for conversation blocks -->
+  <div id="zoom"><button class="zclose">Close <svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button><div class="zcard"></div></div>
+
+  <script src="assets/storyboard.js"></script>
+  <script src="assets/deck.js"></script>
+</body>
+</html>
