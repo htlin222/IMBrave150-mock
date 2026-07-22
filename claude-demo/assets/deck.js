@@ -35,6 +35,59 @@
   let autoTimer = null;    // session auto-play timer
   const started = Date.now();
 
+  /* ---------- sound fx (Web Audio synth, self-contained, opt-in) ----------
+     No audio files — every sound is a short enveloped oscillator tone, so the
+     deck stays 100% self-contained. Off by default (a talk shouldn't beep by
+     surprise); toggle with M or the HUD speaker. The AudioContext is created
+     on that first user gesture, satisfying browser autoplay policy. */
+  const sfx = (function () {
+    let ctx = null, master = null, on = false, lastKey = 0;
+    function ensure() {
+      if (ctx) return;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      ctx = new AC();
+      master = ctx.createGain();
+      master.gain.value = 0.9;
+      master.connect(ctx.destination);
+    }
+    function tone(freq, dur, type, peak, when) {
+      if (!ctx) return;
+      const t0 = when || ctx.currentTime;
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = type || "sine";
+      o.frequency.setValueAtTime(freq, t0);
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(peak, t0 + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g); g.connect(master);
+      o.start(t0); o.stop(t0 + dur + 0.02);
+    }
+    const now = () => (ctx ? ctx.currentTime : 0);
+    return {
+      get on() { return on; },
+      toggle() {
+        on = !on;
+        if (on) { ensure(); if (ctx && ctx.state === "suspended") ctx.resume(); tone(880, 0.10, "sine", 0.12); }
+        return on;
+      },
+      key() {                                            // one keystroke while typing
+        if (!on) return;
+        const t = (window.performance && performance.now()) || 0;
+        if (t - lastKey < 55) return;                    // throttle machine-gun typing
+        lastKey = t; ensure();
+        tone(1500 + Math.random() * 300, 0.028, "square", 0.014);
+      },
+      ready() { if (!on) return; ensure(); tone(660, 0.10, "sine", 0.06); tone(990, 0.12, "sine", 0.05, now() + 0.06); },
+      send()  { if (!on) return; ensure(); tone(520, 0.10, "triangle", 0.09); tone(780, 0.12, "triangle", 0.07, now() + 0.05); },
+      think() { if (!on) return; ensure(); tone(300, 0.20, "sine", 0.05); },
+      tool()  { if (!on) return; ensure(); tone(430, 0.05, "square", 0.04); },   // low beep as a tool starts (Running)
+      ran()   { if (!on) return; ensure(); tone(720, 0.06, "sine", 0.05); },     // higher confirm as it resolves (Ran)
+      done()  { if (!on) return; ensure(); const t = now(); tone(660, 0.10, "sine", 0.07, t); tone(880, 0.10, "sine", 0.07, t + 0.08); tone(1320, 0.16, "sine", 0.06, t + 0.16); },
+      scene() { if (!on) return; ensure(); tone(200, 0.12, "sine", 0.05); tone(400, 0.14, "sine", 0.035, now() + 0.03); },
+    };
+  })();
+
   /* ---------- build scenes ---------- */
   SB.scenes.forEach((sc, i) => {
     const el = document.createElement("section");
@@ -97,13 +150,14 @@
     document.body.classList.add("prompt-focus");
     let i = 0;
     (function tick() {
-      if (i <= text.length) { node.textContent = text.slice(0, i); i++; setTimeout(tick, 20 + Math.random() * 30); }
+      if (i <= text.length) { node.textContent = text.slice(0, i); sfx.key(); i++; setTimeout(tick, 20 + Math.random() * 30); }
       else {
         // Typed and PENDING: keep the caret, the zoom and the dim, and wait
         // for the presenter to send. The typing guard releases so the next →
         // triggers the actual send + thinking animation.
         typing = false;
         document.body.classList.add("prompt-ready");
+        sfx.ready();
         done && done();
       }
     })();
@@ -115,6 +169,7 @@
   function toolCount(el) { return el.querySelectorAll(".sess-beats .tool-row").length; }
 
   function sendPrompt(el) {
+    sfx.send();
     const promptNode = el.querySelector("[data-type]");
     if (promptNode) promptNode.classList.remove("typing");
     const mac = el.querySelector(".mac"); if (mac) mac.classList.remove("zoom");
@@ -133,6 +188,7 @@
     const secs = 3 + Math.floor(Math.random() * 4);
     if (think) {
       think.innerHTML = `<div class="sess-think"><span class="spark">${SPARK}</span><span class="shimmer-label">Thinking…</span></div>`;
+      sfx.think();
       scrollToLast(el);
       setTimeout(() => {
         think.innerHTML = `<div class="sess-think collapsed"><span class="spark-mini">${SPARK}</span> Thought for ${secs}s</div>`;
@@ -151,6 +207,7 @@
     const s = el.querySelector(".sess-status-slot");
     if (s) s.innerHTML = `<div class="sess-status done"><span class="spark-mini">${SPARK}</span> Done · ${toolCount(el)} tool ${toolCount(el) === 1 ? "call" : "calls"}</div>`;
     const box = el.querySelector(".cc-box"); if (box) box.classList.remove("generating");
+    sfx.done();
   }
 
   /* reveal every response beat at step s; animate tool rows Running→Ran */
@@ -164,11 +221,13 @@
         const verb = row.querySelector(".verb");
         row.classList.add("running", "pending");
         if (verb) verb.textContent = "Running";
+        sfx.tool();
         setTimeout(() => {
           row.classList.remove("running", "pending");
           row.classList.add("open");
           if (verb) verb.textContent = "Ran";
           detail.classList.remove("pending");
+          sfx.ran();
           scrollToLast(el);
         }, 780 + Math.random() * 260);
       }
@@ -256,6 +315,7 @@
     // a focused HUD/nav button would otherwise swallow the first Space/Enter
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
     i = Math.max(0, Math.min(SB.scenes.length - 1, i));
+    if (i !== cur) sfx.scene();
     cur = i; step = 0; sent = false; typing = false;
     renderScene(true);
     const el = sceneEls[cur];
@@ -404,6 +464,8 @@
   function toggleFull() { if (!document.fullscreenElement) document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); else document.exitFullscreen && document.exitFullscreen(); }
   const help = document.getElementById("help");
   function toggleHelp() { help.classList.toggle("show"); }
+  const soundBtn = document.querySelector('[data-act="sound"]');
+  function toggleSound() { sfx.toggle(); if (soundBtn) { soundBtn.textContent = sfx.on ? "🔊" : "🔇"; soundBtn.classList.toggle("on", sfx.on); } }
 
   /* ---------- keyboard ---------- */
   document.addEventListener("keydown", (e) => {
@@ -430,6 +492,7 @@
         else { notesLang = notesLang === "en" ? "zh" : "en"; renderSpeaker(); }
         break;
       case "f": case "F": toggleFull(); break;
+      case "m": case "M": toggleSound(); break;
       case "o": case "O": toggleOverview(); break;
       case "c": case "C": chapters.classList.toggle("show"); break;
       case "?": toggleHelp(); break;
@@ -439,6 +502,7 @@
   document.querySelectorAll("[data-act]").forEach(b => b.addEventListener("click", () => {
     const a = b.dataset.act;
     if (a === "speaker") toggleSpeaker(); else if (a === "full") toggleFull(); else if (a === "overview") toggleOverview();
+    else if (a === "sound") toggleSound();
     else if (a === "help") toggleHelp(); else if (a === "prev") prev(); else if (a === "next") next();
     else if (a === "lang") { notesLang = notesLang === "en" ? "zh" : "en"; renderSpeaker(); }
     b.blur();   // release focus so keyboard keeps controlling the deck
