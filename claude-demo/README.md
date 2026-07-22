@@ -1,5 +1,7 @@
 # How I do real-world data analysis with Claude Code — presentation deck
 
+**Presenter:** 林協霆 (Hsieh-Ting Lin) · 和信治癌中心腫瘤內科部 (Department of Oncology, Koo Foundation Sun Yat-Sen Cancer Center)
+
 A fullscreen, self-contained HTML slide deck (~60 min) that walks an audience
 through a complete real-world analysis of the synthetic **IMbrave150** cohort:
 data aggregation → propensity-score matching → survival → subgroups →
