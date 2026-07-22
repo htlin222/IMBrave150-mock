@@ -110,6 +110,7 @@
         <div class="item"><div class="k">Case study</div><div class="v">IMbrave150 (synthetic)</div></div>
         <div class="item"><div class="k">Endpoint</div><div class="v">Overall survival, HCC</div></div>
         <div class="item"><div class="k">Runtime</div><div class="v">~60 minutes</div></div>
+        <div class="item"><div class="k">Presenter</div><div class="v">林協霆 · 和信治癌中心腫瘤內科部</div></div>
       </div>`,
 		notes: `<ul>
       <li>Open warm. This is a <b>process</b> talk, not a results talk. The goal: the audience leaves knowing <b>how</b> to drive Claude Code through a full analysis.</li>
