@@ -21,3 +21,7 @@ hospitals_10sites.zip
 
 # Cloudflare Pages / wrangler local cache & build artifacts
 .wrangler/
+
+# Claude Code local settings + demo timing log
+.claude/settings.local.json
+.claude/live-demo-timing.log
