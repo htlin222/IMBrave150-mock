@@ -1,4 +1,16 @@
-numpy>=1.26
-pandas>=2.0
-lifelines>=0.27
-matplotlib>=3.8
+# 版本刻意釘死：學員下載 release 之後建出來的環境，要和講者台上那台一模一樣。
+#
+# 最要緊的是 lifelines 0.30.0 + numpy 2.5.1 這組——它會讓
+# lifelines.plotting.add_at_risk_counts() 拋 TypeError。那不是壞掉，
+# 是教材的前提：live-demo/README.md 的全域硬性約束第 1 條、以及 Mission 3.2
+# 的手工替代碼，都是為這個情況寫的。放寬成 lifelines>=0.30.3 會讓那個函式
+# 恢復正常，那一關的教學點就消失了。
+#
+# 另外 lifelines 0.30.3 會把 pandas 壓回 2.x；要 pandas 3.x 就得留在 0.30.0。
+#
+# 這組合已驗證：乾淨 venv 安裝成功，且重現核心數字
+# （naive HR 0.505、706 配對、matched OS HR 0.578）。
+numpy==2.5.1
+pandas==3.0.3
+lifelines==0.30.0
+matplotlib==3.11.0
