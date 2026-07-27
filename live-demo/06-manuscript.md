@@ -118,6 +118,22 @@ Methods ─→ Results ─→ Discussion ─→ Introduction ─→ Conclusions 
 
 ---
 
+## 🔀 岔路：現場 60 分鐘走短路線的，從這裡跳到 Mission 6.9-live
+
+**時間夠、或在做工作坊** → 照順序往下做 6.3 → 6.8 → 6.9。
+
+**現場只有 60 分鐘** → **直接跳到本檔最後的 [Mission 6.9-live](#mission-69-live)**，
+不要做 6.3–6.8。跳過去之前對觀眾說一句：
+
+> 「完整的 Discussion、Introduction、Abstract、Title 和引用驗證都在 repo 的 06 章，
+> 現在我要直接跳到這一整場真正的論點——**用程式稽核我剛剛寫的每一個數字**。」
+
+⛔ **不要在短路線上跑 `--mission 6.9`。** 那一關會檢查 Abstract / Introduction /
+Discussion / Conclusions / References 是否齊全，而那些正是你跳過的 6.3–6.8 的產出。
+短路線的驗收指令是 `--mission 6.9-live`。
+
+---
+
 ## Mission 6.3 — Discussion：把限制寫滿
 
 **目標**：`workspace/manuscript/discussion.md`
@@ -323,6 +339,13 @@ curl -s "https://api.crossref.org/works/<DOI>" -H "$UA"
 ### 任務
 
 > 1. 掃過 `introduction.md` / `discussion.md` 裡所有 `[@key]` 佔位，列出你**想引用**的文獻。
+>
+>    ⚡ **這一關最值得派 subagent**：第 2 步對每一筆文獻是完全獨立的網路 I/O，
+>    序列跑最慢。**一筆文獻一個 subagent**，各自 WebSearch → Crossref 驗 →
+>    回報「驗過（附六個書目欄位）／驗不過」，你再彙整成 `refs_validated.csv`。
+>    ⛔ 派工時明確寫：**禁止讀 `live-demo/` 底下任何檔案；沒查到就回報查不到，
+>    不准自己生一個 DOI 填上去。** 驗不過的一律從稿子裡刪掉——以你彙整後跑的驗收為準。
+>
 > 2. 每一筆都做兩步：
 >    - **找**：用 WebSearch 查該主題的實際文獻（不要憑記憶生 DOI）。
 >    - **證**：拿到 DOI 後打 Crossref API 驗證：
@@ -448,3 +471,74 @@ cd live-demo && ../.venv/bin/python verify/ch06.py --mission 6.9
 > 全部跑出來、全部被外部資料庫對過、全部剛剛被稽核過一次。」
 
 下一關：[07-review.md](07-review.md) — 讓它自己審自己的稿。
+
+---
+
+<a id="mission-69-live"></a>
+
+## Mission 6.9-live — 短路線收尾：組裝 + 數字稽核 ⭐
+
+> **只有走現場 60 分鐘短路線的人做這一關**（6.2 之後直接跳來這裡）。
+> 走完整路線的人請做本檔上面的 **Mission 6.9**，不要做這關。
+
+**目標**：`workspace/manuscript/manuscript-live.md`，然後**用程式抓出幻覺數字**。
+
+短路線只寫了 Methods 和 Results，所以這份手稿**沒有** Abstract、Introduction、
+Discussion、Conclusions、References——這是預期的，驗收不會檢查它們。
+但**數字稽核的嚴格度與完整版一模一樣**，這才是整場的論點。
+
+### 任務
+
+> 1. 組裝 `workspace/manuscript/manuscript-live.md`，依序：
+>    工作標題（`# ` 開頭，一行就好，不必是 Mission 6.7 那種打磨過的標題）、
+>    **Methods**（貼 `methods.md`）、**Results**（貼 `results.md`）、
+>    **Data and code availability**、**Synthetic data disclaimer**、
+>    **Figure legends**（4 張）。
+>
+> 2. 做數字出處對照表 `workspace/manuscript/claims.csv`（欄位與完整版相同）：
+>    ```
+>    claim_id, statement, value, source_file, source_key
+>    C01, Pooled cohort size, 1800, pooled.csv, nrow
+>    C04, Naive OS hazard ratio, 0.505, naive_hr.json, hr
+>    C08, Caliper on logit propensity score, 0.114, psm.py, 0.2*SD(logit_ps)
+>    …
+>    ```
+>    **Methods 與 Results 裡每一個實質數字都要有一列**（短路線至少 8 列）。
+>
+> 3. 跑稽核。它做三件事：
+>    - `claims.csv` 每個 value 是否真的等於來源檔裡的值
+>    - 手稿裡是否有**沒有出處**的類結果數字（幻覺偵測）
+>    - 合成資料聲明與 ATT／未配對說明是否還在（趕時間最先被犧牲的兩項）
+
+### ⚠️ 地雷
+
+1. 🔴 **檔名是 `manuscript-live.md`，不是 `manuscript.md`。**
+   分開命名是刻意的：這樣事後補做完整路線時，`--mission 6.9` 會正確地 SKIP 而不是 FAIL。
+2. 🔴 **稽核用「書寫精度」比對**：你寫 `0.58`，它會接受 `0.578`；
+   你寫 `0.612`，它**不會**接受 `0.61`。想模糊帶過是行不通的。
+3. 🔴 **不要因為趕時間就把數字「潤」掉。** 把 66% 寫成「大多數」、把全距省略——
+   這正是稽核要抓的東西。
+4. **`claims.csv` 不是事後補的裝飾。** 找不到來源的數字，**就是編的**。
+5. **合成資料聲明不可省。** 它在 Methods 開頭就該有（Mission 6.1 已經要求）。
+
+### 驗收
+
+```bash
+cd live-demo && ../.venv/bin/python verify/ch06.py --mission 6.9-live
+```
+
+### 🆘 卡住時
+
+稽核抓到「無來源數字」時會印出該數字與所在句子。
+**不要去改稽核腳本**，去改手稿或去補跑分析。
+
+---
+
+## 🎤 停 — 講者接話（短路線的收場白）
+
+`⏸ Mission 6.9-live 完成，等候指示。`
+
+> 講者：
+> 「今天沒有一個數字是我打字打進去的。全部跑出來、剛剛被程式稽核過一次。
+> 剩下的 Discussion、Abstract、引用驗證、四個審稿人、build 成 PDF——
+> 都在這個 repo 的 06–08 章，回去可以自己跑完。」

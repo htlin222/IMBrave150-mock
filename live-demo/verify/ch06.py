@@ -408,29 +408,15 @@ def _scan(text, allowed):
     return bad
 
 
-def m6_9(c):
-    t = _read(c, "manuscript.md")
-    c.ok(f"manuscript.md 存在（{len(t)} 字元）")
+def _claims_audit(c, t, min_rows):
+    """claims.csv 出處對照 + 幻覺偵測。6.9 與 6.9-live 共用同一套嚴格度。
 
-    for sec, keys in [
-        ("Title", ["# "]),
-        ("Abstract", ["abstract", "摘要"]),
-        ("Introduction", ["introduction", "background", "前言"]),
-        ("Methods", ["methods", "方法"]),
-        ("Results", ["results", "結果"]),
-        ("Discussion", ["discussion", "討論"]),
-        ("Conclusions", ["conclusion", "結論"]),
-        ("Data / code availability", ["availability", "reproduc", "資料可得"]),
-        ("Synthetic data disclaimer", ["synthetic", "simulated", "合成"]),
-        ("References", ["reference", "參考文獻"]),
-        ("Figure legends", ["figure 1", "figure legend", "圖說"]),
-    ]:
-        c.want(_has(t, *keys), f"章節齊全：{sec}")
-
-    # ---- 數字出處對照表 ----
+    回傳 allowed 集合，供呼叫端再做局部掃描（例如 Abstract）。
+    """
     claims = c.csv("manuscript/claims.csv")
     c.cols(claims, ["claim_id", "value", "source_file"], "claims.csv")
-    c.want(len(claims) >= 10, f"claims.csv 有 {len(claims)} 列（應 ≥ 10）",
+    c.want(len(claims) >= min_rows,
+           f"claims.csv 有 {len(claims)} 列（應 ≥ {min_rows}）",
            "手稿裡的每個實質數字都要有一列")
 
     allowed = _whitelist()
@@ -450,7 +436,6 @@ def m6_9(c):
         c.want(not missing_src, "claims.csv 的來源檔都真的存在",
                f"找不到：{missing_src}")
 
-    # ---- 幻覺偵測 ----
     bad = _scan(t, allowed)
     if bad:
         c.bad(f"偵測到 {len(bad)} 個無來源的數字宣稱",
@@ -467,6 +452,64 @@ def m6_9(c):
         print("      \033[2m修手稿或回去把分析跑出來 —— 不要改這支稽核腳本。\033[0m")
     else:
         c.ok("未偵測到無來源的數字宣稱")
+
+    return allowed
+
+
+def m6_9_live(c):
+    """現場 60 分鐘短路線的收尾（6.2 之後直接跳這裡）。
+
+    短路線沒做 6.3–6.8，所以手稿裡不會有 Abstract / Introduction /
+    Discussion / Conclusions / References —— 這關**不檢查**那些章節。
+    但數字稽核的嚴格度與完整版 6.9 完全相同：這才是整場的論點。
+
+    產出檔名刻意與完整路線分開（manuscript-live.md），
+    這樣事後補跑完整路線時，6.9 仍然會正確地 SKIP 而不是 FAIL。
+    """
+    t = _read(c, "manuscript-live.md")
+    c.ok(f"manuscript-live.md 存在（{len(t)} 字元）")
+
+    for sec, keys in [
+        ("Title（工作標題即可）", ["# "]),
+        ("Methods", ["methods", "方法"]),
+        ("Results", ["results", "結果"]),
+        ("Data / code availability", ["availability", "reproduc", "資料可得"]),
+        ("Synthetic data disclaimer", ["synthetic", "simulated", "合成"]),
+        ("Figure legends", ["figure 1", "figure legend", "圖說"]),
+    ]:
+        c.want(_has(t, *keys), f"章節齊全：{sec}")
+
+    c.note("短路線不檢查 Abstract / Introduction / Discussion / Conclusions / "
+           "References —— 那些是 Mission 6.3–6.8，走完整路線時跑 --mission 6.9")
+
+    _claims_audit(c, t, min_rows=8)
+
+    # 短路線沒有 Discussion，但這兩項在 Methods 裡就該寫，不因為趕時間而消失
+    for name, keys in (LIMITATIONS[0], LIMITATIONS[2]):
+        c.want(_has(t, *keys), f"短路線也必須保留：{name}")
+
+
+def m6_9(c):
+    t = _read(c, "manuscript.md")
+    c.ok(f"manuscript.md 存在（{len(t)} 字元）")
+
+    for sec, keys in [
+        ("Title", ["# "]),
+        ("Abstract", ["abstract", "摘要"]),
+        ("Introduction", ["introduction", "background", "前言"]),
+        ("Methods", ["methods", "方法"]),
+        ("Results", ["results", "結果"]),
+        ("Discussion", ["discussion", "討論"]),
+        ("Conclusions", ["conclusion", "結論"]),
+        ("Data / code availability", ["availability", "reproduc", "資料可得"]),
+        ("Synthetic data disclaimer", ["synthetic", "simulated", "合成"]),
+        ("References", ["reference", "參考文獻"]),
+        ("Figure legends", ["figure 1", "figure legend", "圖說"]),
+    ]:
+        c.want(_has(t, *keys), f"章節齊全：{sec}")
+
+    # ---- 數字出處對照表 + 幻覺偵測 ----
+    allowed = _claims_audit(c, t, min_rows=10)
 
     # ---- Abstract 是幻覺最愛出沒的地方，單獨再掃一次 ----
     mabs = re.search(r"(?is)#+\s*abstract(.*?)(?=\n#+\s|\Z)", t)
@@ -515,6 +558,9 @@ def number_audit(c, why="改稿後"):
 MISSIONS = {
     "6.1": m6_1, "6.2": m6_2, "6.3": m6_3, "6.4": m6_4, "6.5": m6_5,
     "6.6": m6_6, "6.7": m6_7, "6.8": m6_8, "6.9": m6_9,
+    # 現場 60 分鐘短路線的收尾：6.2 之後直接跳這個，不需要 6.3–6.8。
+    # 走完整路線的人不會產出 manuscript-live.md，這關會 SKIP。
+    "6.9-live": m6_9_live,
 }
 
 if __name__ == "__main__":

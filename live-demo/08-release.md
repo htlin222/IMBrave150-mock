@@ -148,6 +148,10 @@ command -v rsvg-convert || command -v inkscape || echo "⚠️ 圖會失敗"
 
 **目標**：`workspace/dist/manuscript.docx`
 
+> ⚡ PDF 與 DOCX 兩條 build 沒有相依，**可以派兩個 subagent 同時跑**
+> （8.2 一個、8.3 一個，共用同一份 `manuscript.md` 與 `refs.bib`）。
+> 但驗收仍然一關一關跑、一關一關停。
+
 ### 任務
 
 > 1. 產出 DOCX 並檢查：段落樣式、參考文獻是不是純文字（不是欄位碼）、圖片有沒有進去。
@@ -241,7 +245,7 @@ cd live-demo && ../.venv/bin/python verify/ch08.py --mission 8.4
 
 ## 🎤 收尾 — 講者接話
 
-`⏸ Mission 8.4 完成。全部 26 個 Mission 結束。`
+`⏸ Mission 8.4 完成。全部 32 個 Mission 結束。`
 
 > 講者（詳見 [RUNBOOK.md](RUNBOOK.md#m84)）：
 > 「從十個亂七八糟的 CSV 開始，到一份可以投出去的 PDF。

@@ -56,7 +56,7 @@
 
 | 路徑 | 是什麼 |
 |---|---|
-| `live-demo/` | **主要交付物。** 9 章 26 個 Mission 的逐關指南 + 驗收腳本。 |
+| `live-demo/` | **主要交付物。** 9 章 32 個 Mission 的逐關指南 + 驗收腳本。 |
 | `live-demo/README.md` | Agent 入口：規則、全域硬性約束、章節索引。**先讀這個。** |
 | `live-demo/verify/` | 驗收腳本。你只負責「跑」，**不要改**。 |
 | `live-demo/workspace/` | 你所有的產出都放這裡。**絕不動 repo 根目錄。** |
@@ -72,6 +72,17 @@
 4. **不要憑記憶生成 DOI 或引用。** 一律 WebSearch 找到真文獻 → Crossref 驗證。
 5. 每個 Mission 底下的 `⛔ 硬性約束` 區塊，**在寫該關第一行程式碼之前讀完**。
    那些是已知會在台上炸掉的東西。
+6. **派 subagent 時，禁止它們讀 `live-demo/` 底下任何檔案。**
+   那裡有全部的標準答案與預期數字。把這句話寫進 prompt。
+
+## ⚡ 可以用 subagent 加速
+
+Mission 1.1（三種方言）、6.8（每筆引用各自去 Crossref 驗）、7.1（四個審稿人）、
+8.2+8.3（PDF 與 DOCX）本來就是「同一件事做 N 次」，**派 subagent 平行做**。
+細節與該派／不該派的清單見 `live-demo/README.md` 的「⚡ 用 subagent 加速」。
+
+但**節奏協定沒有例外**：subagent 只在單一 Mission 內部平行，
+收完工照樣要跑驗收、講三五行、然後 `⏸ 停`。不准拿「subagent 閒著」當理由往下做。
 
 ## 🐍 環境
 
