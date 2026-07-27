@@ -15,10 +15,14 @@ from _common import WS, run
 
 MS = WS / "manuscript"
 
-# 結構性常數：方法學裡本來就會出現的數字，不算「結果宣稱」
+# 結構性常數：方法學裡本來就會出現的「分析選擇」，不算「結果宣稱」。
+# 判準：這個數字是你「決定」的（門檻、卡尺、截斷界、換算係數），
+# 而不是資料「算出來」的。算出來的一律要有出處。
 STRUCTURAL = {
     0.1, 0.2, 0.25, 0.5, 1.0, 2.0, 0.05, 1.1, 17.1, 10.0, 1.96,
     12.0, 18.0, 24.0, 6.0, 95.0, 100.0, 400.0, 120.0, 150.0, 1.0e-3,
+    0.02, 0.98,          # positivity 截斷界
+    1e-8, 1e-6,          # ridge 穩定項
 }
 # 必列的七項限制（關鍵詞任一命中即算）
 LIMITATIONS = [
@@ -384,7 +388,10 @@ def _scan(text, allowed):
     text = re.sub(r"\d{4};\d+(\(\d+\))?:\S*", " ", text)         # 期刊卷期頁碼
     text = re.sub(r"(?i)(figure|table|fig\.?|ref\.?)\s*\d+", " ", text)
     text = re.sub(r"(?i)https?://\S+", " ", text)
-    text = re.sub(r"\b\d+\.\d+\.\d+\b", " ", text)               # 套件版本號
+    # 套件／語言版本號：三段式（0.30.0）與兩段式（Python 3.12）都要擋
+    text = re.sub(r"\b\d+\.\d+\.\d+\b", " ", text)
+    text = re.sub(r"(?i)\b(python|lifelines|pandas|numpy|matplotlib|scipy|sklearn|"
+                  r"pandoc|tectonic|quarto|biber|R)\s+v?\d+(\.\d+)*", r"\1 ", text)
 
     bad = []
     for line in text.splitlines():

@@ -150,11 +150,44 @@ def m7_3(c):
 
 
 def m7_4(c):
-    rep = c.need("manuscript/humanize_report.md")
-    c.ok(f"humanize_report.md 存在（{len(rep.read_text(errors='ignore'))} 字元）")
+    rt = c.need("manuscript/humanize_report.md").read_text(errors="ignore")
+    c.ok(f"humanize_report.md 存在（{len(rt)} 字元）")
 
     t = c.need("manuscript/manuscript.md").read_text(errors="ignore")
     low = t.lower()
+
+    # 🔴 揭露不可以在潤稿時被拿掉 —— 那不是 humanize，是造假
+    c.want(_has(t, "use of ai", "ai tools", "ai-assisted", "coding agent",
+                "AI 使用", "人工智慧"),
+           "手稿保留了 AI 使用揭露聲明",
+           "把文字修得像人寫的、卻拿掉揭露，等於謊報作者身分")
+    c.want(_has(t, "supervis", "responsible for", "author is responsible", "監督", "負責"),
+           "揭露聲明有寫明作者責任歸屬")
+
+    # 只准用 pattern linter，不准用「規避偵測」那一類。
+    # 注意：要抓的是「使用」，不是「提及」——報告裡寫「未使用 undetectable 工具」是對的。
+    BANNED = ["undetectable", "bypass ai detect", "bypass detector",
+              "evade detection", "beat ai detector", "humanize to avoid detection"]
+    NEGATION = ["未使用", "沒有使用", "不使用", "不准", "未採用", "避免使用", "禁止",
+                "not used", "did not use", "no ", "avoided", "without using",
+                "**未**", "never used"]
+    offending = []
+    for line in rt.splitlines():
+        low = line.lower()
+        if any(b in low for b in BANNED) and not any(n.lower() in low for n in NEGATION):
+            offending.append(line.strip()[:80])
+    c.want(not offending, "沒有使用規避 AI 偵測的工具或提示詞",
+           f"報告中這幾行像是真的用了：{offending[:3]}"
+           " —— 本關的目標是可讀性，不是騙過偵測器")
+
+    # 前後對照：沒有數字就無法證明真的改了
+    nums = re.findall(r"(?i)(?:before|前|修改前)\D{0,20}(\d+)", rt)
+    after = re.findall(r"(?i)(?:after|後|修改後)\D{0,20}(\d+)", rt)
+    if nums and after:
+        b, a = int(nums[0]), int(after[0])
+        c.want(a <= b, f"AI-tell 問題數 {b} → {a}（下降或持平）")
+    else:
+        c.note("報告沒有 llmstrip 前後問題數對照 —— 建議補上，才能證明改了什麼")
 
     found = [p for p in AI_PHRASES if p in low]
     c.want(not found, f"AI 腔詞彙已清除（檢查 {len(AI_PHRASES)} 個）",

@@ -152,6 +152,16 @@ def main():
                 p.bad("tectonic 暖機失敗",
                       (r.stderr or "")[-200:] or "檢查網路")
 
+    # 去 AI 腔的 pattern linter（選用，Mission 7.4）
+    if shutil.which("llmstrip"):
+        p.ok("llmstrip 可用", "Mission 7.4 的機器檢查")
+    else:
+        p.soft("沒有 llmstrip（選用）",
+               "裝了可讓 Mission 7.4 有可稽核的前後對照："
+               "curl -fsSL https://raw.githubusercontent.com/HugoLopes45/"
+               "llmstrip/main/scripts/install.sh | sh"
+               "  ——沒裝就靠 Mission 7.4 的人工清單，不影響流程")
+
     # Crossref 連線 + polite pool
     if shutil.which("curl"):
         r = subprocess.run(

@@ -163,13 +163,47 @@
 
 **目標**：讀起來像人寫的，而且**數字一個都沒動**。
 
+### ⛔ 這一關的界線（先讀，這是原則問題不是技術問題）
+
+「AI humanizer」這個生態系裡有兩類工具，**只准用第一類**：
+
+| 類別 | 例子 | 這裡能不能用 |
+|---|---|---|
+| **確定性 pattern linter** — 列出你寫作上的 AI 慣性，讓你自己改 | `llmstrip`、`slopbuster`、`humanizer-skill`、Vale | ✅ 用這類。可稽核、不改語意。 |
+| **「undetectable」改寫器** — 目標是騙過 AI 偵測器 | 各種標榜 *undetectable* / *bypass detector* 的服務 | ❌ **不准用。** |
+
+理由很簡單：**我們的目標是讓文字更好讀，不是隱瞞 AI 參與過。**
+在科學稿件上做後者，等於對期刊與讀者謊報作者身分。多數期刊現在都要求揭露 AI 使用。
+
+**所以這一關同時要做一件事：確認手稿帶有 AI 使用揭露聲明。**
+如果你把文字修得像人寫的、卻拿掉了揭露，那不是 humanize，那是造假。
+
 ### 任務
 
-> 若環境有 `human-write` skill，先用它掃一遍：
+> **A. 先跑機器檢查（確定性、可重跑）**
+>
+> `llmstrip`（Rust CLI，MIT，**只報告不改檔**）：
+> ```bash
+> # 安裝一次即可
+> curl -fsSL https://raw.githubusercontent.com/HugoLopes45/llmstrip/main/scripts/install.sh | sh
+>
+> # 只報告，不動檔案
+> llmstrip --report workspace/manuscript/manuscript.md
 > ```
-> /human-write workspace/manuscript/manuscript.md
-> ```
-> 然後人工複查下列各項，把處理結果寫進 `workspace/manuscript/humanize_report.md`：
+> 記下**修改前的問題數**。
+>
+> 若環境另有這些，一併用（都是 MIT、都可 report-only）：
+> - `slopbuster`（152 個 pattern，`--score-only` 只評分不改寫）
+> - `human-write` skill：`/human-write workspace/manuscript/manuscript.md`
+>
+> **B. 依報告逐項修改**（下面 1–6 是即使沒有工具也要自己做的）
+>
+> **C. 修改後再跑一次 `llmstrip --report`**，記下**修改後的問題數**。
+> 兩個數字都要寫進報告——**沒有前後對照就無法證明你真的改了什麼**。
+>
+> **D. 確認手稿有 AI 使用揭露**（見下方地雷 7）。
+>
+> 把全部處理結果寫進 `workspace/manuscript/humanize_report.md`。
 >
 > **1. 詞彙**——找出並替換這些高頻 AI 詞：
 > `delve into`, `leverage`(當動詞), `robust`(非統計意義的濫用), `comprehensive`,
@@ -204,6 +238,23 @@
 6. **警告：這一關最容易把 Limitations 稀釋掉。** AI 腔的一個特徵是
    「條列式的、機械的限制清單」——但那份清單**本來就應該是機械的**。
    把它改成流暢的散文很可能會弄丟其中一兩項。**改完數一次：還是七項嗎？**
+7. 🔴 **手稿必須有 AI 使用揭露聲明，而且這一關不准動它。**
+   放在 Data availability 附近，一段就好，具體寫出：
+   ```markdown
+   ## Use of AI tools
+
+   Analyses were executed by an AI coding agent under author supervision,
+   following the mission specifications in `live-demo/`. The agent wrote the
+   harmonisation, matching, survival, robustness and TMLE scripts, and drafted
+   the manuscript from the artefacts those scripts produced. Every reported
+   number was re-checked against its source artefact by `live-demo/verify/`;
+   every reference was validated against Crossref. The author is responsible
+   for the design, the interpretation and the final text.
+   ```
+   **「讓文字讀起來像人寫的」與「假裝沒有用 AI」是兩回事。** 前者是編輯，後者是造假。
+   `verify/ch07.py` 會檢查這段還在。
+8. **不准使用標榜 “undetectable” / “bypass AI detector” 的工具或提示詞。**
+   本關的成功指標是 `llmstrip --report` 的問題數下降，**不是**任何偵測器的分數。
 
 ### 驗收
 
