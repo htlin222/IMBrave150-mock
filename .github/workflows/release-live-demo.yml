@@ -1,0 +1,100 @@
+name: Package live-demo
+
+# 學員拿到的下載包。推 tag 才發正式 release；推 main 只驗證打包沒壞。
+# 刻意不加 paths 過濾：paths 與 tags 併用時，tag push 會不會被過濾掉是
+# 出了名的不可靠，而「推了 tag 卻沒發版」是最難察覺的失敗。寧可多跑兩分鐘。
+on:
+  push:
+    tags: ["v*"]
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: live-demo-bundle-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 建立 release 需要
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # tag 推上來時用 tag 名當版本；平常用 short SHA。
+      - name: Resolve version
+        id: v
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            echo "version=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+            echo "is_release=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=main-$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+            echo "is_release=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build bundle
+        run: ./scripts/make-live-demo-bundle.sh "${{ steps.v.outputs.version }}"
+
+      # 打包腳本自己會斷言沒有洩題檔、workspace 是空的。這裡再從
+      # 解開後的成品驗一次：學員拿到的東西真的能跑 preflight。
+      - name: Verify the bundle a student would download
+        run: |
+          set -euo pipefail
+          work=$(mktemp -d)
+          unzip -q "dist/imbrave150-live-demo-${{ steps.v.outputs.version }}.zip" -d "$work"
+          cd "$work/imbrave150-live-demo"
+
+          test ! -e _answer_key_pooled.csv
+          test ! -e imbrave150_pooled.csv
+          test "$(find live-demo/workspace -mindepth 1 ! -name .gitignore | wc -l)" -eq 0
+          test "$(find hospitals -name '*.csv' | wc -l)" -eq 10
+
+          python3 -m venv .venv
+          .venv/bin/pip install -q -r requirements.txt
+          cd live-demo && ../.venv/bin/python verify/preflight.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: imbrave150-live-demo-${{ steps.v.outputs.version }}
+          path: dist/*.zip
+          if-no-files-found: error
+
+      - name: Publish release
+        if: steps.v.outputs.is_release == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.v.outputs.version }}
+        run: |
+          cat > notes.md <<'EOF'
+          一場現場 demo 的完整可執行版本：十家醫院、三種 EHR 方言的原始 CSV，
+          一關一關做成一篇可投稿的手稿。講者台上跑的就是這一包。
+
+          ### 下載後
+
+          解開 zip，讀 `START-HERE.md`，然後在該目錄開一個 Claude Code
+          會話打一句「開始」。
+
+          ### 裡面有
+
+          - `live-demo/` — 9 章 32 個 Mission 的逐關指南 + 驗收腳本
+          - `hospitals/` — 十家醫院的原始檔（唯一的輸入）
+          - `hospitals_meta.csv` — 醫院目錄（刻意不在病人檔裡）
+          - 參考解 `*.py` — 給你卡住時看的，不是給你照抄的
+
+          衍生產物（`_answer_key_pooled.csv`、`imbrave150_pooled.csv`）
+          刻意沒附，那正好是第 01 章要你做出來的東西。需要時 `make data` 會重新生成。
+
+          ### ⚠️ 這批資料是合成的
+
+          模擬自 Finn RS et al., *N Engl J Med* 2020;382:1894-1905
+          （DOI 10.1056/NEJMoa1915745）。**沒有任何真實病人。**
+          不構成關於 atezolizumab、bevacizumab 或 sorafenib 的任何證據。
+          EOF
+
+          gh release create "$VERSION" \
+            "dist/imbrave150-live-demo-$VERSION.zip" \
+            --title "live-demo $VERSION" \
+            --notes-file notes.md

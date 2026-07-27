@@ -25,3 +25,6 @@ hospitals_10sites.zip
 # Claude Code local settings + demo timing log
 .claude/settings.local.json
 .claude/live-demo-timing.log
+
+# live-demo 下載包（由 scripts/make-live-demo-bundle.sh 產生）
+dist/
