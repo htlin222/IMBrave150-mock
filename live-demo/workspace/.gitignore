@@ -1,0 +1,4 @@
+# 沙盒：現場由 agent 產生的東西不進版本控制。
+# 每次 demo 前把這裡清空，讓 Mission 0.1 從零開始。
+*
+!.gitignore

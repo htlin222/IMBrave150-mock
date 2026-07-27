@@ -15,6 +15,14 @@ published trial.
 > statistical models tuned to the published summaries — use for teaching only,
 > never for clinical or research claims about the actual drugs.
 
+## Three ways to use this repo
+
+| | What it is |
+|---|---|
+| **`live-demo/`** | **A 9-chapter, 26-mission guide an AI agent executes live, one mission at a time.** Open the repo and say *"follow the ./live-demo mission by mission"*. Every mission has hard-number acceptance checks (`live-demo/verify/`), a gotcha list drawn from a real run, and a presenter runbook. Goes from 10 raw hospital CSVs to a typeset preprint PDF. |
+| **`claude-demo/`** | A self-contained animated HTML slide deck of the same story (~60 min). Open `claude-demo/index.html`. |
+| **the dataset itself** | Two teaching layers (below) — use the CSVs and scripts directly for coursework. |
+
 ## Two teaching layers
 
 1. **Randomised trial** (`imbrave150_simulated.csv`) — covariates balanced by
