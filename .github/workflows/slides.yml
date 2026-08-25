@@ -86,16 +86,22 @@ jobs:
             echo "is_release=${is_release}"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Build the PDF
+      # Three decks: the 12-slide talk, the same with recorded terminal
+      # captures as a demo fallback, and the 43-slide reference edition.
+      - name: Build the PDFs
         working-directory: slides
         env:
           CHROME_PATH: ${{ steps.chrome.outputs.path }}
           # Marp's bundled Chromium needs the sandbox off inside the runner.
           CHROME_ENABLE_EXTENSIONS: "false"
         run: |
-          npx --yes @marp-team/marp-cli@4.0.0 deck.md \
-            --config .marprc.yml --pdf --no-sandbox \
-            -o dist/imbrave150-mission-by-mission.pdf
+          mkdir -p dist
+          for d in deck deck-backup deck-full; do
+            npx --yes @marp-team/marp-cli@4.0.0 "$d.md" \
+              --config .marprc.yml --pdf --no-sandbox \
+              -o "dist/imbrave150-$d.pdf"
+          done
+          ls -la dist/
 
       # Marp clips a too-full slide without saying a word. Rasterise the
       # artefact we are about to ship and assert nothing was cut off.
@@ -103,7 +109,9 @@ jobs:
         working-directory: slides
         run: |
           mkdir -p dist/png
-          pdftoppm -png -r 96 dist/imbrave150-mission-by-mission.pdf dist/png/slide
+          for d in deck deck-backup deck-full; do
+            pdftoppm -png -r 96 "dist/imbrave150-$d.pdf" "dist/png/$d"
+          done
           python3 tools/check_overflow.py dist/png
 
       - name: Report deck size
@@ -115,14 +123,14 @@ jobs:
             echo ""
             echo "- version: \`${{ steps.v.outputs.version }}\`"
             echo "- slides: ${slides}"
-            echo "- size: $(du -h dist/*.pdf | cut -f1)"
+            echo "- decks: $(find dist -maxdepth 1 -name '*.pdf' | wc -l | tr -d ' ')"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload the PDF
         uses: actions/upload-artifact@v4
         with:
           name: imbrave150-slides-${{ steps.v.outputs.version }}
-          path: slides/dist/imbrave150-mission-by-mission.pdf
+          path: slides/dist/*.pdf
           if-no-files-found: error
 
       - name: Publish release
@@ -132,18 +140,24 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: "Slides ${{ steps.v.outputs.display }}"
-          files: slides/dist/imbrave150-mission-by-mission.pdf
+          files: slides/dist/*.pdf
           body: |
-            **Mission by Mission** — driving an AI coding agent end-to-end,
-            from ten messy hospital exports to a typeset, machine-audited
-            manuscript.
+            **Mission by Mission** — driving an AI coding agent, live, from ten
+            messy hospital exports to a result you can audit.
+
+            | file | what it is |
+            |---|---|
+            | `imbrave150-deck.pdf` | **The talk.** 12 slides: five signposts around a live demo. |
+            | `imbrave150-deck-backup.pdf` | The same, with recorded terminal output after each signpost, for when the demo will not cooperate. |
+            | `imbrave150-deck-full.pdf` | Reference edition, 43 slides, for reading afterwards. |
 
             Hsieh-Ting Lin, MD (林協霆) · Department of Medical Oncology,
             Koo Foundation Sun Yat-Sen Cancer Center (和信治癌中心醫院).
 
-            Built from `slides/deck.md` at ${{ github.sha }}. Every slide was
-            checked for overflow before release; every citation in the deck was
-            verified against Crossref.
+            Built from `slides/` at ${{ github.sha }}. Every slide was checked
+            for overflow before release; every citation was verified against
+            Crossref; and every number came from a recorded run of the
+            `live-demo/` pipeline in this repository.
 
             ⚠️ All data in the deck are synthetic. No real patient is
             represented, and nothing here is evidence about atezolizumab,

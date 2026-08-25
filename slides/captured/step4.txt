@@ -1,0 +1,14 @@
+naive (unadjusted)      0.505
+specifications          120  (15 covariate sets x 8 methods)
+median HR               0.582
+IQR                     0.560 - 0.609
+range                   0.480 - 0.716
+within 0.55-0.61        63%
+specs crossing HR 1.0   0
+specs whose CI hits 1.0 0
+
+            count  median    min    max
+method                                 
+iptw           15   0.584  0.557  0.595
+psm            90   0.595  0.480  0.716
+regression     15   0.556  0.546  0.576

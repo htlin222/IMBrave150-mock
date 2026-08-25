@@ -1,0 +1,18 @@
+caliper = 0.2 x SD(logit PS) = 0.1142
+matched pairs         706
+patients after match  1412
+treated unmatched     256 (26.6% of treated)
+
+max |SMD| before      0.228
+max |SMD| after       0.044
+covariates > 0.10     0
+
+raw proportion who died (ignores censoring)
+  Atezo+Bev  25.6%
+  Sorafenib  38.0%
+  median follow-up  8.0 vs 6.0 months
+
+OS   HR 0.578 (0.48-0.70)   log-rank p = 8.75e-09
+     12-month 71.1% vs 55.7%   median 21.3 vs 13.46 months
+     figures/km_os.svg
+PFS  HR 0.632 (0.55-0.72)   log-rank p = 5.47e-12

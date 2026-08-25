@@ -1,0 +1,28 @@
+id,reviewer,severity,comment_short,verdict,action_taken,file_changed
+R1-1,1,major,"Hospital is the named confounder but is absent from the primary PS model",PARTIAL,"Acknowledged; TMLE does adjust for site. Refitting the primary model with site is out of scope for this staging run and is recorded as open.",
+R1-2,1,major,"26.6% unmatched attributed to common support; arithmetic (962 treated vs 838 controls) explains most of it",ACCEPT,"Open — flagged for revision; the 132 unused controls are also unreported.",
+R1-3,1,major,"'Order-independent' conflated with 'reproducible'",ACCEPT,"Methods rewritten: fixed order gives reproducibility, not invariance; tie behaviour and its 0.577-0.579 effect now stated.",manuscript.md
+R1-4,1,major,"Proportional hazards never tested; Schoenfeld p = 0.035",ACCEPT,"Open — recorded for revision.",
+R1-5,1,major,"Limitation 4 asserts CIs are narrow; pair-clustered SE is actually smaller",ACCEPT,"Open — recorded for revision.",
+R1-6,1,major,"Specification curve pools conditional, ATE and ATT estimands into one median",ACCEPT,"Open — recorded for revision.",
+R1-7,1,major,"IPCW uses a marginal censoring KM; never stated",ACCEPT,"Open — recorded for revision.",
+R2-1,2,major,"Covariate set omits tumour burden, Vp grade, prior therapy; aetiology available but unused",PARTIAL,"Genuine, but the synthetic generator does not contain these fields. Belongs in Limitations.",
+R2-2,2,major,"88.5% of matched pairs cross hospitals",ACCEPT,"Open — same root cause as R1-1.",
+R2-3,2,major,"Varices treated as exchangeable confounder, not as a bevacizumab contraindication",PARTIAL,"Correct clinically; the dataset has no bleeding endpoint. Recorded as a data limitation.",
+R2-4,2,major,"No safety or response data reported although the fields exist",ACCEPT,"Open — response and grade 3-4 AE fields are in pooled.csv and should be reported.",
+R2-5,2,major,"Median OS quoted beyond supportable follow-up; no RMST, no NNT",ACCEPT,"Open — recorded for revision.",
+R2-6,2,major,"Unmatched treated are systematically younger and lower burden; never characterised",ACCEPT,"Open — recorded for revision.",
+R2-7,2,major,"Subgroups omit liver function and varices strata",ACCEPT,"Open — recorded for revision.",
+R3-1,3,major,"STROBE 14a: no Table 1 anywhere in the manuscript",ACCEPT,"Open — the largest single reporting gap.",
+R3-2,3,major,"STROBE 13: no flow diagram; 132 discarded controls never mentioned",ACCEPT,"Open — one-sided attrition reporting is a real inconsistency with the paper's own thesis.",
+R3-3,3,major,"Missing albumin (4.3%) and bilirubin (5.1%) undeclared; ALBI derivation unexplained",ACCEPT,"Open — recorded for revision.",
+R3-4,3,major,"STROBE 6a / RECORD 6.1: no eligibility criteria, no time zero",ACCEPT,"Open — recorded for revision.",
+R3-5,3,major,"STROBE 14c: follow-up time never summarised; 2019 cohort cannot reach the 12-month landmark",ACCEPT,"Open — material for the TMLE estimand.",
+R3-6,3,major,"RECORD 12.2/22.1: linkage undescribed; 'the repository' names no identifier",ACCEPT,"Open — recorded for revision.",
+R3-7,3,major,"PFS true value 0.59 carries no src tag and is in no output file",ACCEPT,"Numeric comparison removed; the limitation now states why no true value is quoted.",manuscript.md
+R4-1,4,major,"Order-independence claim empirically false: 232 tied scores, ~46 of 706 pairs change",ACCEPT,"Same fix as R1-3.",manuscript.md
+R4-2,4,major,"workspace/.gitignore is '*' so no cited artefact is version-controlled",REJECT,"Correct about the repository, but by design: workspace/ is the live-demo sandbox and is meant to start empty for every run. The scripts that produce it are what ship.",
+R4-3,4,major,"site_join.py writes back over pooled.csv and crashes on rerun",ACCEPT,"Fixed: the script now drops previously joined columns before joining. Verified by running it twice with identical output.",site_join.py
+R4-4,4,major,"120-spec grid cannot be reimplemented: covsets, caliper units, 1:2 rule, PS clipping all unstated",ACCEPT,"Open — recorded for revision.",
+R4-5,4,major,"Specification curve pools three estimands",ACCEPT,"Duplicate of R1-6.",
+R4-6,4,major,"IRLS details, binary SMD denominator, derived-covariate definitions, full environment all unstated",ACCEPT,"Open — recorded for revision.",

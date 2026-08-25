@@ -448,3 +448,52 @@ section.refs ol > li {
    attribute, so map the values the deck actually uses. */
 section ol[start="6"]  { counter-reset: item 5; }
 section ol[start="11"] { counter-reset: item 10; }
+
+/* =========================================================================
+   Backup slides — real captured terminal output.
+   Used only in deck-backup.md, shown when the live demo will not cooperate.
+   ========================================================================= */
+
+section.term h2 {
+  font-family: var(--sans);
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: 0;
+  margin-bottom: 8px;
+  padding-bottom: 10px;
+}
+
+section.term h2 .tag {
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink-60);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-right: 14px;
+}
+
+/* The captured output itself. 18px is the deck's floor and this is the one
+   place it is used for body text, so the block must not be crowded. */
+section.term pre {
+  font-size: 18px;
+  line-height: 1.42;
+  background: #f7f7f7;
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--ink);
+  padding: 16px 20px;
+  margin: 0;
+  white-space: pre;
+  overflow: hidden;
+}
+
+section.term .caption {
+  font-size: 20px;
+  color: var(--ink-60);
+  margin: 14px 0 0;
+}
+
+section.term .caption strong {
+  color: var(--ink);
+  font-weight: 600;
+}

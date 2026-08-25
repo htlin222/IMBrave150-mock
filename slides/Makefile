@@ -1,15 +1,22 @@
-# slides/ — build the presentation PDF.
+# slides/ — build the presentation PDFs.
 #
-# The same Marp version and the same .marprc.yml are used by CI
-# (.github/workflows/slides.yml), so `make` here reproduces the released file.
+# Three decks are built from one theme:
+#   deck.md         12 slides — the talk. Signposts around a live demo.
+#   deck-backup.md  the same, plus a recorded terminal screenshot after each
+#                   signpost, for when the live demo will not cooperate.
+#   deck-full.md    43 slides — the reference edition, for reading afterwards.
+#
+# CI (.github/workflows/slides.yml) uses this same Makefile and .marprc.yml, so
+# `make` here reproduces exactly what gets released.
 
-DECK    := deck.md
+DECKS   := deck deck-backup deck-full
+PDFS    := $(patsubst %,dist/imbrave150-%.pdf,$(DECKS))
 THEME   := theme.css
-OUT     := dist/imbrave150-mission-by-mission.pdf
 MARP    ?= npx --yes @marp-team/marp-cli@4.0.0
 
-# Marp drives a headless Chrome. On macOS the Homebrew `chromium` shim is
-# often a dangling symlink, so prefer a real Chrome if one is installed.
+# Marp drives a headless Chrome. On macOS the Homebrew `chromium` formula is
+# often a dangling symlink into an app that was never installed, so prefer a
+# real Google Chrome when one is present.
 CHROME_CANDIDATES := \
 	/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
 	/Applications/Chromium.app/Contents/MacOS/Chromium
@@ -20,38 +27,42 @@ export CHROME_PATH
 # does not.
 PYTHON ?= $(if $(wildcard ../.venv/bin/python),../.venv/bin/python,python3)
 
-.PHONY: all pdf html png watch clean check
+.PHONY: all pdf talk html png watch clean check
 
 all: pdf
 
-pdf: $(OUT)
+pdf: $(PDFS)
 
-$(OUT): $(DECK) $(THEME) .marprc.yml
+# The talk deck alone — what you rebuild while editing.
+talk: dist/imbrave150-deck.pdf
+
+dist/imbrave150-%.pdf: %.md $(THEME) .marprc.yml
 	@mkdir -p dist
-	$(MARP) $(DECK) --config .marprc.yml --pdf -o $(OUT)
-	@echo "→ $(OUT)"
+	$(MARP) $< --config .marprc.yml --pdf -o $@
+	@echo "-> $@"
 
-# A self-contained HTML deck, handy for presenting without a PDF viewer.
-html: $(DECK) $(THEME)
+# A self-contained HTML deck, for presenting without a PDF viewer.
+html: deck.md $(THEME)
 	@mkdir -p dist
-	$(MARP) $(DECK) --config .marprc.yml --html-output-dir dist \
-		--output dist/index.html
-	@echo "→ dist/index.html"
+	$(MARP) deck.md --config .marprc.yml --output dist/index.html
+	@echo "-> dist/index.html"
 
-# One PNG per slide, rasterised from the built PDF. This is far faster than
-# asking Marp to screenshot each slide, and it checks the artefact we ship.
-png: $(OUT)
+# One PNG per slide, rasterised from the built PDFs. Far faster than asking
+# Marp to screenshot each slide, and it checks the artefact we actually ship.
+png: $(PDFS)
 	@mkdir -p dist/png
 	@rm -f dist/png/*.png
-	pdftoppm -png -r 96 $(OUT) dist/png/slide
+	@for d in $(DECKS); do \
+		pdftoppm -png -r 96 dist/imbrave150-$$d.pdf dist/png/$$d; \
+	done
 
-# Fails if any slide's content runs past the bottom edge. Marp silently
-# clips overflow, so this is the only way to catch a too-full slide.
+# Fails if any slide's content runs past the bottom edge. Marp silently clips
+# an overfull slide, so this is the only way to catch one.
 check: png
 	@$(PYTHON) tools/check_overflow.py dist/png
 
 watch:
-	$(MARP) $(DECK) --config .marprc.yml --watch --preview
+	$(MARP) deck.md --config .marprc.yml --watch --preview
 
 clean:
 	rm -rf dist
