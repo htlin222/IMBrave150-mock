@@ -69,13 +69,22 @@ jobs:
       - name: Resolve version
         id: v
         run: |
+          # `version` names the artifact; `display` titles the release, with the
+          # `slides-` prefix stripped so it does not read "Slides slides-v1".
           if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
-            echo "version=${GITHUB_REF_NAME}"  >> "$GITHUB_OUTPUT"
-            echo "is_release=true"             >> "$GITHUB_OUTPUT"
+            version="${GITHUB_REF_NAME}"
+            display="${GITHUB_REF_NAME#slides-}"
+            is_release=true
           else
-            echo "version=main-$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
-            echo "is_release=false"            >> "$GITHUB_OUTPUT"
+            version="main-$(git rev-parse --short HEAD)"
+            display="${version}"
+            is_release=false
           fi
+          {
+            echo "version=${version}"
+            echo "display=${display}"
+            echo "is_release=${is_release}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Build the PDF
         working-directory: slides
@@ -122,7 +131,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: "Slides ${{ steps.v.outputs.version }}"
+          name: "Slides ${{ steps.v.outputs.display }}"
           files: slides/dist/imbrave150-mission-by-mission.pdf
           body: |
             **Mission by Mission** — driving an AI coding agent end-to-end,
