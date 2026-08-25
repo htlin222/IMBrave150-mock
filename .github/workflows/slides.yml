@@ -100,11 +100,14 @@ jobs:
       - name: Report deck size
         working-directory: slides
         run: |
-          echo "### Slides rebuilt" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "- version: \`${{ steps.v.outputs.version }}\`" >> "$GITHUB_STEP_SUMMARY"
-          echo "- slides: $(ls dist/png/*.png | wc -l)" >> "$GITHUB_STEP_SUMMARY"
-          echo "- size: $(du -h dist/*.pdf | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
+          slides=$(find dist/png -name '*.png' | wc -l | tr -d ' ')
+          {
+            echo "### Slides rebuilt"
+            echo ""
+            echo "- version: \`${{ steps.v.outputs.version }}\`"
+            echo "- slides: ${slides}"
+            echo "- size: $(du -h dist/*.pdf | cut -f1)"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload the PDF
         uses: actions/upload-artifact@v4
@@ -136,5 +139,3 @@ jobs:
             ⚠️ All data in the deck are synthetic. No real patient is
             represented, and nothing here is evidence about atezolizumab,
             bevacizumab or sorafenib.
-    permissions:
-      contents: write
