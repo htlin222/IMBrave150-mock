@@ -1,0 +1,8 @@
+# Shared by the local `make` target and the CI job, so the released PDF is
+# rendered with exactly the settings you previewed.
+themeSet: ["./theme.css"]
+allowLocalFiles: true
+# Raw HTML is required: the deck uses <span class="ic …"> for the Lucide
+# glyphs and <sup>/<em> inside the AMA citation footers.
+html: true
+pdfOutlines: true

@@ -1,0 +1,140 @@
+name: Slides
+
+# Re-print the presentation PDF whenever the deck changes.
+#
+#   push to main            → rebuild, verify, upload the PDF as an artifact
+#   push a tag `slides-v*`  → rebuild, verify, publish a GitHub Release
+#
+# There is deliberately no `paths:` filter on `push`. GitHub requires the
+# branch/tag filter AND the path filter to match, so `paths` here would mean a
+# `slides-v*` tag that happens not to touch slides/** never releases — and
+# "pushed a tag, got no release" is the worst kind of silent failure. The
+# build is under a minute; running it on every push to main is the cheaper
+# trade. Same reasoning as release-live-demo.yml.
+#
+# Pull requests do filter on paths: there is no release at stake there.
+on:
+  push:
+    branches: [main]
+    tags: ["slides-v*"]
+  pull_request:
+    paths:
+      - "slides/**"
+      - ".github/workflows/slides.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: slides-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Needed by the release step; harmless on ordinary pushes.
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Marp drives headless Chrome; poppler gives us pdftoppm for the
+      # overflow check, and Pillow reads the rasterised slides.
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            chromium-browser poppler-utils fonts-noto-cjk || \
+          sudo apt-get install -y --no-install-recommends \
+            chromium poppler-utils fonts-noto-cjk
+          python3 -m pip install --quiet Pillow
+
+      - name: Resolve Chrome binary
+        id: chrome
+        run: |
+          for c in chromium-browser chromium google-chrome; do
+            if command -v "$c" >/dev/null 2>&1; then
+              echo "path=$(command -v "$c")" >> "$GITHUB_OUTPUT"; exit 0
+            fi
+          done
+          echo "No Chromium binary found" >&2; exit 1
+
+      - name: Resolve version
+        id: v
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            echo "version=${GITHUB_REF_NAME}"  >> "$GITHUB_OUTPUT"
+            echo "is_release=true"             >> "$GITHUB_OUTPUT"
+          else
+            echo "version=main-$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+            echo "is_release=false"            >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build the PDF
+        working-directory: slides
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.path }}
+          # Marp's bundled Chromium needs the sandbox off inside the runner.
+          CHROME_ENABLE_EXTENSIONS: "false"
+        run: |
+          npx --yes @marp-team/marp-cli@4.0.0 deck.md \
+            --config .marprc.yml --pdf --no-sandbox \
+            -o dist/imbrave150-mission-by-mission.pdf
+
+      # Marp clips a too-full slide without saying a word. Rasterise the
+      # artefact we are about to ship and assert nothing was cut off.
+      - name: Verify no slide overflows
+        working-directory: slides
+        run: |
+          mkdir -p dist/png
+          pdftoppm -png -r 96 dist/imbrave150-mission-by-mission.pdf dist/png/slide
+          python3 tools/check_overflow.py dist/png
+
+      - name: Report deck size
+        working-directory: slides
+        run: |
+          echo "### Slides rebuilt" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- version: \`${{ steps.v.outputs.version }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- slides: $(ls dist/png/*.png | wc -l)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- size: $(du -h dist/*.pdf | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: imbrave150-slides-${{ steps.v.outputs.version }}
+          path: slides/dist/imbrave150-mission-by-mission.pdf
+          if-no-files-found: error
+
+      - name: Publish release
+        if: steps.v.outputs.is_release == 'true'
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: "Slides ${{ steps.v.outputs.version }}"
+          files: slides/dist/imbrave150-mission-by-mission.pdf
+          body: |
+            **Mission by Mission** — driving an AI coding agent end-to-end,
+            from ten messy hospital exports to a typeset, machine-audited
+            manuscript.
+
+            Hsieh-Ting Lin, MD (林協霆) · Department of Medical Oncology,
+            Koo Foundation Sun Yat-Sen Cancer Center (和信治癌中心醫院).
+
+            Built from `slides/deck.md` at ${{ github.sha }}. Every slide was
+            checked for overflow before release; every citation in the deck was
+            verified against Crossref.
+
+            ⚠️ All data in the deck are synthetic. No real patient is
+            represented, and nothing here is evidence about atezolizumab,
+            bevacizumab or sorafenib.
+    permissions:
+      contents: write

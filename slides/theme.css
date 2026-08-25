@@ -1,0 +1,450 @@
+/* =========================================================================
+   mono-academic — a black-and-white, minimalist Marp theme
+   -------------------------------------------------------------------------
+   Design rules this file enforces (do not "improve" them away):
+     · No decorative header or footer. The footer band carries ONLY an
+       AMA-style citation, and only on slides that actually cite something.
+     · Pure monochrome. #000 on #fff. Emphasis comes from weight, size and
+       whitespace — never from colour.
+     · Minimum rendered font size is 18px (the citation footer). Nothing on
+       any slide is allowed to be smaller.
+     · Slides are 1280x720, so every px below is a real px in the PDF.
+   ========================================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500&display=swap");
+
+/* @theme mono-academic */
+
+:root {
+  --ink: #000;
+  --paper: #fff;
+  /* The only two greys in the deck. Both pass 4.5:1 on white. */
+  --ink-60: #4a4a4a;
+  --rule: #c8c8c8;
+
+  --sans: "IBM Plex Sans", "Noto Sans TC", "Helvetica Neue", Arial, sans-serif;
+  --serif: "IBM Plex Serif", "Noto Sans TC", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", "SF Mono", Menlo, Consolas, monospace;
+}
+
+section {
+  width: 1280px;
+  height: 720px;
+  padding: 56px 72px 64px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 24px;
+  line-height: 1.45;
+  letter-spacing: 0.002em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* ---------- headings -------------------------------------------------- */
+
+/* h1 = SECTION divider (used alone on its own slide) */
+section h1 {
+  font-family: var(--serif);
+  font-size: 60px;
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+/* h2 = SLIDE title */
+section h2 {
+  font-family: var(--serif);
+  font-size: 38px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0 0 28px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule);
+  letter-spacing: -0.01em;
+}
+
+section h3 {
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ink-60);
+  margin: 0 0 12px;
+}
+
+/* ---------- body ------------------------------------------------------ */
+
+section p { margin: 0 0 16px; }
+section strong { font-weight: 600; }
+section em { font-style: italic; }
+
+/* Nested lists are the workhorse of this deck: level 1 = the two pillars
+   ("Current step" / "Good prompt"), level 2 = the substance. */
+section ul,
+section ol {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+section li {
+  position: relative;
+  margin: 0 0 10px;
+  padding-left: 26px;
+}
+
+section li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.62em;
+  width: 9px;
+  height: 1px;
+  background: var(--ink);
+}
+
+/* level 2 — indented, lighter, smaller (but never below 18px) */
+section li ul,
+section li ol { margin: 10px 0 14px; }
+
+section li li {
+  font-size: 21px;
+  color: var(--ink-60);
+  margin-bottom: 8px;
+  padding-left: 22px;
+}
+
+section li li::before {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  top: 0.6em;
+  left: 4px;
+  background: var(--ink-60);
+}
+
+section li li li { font-size: 19px; }
+
+/* ---------- code ------------------------------------------------------ */
+
+section code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  background: #f2f2f2;
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+
+section pre {
+  font-family: var(--mono);
+  font-size: 19px;
+  line-height: 1.5;
+  background: #f6f6f6;
+  border-left: 2px solid var(--ink);
+  padding: 16px 20px;
+  margin: 0 0 18px;
+  overflow-x: hidden;
+  white-space: pre-wrap;
+}
+
+section pre code { background: none; padding: 0; font-size: inherit; }
+
+/* ---------- blockquote = the verbatim prompt -------------------------- */
+
+section blockquote {
+  margin: 0 0 18px;
+  padding: 14px 0 14px 22px;
+  border-left: 2px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+section blockquote p { margin: 0 0 8px; }
+section blockquote p:last-child { margin-bottom: 0; }
+
+/* ---------- tables ---------------------------------------------------- */
+
+section table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 21px;
+  margin: 0 0 18px;
+}
+
+section th {
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1.5px solid var(--ink);
+  padding: 8px 14px 8px 0;
+}
+
+section td {
+  border-bottom: 1px solid var(--rule);
+  padding: 8px 14px 8px 0;
+  vertical-align: top;
+}
+
+section tr td:last-child,
+section tr th:last-child { padding-right: 0; }
+
+/* ---------- pagination ------------------------------------------------ */
+
+section::after {
+  /* Marp's page number. Functional, not decoration — kept for Q&A. */
+  font-family: var(--mono);
+  font-size: 18px;
+  color: var(--ink-60);
+  bottom: 26px;
+  right: 72px;
+  padding: 0;
+}
+
+/* =========================================================================
+   Slide classes
+   ========================================================================= */
+
+/* --- title slide ------------------------------------------------------ */
+section.title { justify-content: center; }
+
+section.title h1 {
+  font-size: 60px;
+  margin-bottom: 12px;
+  max-width: 20em;
+}
+
+section.title .subtitle {
+  font-family: var(--serif);
+  font-size: 29px;
+  color: var(--ink-60);
+  margin: 0 0 44px;
+  max-width: 27em;
+}
+
+section.title .byline {
+  border-top: 1px solid var(--ink);
+  padding-top: 20px;
+  font-size: 22px;
+  line-height: 1.6;
+}
+
+section.title .byline .name { font-weight: 600; font-size: 24px; }
+section.title .byline .affil { color: var(--ink-60); }
+section.title::after { content: ""; }
+
+/* --- section divider (a slide holding only an h1) --------------------- */
+section.section { justify-content: center; }
+
+section.section .kicker {
+  font-family: var(--mono);
+  font-size: 20px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-60);
+  margin-bottom: 18px;
+}
+
+section.section h1 { max-width: 18em; }
+
+section.section .rule {
+  width: 96px;
+  height: 2px;
+  background: var(--ink);
+  margin-top: 30px;
+}
+
+/* --- two-column body -------------------------------------------------- */
+section.cols .columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 46px;
+  align-items: start;
+}
+
+section.cols .columns > div > *:first-child { margin-top: 0; }
+
+/* --- the "quiet" slide: one statement -------------------------------- */
+section.statement { justify-content: center; align-items: flex-start; }
+
+section.statement p {
+  font-family: var(--serif);
+  font-size: 42px;
+  line-height: 1.28;
+  max-width: 21em;
+  margin: 0;
+}
+
+section.statement .attrib {
+  font-family: var(--sans);
+  font-size: 21px;
+  color: var(--ink-60);
+  margin-top: 30px;
+  max-width: 40em;
+}
+
+/* --- dense slide: shrink one notch when a slide is legitimately full --- */
+section.dense { font-size: 22px; }
+section.dense li li { font-size: 20px; }
+section.dense h2 { margin-bottom: 22px; }
+
+/* =========================================================================
+   Footer — AMA-style citation only. Never decoration.
+   Usage:  <footer><sup>1</sup> Finn RS, Qin S, Ikeda M, et al. ...</footer>
+   ========================================================================= */
+
+section footer {
+  position: absolute;
+  left: 72px;
+  right: 190px;
+  bottom: 22px;
+  margin: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-size: 18px; /* the deck's floor — do not go below */
+  line-height: 1.35;
+  color: var(--ink-60);
+  text-align: left;
+}
+
+section footer sup {
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--ink);
+  margin-right: 5px;
+  vertical-align: super;
+}
+
+/* superscript reference markers in body text */
+section .ref {
+  font-size: 0.62em;
+  font-weight: 600;
+  vertical-align: super;
+  line-height: 0;
+  margin-left: 1px;
+}
+
+/* =========================================================================
+   Lucide icons (ISC licence) — inlined as data-URI masks so the PDF has
+   zero network dependencies and each glyph inherits `currentColor`.
+   ========================================================================= */
+
+section .ic {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.13em;
+  margin-right: 0.36em;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+/* h3 kickers carry the icon; keep it optically aligned with the caps */
+section h3 .ic { width: 0.95em; height: 0.95em; vertical-align: -0.1em; }
+
+section .ic-database { -webkit-mask-image: var(--i-database); mask-image: var(--i-database); }
+section .ic-search   { -webkit-mask-image: var(--i-search);   mask-image: var(--i-search); }
+section .ic-merge    { -webkit-mask-image: var(--i-merge);    mask-image: var(--i-merge); }
+section .ic-scale    { -webkit-mask-image: var(--i-scale);    mask-image: var(--i-scale); }
+section .ic-activity { -webkit-mask-image: var(--i-activity); mask-image: var(--i-activity); }
+section .ic-shuffle  { -webkit-mask-image: var(--i-shuffle);  mask-image: var(--i-shuffle); }
+section .ic-file     { -webkit-mask-image: var(--i-file);     mask-image: var(--i-file); }
+section .ic-users    { -webkit-mask-image: var(--i-users);    mask-image: var(--i-users); }
+section .ic-package  { -webkit-mask-image: var(--i-package);  mask-image: var(--i-package); }
+section .ic-terminal { -webkit-mask-image: var(--i-terminal); mask-image: var(--i-terminal); }
+section .ic-message  { -webkit-mask-image: var(--i-message);  mask-image: var(--i-message); }
+section .ic-check    { -webkit-mask-image: var(--i-check);    mask-image: var(--i-check); }
+section .ic-alert    { -webkit-mask-image: var(--i-alert);    mask-image: var(--i-alert); }
+section .ic-pause    { -webkit-mask-image: var(--i-pause);    mask-image: var(--i-pause); }
+section .ic-git      { -webkit-mask-image: var(--i-git);      mask-image: var(--i-git); }
+section .ic-target   { -webkit-mask-image: var(--i-target);   mask-image: var(--i-target); }
+section .ic-book     { -webkit-mask-image: var(--i-book);     mask-image: var(--i-book); }
+section .ic-flask    { -webkit-mask-image: var(--i-flask);    mask-image: var(--i-flask); }
+section .ic-refresh  { -webkit-mask-image: var(--i-refresh);  mask-image: var(--i-refresh); }
+section .ic-eye      { -webkit-mask-image: var(--i-eye);      mask-image: var(--i-eye); }
+
+/* Data URIs live in one block so the glyph rules above stay readable.
+   Single quotes inside url("...") keep these valid without %-encoding. */
+:root {
+  --i-database: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='12' cy='5' rx='9' ry='3'/><path d='M3 5v14a9 3 0 0 0 18 0V5'/><path d='M3 12a9 3 0 0 0 18 0'/></svg>");
+  --i-search: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>");
+  --i-merge: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='18' cy='18' r='3'/><circle cx='6' cy='6' r='3'/><path d='M6 21V9a9 9 0 0 0 9 9'/></svg>");
+  --i-scale: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z'/><path d='m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z'/><path d='M7 21h10'/><path d='M12 3v18'/><path d='M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2'/></svg>");
+  --i-activity: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2'/></svg>");
+  --i-shuffle: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m18 14 4 4-4 4'/><path d='m18 2 4 4-4 4'/><path d='M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22'/><path d='M2 6h1.972a4 4 0 0 1 3.6 2.2'/><path d='M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45'/></svg>");
+  --i-file: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/><path d='M14 2v4a2 2 0 0 0 2 2h4'/><path d='M10 9H8'/><path d='M16 13H8'/><path d='M16 17H8'/></svg>");
+  --i-users: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'/><circle cx='9' cy='7' r='4'/><path d='M22 21v-2a4 4 0 0 0-3-3.87'/><path d='M16 3.13a4 4 0 0 1 0 7.75'/></svg>");
+  --i-package: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m7.5 4.27 9 5.15'/><path d='M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z'/><path d='m3.3 7 8.7 5 8.7-5'/><path d='M12 22V12'/></svg>");
+  --i-terminal: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m4 17 6-6-6-6'/><path d='M12 19h8'/></svg>");
+  --i-message: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'/></svg>");
+  --i-check: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M18 6 7 17l-5-5'/><path d='m22 10-7.5 7.5L13 16'/></svg>");
+  --i-alert: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3'/><path d='M12 9v4'/><path d='M12 17h.01'/></svg>");
+  --i-pause: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='14' y='4' width='4' height='16' rx='1'/><rect x='6' y='4' width='4' height='16' rx='1'/></svg>");
+  --i-git: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><circle cx='6' cy='6' r='3'/><circle cx='18' cy='6' r='3'/><path d='M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9'/><path d='M12 12v3'/></svg>");
+  --i-target: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><circle cx='12' cy='12' r='6'/><circle cx='12' cy='12' r='2'/></svg>");
+  --i-book: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20'/></svg>");
+  --i-flask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 2v7.31'/><path d='M14 9.3V1.99'/><path d='M8.5 2h7'/><path d='M14 9.3a6.5 6.5 0 1 1-4 0'/><path d='M5.58 16.5h12.85'/></svg>");
+  --i-refresh: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8'/><path d='M21 3v5h-5'/><path d='M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16'/><path d='M8 16H3v5'/></svg>");
+  --i-eye: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0'/><circle cx='12' cy='12' r='3'/></svg>");
+}
+
+/* =========================================================================
+   Corrections layered on top of the base rules above
+   ========================================================================= */
+
+/* Links are black. This deck has no colour, and a blue DOI would be the
+   only chromatic thing in 43 slides. */
+section a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Ordered lists keep their numbers — the reference list depends on them.
+   (The base rule strips markers because every *bullet* list in the deck is
+   the two-pillar "Current step / Good prompt" structure.) */
+section ol {
+  counter-reset: item;
+}
+
+section ol > li {
+  counter-increment: item;
+  padding-left: 38px;
+}
+
+section ol > li::before {
+  content: counter(item) ".";
+  font-family: var(--mono);
+  font-size: 0.86em;
+  font-weight: 500;
+  width: auto;
+  height: auto;
+  background: none;
+  border-radius: 0;
+  top: 0.16em;
+  left: 0;
+  color: var(--ink);
+}
+
+/* The reference list is a hanging-indent bibliography, not a slide bullet:
+   tighter leading, and the wrapped lines align under the text. */
+section.refs ol > li {
+  font-size: 21px;
+  line-height: 1.36;
+  margin-bottom: 14px;
+}
+
+/* A continued ordered list carries `start="N"`; CSS counters ignore that
+   attribute, so map the values the deck actually uses. */
+section ol[start="6"]  { counter-reset: item 5; }
+section ol[start="11"] { counter-reset: item 10; }
