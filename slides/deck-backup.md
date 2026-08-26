@@ -5,7 +5,7 @@ paginate: true
 size: 16:9
 lang: en
 title: "Mission by Mission — Backup"
-description: "Backup edition: the talk with a recorded terminal capture after each signpost, for when the live demo will not cooperate."
+description: "Backup edition: the talk with a still frame from a recorded agent session after each signpost."
 ---
 
 <!-- _class: title -->
@@ -13,7 +13,7 @@ description: "Backup edition: the talk with a recorded terminal capture after ea
 
 # Mission by Mission
 
-<p class="subtitle">Driving an AI coding agent, live — from ten messy hospital exports to a result you can audit.<br><em>Backup edition: every step shown as recorded output.</em></p>
+<p class="subtitle">Driving an AI coding agent, live — from ten messy hospital exports to a result you can audit.<br><em>Backup edition: every step shown as recorded session.</em></p>
 
 <div class="byline">
 <div class="name">Hsieh-Ting Lin, MD　林協霆</div>
@@ -98,8 +98,9 @@ description: "Backup edition: the talk with a recorded terminal capture after ea
 > Group the ten files by their column
 > fingerprint, not by filename. Report the
 > actual values with `unique()`. Convert to
-> this schema — 27 fields, names and units
-> fixed. Never drop a row for missingness.
+> one schema, names and units fixed. Never
+> drop a row for missingness. Then attach
+> each hospital's type and region.
 
 - <span class="ic ic-eye"></span> **What to watch**
   - Albumin is in g/L at some sites, g/dL at others — a tenfold error waiting
@@ -109,35 +110,14 @@ description: "Backup edition: the talk with a recorded terminal capture after ea
 
 ---
 
-<!-- _class: term -->
+<!-- _class: shot -->
 <!-- _footer: "" -->
 
 ## <span class="tag">recorded</span>Ten hospitals, three dialects
 
-```
-pooled rows        1800
-unique patient_id  1800
-hospitals          10
+![](img/seg1.png)
 
-by dialect
-  Alpha    620   H01 H04 H07 H10
-  Beta     620   H02 H05 H08
-  Gamma    560   H03 H06 H09
-
-arm                {'Atezo+Bev': np.int64(962), 'Sorafenib': np.int64(838)}
-albumin  median    3.90 g/dL
-bilirubin median   0.81 mg/dL
-
-missing (%)
-  albumin_g_dl             4.3
-  bilirubin_mg_dl          5.1
-  afp_ng_ml               35.3
-
-vendor detected by fingerprint vs recorded in metadata: 0 mismatches out of 1800
-
-```
-
-<p class="caption"><strong>1,800</strong> patients, one table. Albumin median lands at <strong>3.90 g/dL</strong> — the unit conversion worked.</p>
+<p class="caption">It built the comparison table itself and found the trap: <strong>dialect B stores albumin in g/L and bilirubin in µmol/L</strong>.</p>
 
 ---
 
@@ -160,35 +140,14 @@ vendor detected by fingerprint vs recorded in metadata: 0 mismatches out of 1800
 
 ---
 
-<!-- _class: term -->
+<!-- _class: shot -->
 <!-- _footer: "" -->
 
 ## <span class="tag">recorded</span>The unadjusted answer
 
-```
-n = 1800   Atezo+Bev 962   Sorafenib 838
-deaths        231 vs 334
+![](img/seg2.png)
 
-UNADJUSTED OS   HR 0.505  (95% CI 0.43-0.60)   p = 1.64e-15
-
-baseline |SMD| > 0.10 : 8 of 11 covariates
-baseline |SMD| > 0.15 : 7
-
-  afp_ge_400                  0.325    0.436  -0.228  <-
-  macrovascular_invasion      0.319    0.427  -0.225  <-
-  age                        62.812   65.165  -0.210  <-
-  extrahepatic_spread         0.552    0.652  -0.204  <-
-  albi_ge2                    0.499    0.587  -0.178  <-
-  varices_at_baseline         0.244    0.323  -0.176  <-
-  ecog_ps                     0.358    0.434  -0.157  <-
-  asia                        0.541    0.483  +0.115  <-
-  bclc_C                      0.827    0.842  -0.040
-  male                        0.820    0.805  +0.038
-  child_pugh_score            5.306    5.308  -0.005
-
-```
-
-<p class="caption"><strong>HR 0.505</strong>, then <strong>8 of 11</strong> baseline factors out of balance. The first number was never real.</p>
+<p class="caption"><strong>HR 0.505</strong> — then the balance table. Every serious imbalance leans the same way, toward the treated arm.</p>
 
 ---
 
@@ -198,10 +157,10 @@ baseline |SMD| > 0.15 : 7
   - Pairs each treated patient with an untreated patient of similar profile
 
 > Match 1:1 on the propensity score, nearest
-> neighbour, no replacement. Sort treated by
-> the score **before** matching. Do not force
-> a match outside the caliper. Report how
-> many treated were left unmatched.
+> neighbour, no replacement. Take the treated
+> in **ascending** score order. Do not force a
+> match outside the caliper. Report how many
+> treated were left unmatched.
 
 - <span class="ic ic-eye"></span> **What to watch**
   - **706 pairs. 256 treated patients found no match** — that is honesty, not failure
@@ -211,33 +170,14 @@ baseline |SMD| > 0.15 : 7
 
 ---
 
-<!-- _class: term -->
+<!-- _class: shot -->
 <!-- _footer: "" -->
 
 ## <span class="tag">recorded</span>Matching, and what it costs
 
-```
-caliper = 0.2 x SD(logit PS) = 0.1142
-matched pairs         706
-patients after match  1412
-treated unmatched     256 (26.6% of treated)
+![](img/seg3.png)
 
-max |SMD| before      0.228
-max |SMD| after       0.044
-covariates > 0.10     0
-
-raw proportion who died (ignores censoring)
-  Atezo+Bev  25.6%
-  Sorafenib  38.0%
-  median follow-up  8.0 vs 6.0 months
-
-OS   HR 0.578 (0.48-0.70)   log-rank p = 8.75e-09
-     12-month 71.1% vs 55.7%   median 21.3 vs 13.46 months
-     figures/km_os.svg
-PFS  HR 0.632 (0.55-0.72)   log-rank p = 5.47e-12
-```
-
-<p class="caption"><strong>706 pairs</strong>, <strong>256 treated left out</strong>, and <strong>HR 0.578</strong> against a trial value of 0.58.</p>
+<p class="caption"><strong>706 pairs, 256 treated left unmatched.</strong> It separates the 124 who could never match from the 132 caliper failures.</p>
 
 ---
 
@@ -249,40 +189,26 @@ PFS  HR 0.632 (0.55-0.72)   log-rank p = 5.47e-12
 > Hold the data fixed. Vary only the analytic
 > choices: 15 covariate sets × 8 adjustment
 > methods = 120 runs. Report the median, the
-> spread, and **what fraction lands outside
-> the range I was hoping for.**
+> spread, and **how many landed outside the
+> range I was hoping for.**
 
 - <span class="ic ic-eye"></span> **What to watch**
-  - Median **0.582**, range **0.480–0.716**; only **63%** land in 0.55–0.61
-  - That 63% belongs in the limitations, not in the abstract
+  - The median lands on **0.58** every time. The **spread does not** — about a
+    third of the runs fall outside 0.55–0.61
+  - Nothing crosses 1.0. The direction is solid; the third decimal is not
 
 <!-- _footer: "live-demo · Missions 5.1–5.2　·　Steegen S, Tuerlinckx F, Gelman A, Vanpaemel W. Increasing transparency through a multiverse analysis. <em>Perspect Psychol Sci</em>. 2016;11(5):702-712. doi:10.1177/1745691616658637" -->
 
 ---
 
-<!-- _class: term -->
+<!-- _class: shot -->
 <!-- _footer: "" -->
 
 ## <span class="tag">recorded</span>120 analytic paths
 
-```
-naive (unadjusted)      0.505
-specifications          120  (15 covariate sets x 8 methods)
-median HR               0.582
-IQR                     0.560 - 0.609
-range                   0.480 - 0.716
-within 0.55-0.61        63%
-specs crossing HR 1.0   0
-specs whose CI hits 1.0 0
+![](img/seg4.png)
 
-            count  median    min    max
-method                                 
-iptw           15   0.584  0.557  0.595
-psm            90   0.595  0.480  0.716
-regression     15   0.556  0.546  0.576
-```
-
-<p class="caption">Median <strong>0.582</strong>, but only <strong>63%</strong> inside 0.55–0.61. Both numbers get reported.</p>
+<p class="caption">It found its own outlier: the 0.822 run matches on a near-degenerate score that reuses one control <strong>212 times</strong>.</p>
 
 ---
 
@@ -305,30 +231,14 @@ regression     15   0.556  0.546  0.576
 
 ---
 
-<!-- _class: term -->
+<!-- _class: shot -->
 <!-- _footer: "" -->
 
 ## <span class="tag">recorded</span>Four reviewers, blind to each other
 
-```
-Dispatching 4 review subagents in parallel...
+![](img/seg5.png)
 
-  Reviewer 1  statistical            [running]
-  Reviewer 2  clinical               [running]
-  Reviewer 3  reporting standards    [running]
-  Reviewer 4  reproducibility        [running]
-
-  Reviewer 3  done  198s   Major revision   7 major comments
-  Reviewer 1  done  280s   Major revision   7 major comments
-  Reviewer 2  done  306s   Major revision   7 major comments
-  Reviewer 4  done  380s   Major revision   6 major comments
-
-R4-3  site_join.py writes back over pooled.csv and crashes on rerun
-R4-1  "order-independent" is false: 232 tied scores, ~46/706 pairs move
-R3-7  PFS true value 0.59 carries no src tag and is in no output file
-```
-
-<p class="caption">All four returned <strong>Major revision</strong>. Three of the findings were real bugs, and were fixed.</p>
+<p class="caption"><strong>Four background agents launched</strong> from one message, each reading the manuscript and the output files, none seeing the others.</p>
 
 ---
 
@@ -345,7 +255,7 @@ R3-7  PFS true value 0.59 carries no src tag and is in no output file
 - → 1,800 patients, one table
 - → **HR 0.505** unadjusted
 - → **HR 0.578** matched
-- → 120 re-runs: **0.480–0.716**
+- → 120 re-runs: median **0.58**
 - → four reviewers, blind
 
 </div>

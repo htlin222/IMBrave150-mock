@@ -497,3 +497,57 @@ section.term .caption strong {
   color: var(--ink);
   font-weight: 600;
 }
+
+/* =========================================================================
+   Screenshot backup slides — a still frame from the recorded agent session.
+   Used only in deck-backup.md.
+   ========================================================================= */
+
+section.shot {
+  padding: 40px 56px 56px;
+}
+
+section.shot h2 {
+  font-family: var(--sans);
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: 0;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+}
+
+section.shot h2 .tag {
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink-60);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-right: 14px;
+}
+
+/* The frame is 1600x900 from a 1280x720 slide, so it is scaled down; a hairline
+   border keeps the dark terminal from bleeding into the white page. */
+section.shot img {
+  /* The frame is 16:9 and the space left for it is not, so let the image keep
+     its own ratio and centre it — a fixed width plus object-fit would
+     letterbox the dark terminal inside a white box. */
+  display: block;
+  max-width: 100%;
+  max-height: 516px;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--rule);
+}
+
+section.shot .caption {
+  font-size: 20px;
+  color: var(--ink-60);
+  margin: 12px 0 0;
+}
+
+section.shot .caption strong {
+  color: var(--ink);
+  font-weight: 600;
+}

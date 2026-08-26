@@ -19,9 +19,12 @@ Koo Foundation Sun Yat-Sen Cancer Center (和信治癌中心醫院).
 | Path | What it is |
 |---|---|
 | `deck.md` | **The talk. 12 slides.** Edit this one. |
-| `deck-backup.md` | Generated from `deck.md` — the same slides with a recorded terminal capture after each signpost, for when the live demo will not cooperate. Do not hand-edit; regenerate. |
+| `deck-backup.md` | Generated from `deck.md` — the same slides with a still frame from a real recorded agent session after each signpost, for when the live demo will not cooperate. Do not hand-edit; regenerate. |
 | `deck-full.md` | Reference edition, 43 slides, for reading after the talk. |
-| `captured/` | Real stdout from the recorded pipeline run, embedded by `deck-backup.md`. |
+| `img/` | One still frame per signpost, cut from the recordings. |
+| `recordings/` | The five `.mp4` sessions the frames came from. |
+| `tools/record_segments.sh` | Records the five segments as real Claude Code sessions and cuts the frames. |
+| `tools/make_backup_deck.py` | Builds `deck-backup.md` from `deck.md` + `img/`. |
 | `theme.css` | `mono-academic`: the black-and-white theme, plus the Lucide icons as inline data-URI masks. |
 | `.marprc.yml` | Render settings shared by `make` and CI, so the released PDFs match your preview. |
 | `tools/check_overflow.py` | Fails the build if any slide is clipped. |
@@ -121,11 +124,53 @@ Slide classes, applied with `<!-- _class: … -->`: `title`, `section`,
 `statement`, `dense` (one notch smaller, for a legitimately full slide),
 `refs` (bibliography leading), `cols` (two columns).
 
+## Recording the backup deck
+
+```bash
+./tools/record_segments.sh        # all five, ~45 min; or pass 1..5 for one
+python3 tools/make_backup_deck.py
+make check
+```
+
+Each segment runs as a real Claude Code session under VHS, gets the slide's own
+prompt typed into it, and does the work for real. Three things this cost an
+hour each to learn, all encoded in the script:
+
+- **VHS cannot run in parallel.** Its `ttyd` binds a fixed port (7681), so a
+  second concurrent instance silently gets no terminal and the tape dies on the
+  startup wait with an unhelpful error.
+- **Use an absolute path to `claude`.** Inside tmux or ttyd, `PATH` may resolve
+  to an older build, which gets SIGKILLed in a nested session.
+- **Dismiss the first-run dialogs by hand first.** A fresh install shows *"Try
+  the new fullscreen renderer?"*, which hides the composer footer VHS waits on.
+  The tape then hangs until timeout, showing nothing useful.
+
 ## Numbers
 
 Every figure quoted on a slide came from a recorded run of the `live-demo/`
 pipeline in this repository, not from the course notes. If you rerun the
 pipeline and a number moves, the slide is wrong, not the run.
+
+### Which numbers actually reproduce
+
+Recording the demo with independent agent sessions showed that not every figure
+is stable, and the slides now quote only the ones that are:
+
+| Figure | Reproduces? |
+|---|---|
+| Cohort counts, albumin/bilirubin medians | Yes, exactly |
+| Unadjusted HR 0.505 and its CI | Yes, exactly |
+| Baseline SMDs | Yes, exactly |
+| Caliper 0.114, 706 pairs, 256 unmatched | Yes — **but only if the prompt says `ascending`** |
+| Multiverse median ≈ 0.58, and nothing crossing 1.0 | Yes |
+| Multiverse *range* and *% inside 0.55–0.61* | **No** — moves with implementation choices |
+
+The matching one is the sharpest lesson. An earlier version of the slide said
+only *"sort treated by the score before matching"*. A recorded session read that
+as descending and returned **765 pairs, 20.5% unmatched** instead of 706 and
+26.6% — the same number the statistical reviewer had predicted from the same
+ambiguity. Greedy matching is order-dependent; the direction has to be stated,
+and the slide now states it.
 
 ## Citations
 

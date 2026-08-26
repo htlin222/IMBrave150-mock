@@ -98,8 +98,9 @@ description: "A live demonstration of driving an AI coding agent from ten messy 
 > Group the ten files by their column
 > fingerprint, not by filename. Report the
 > actual values with `unique()`. Convert to
-> this schema — 27 fields, names and units
-> fixed. Never drop a row for missingness.
+> one schema, names and units fixed. Never
+> drop a row for missingness. Then attach
+> each hospital's type and region.
 
 - <span class="ic ic-eye"></span> **What to watch**
   - Albumin is in g/L at some sites, g/dL at others — a tenfold error waiting
@@ -134,10 +135,10 @@ description: "A live demonstration of driving an AI coding agent from ten messy 
   - Pairs each treated patient with an untreated patient of similar profile
 
 > Match 1:1 on the propensity score, nearest
-> neighbour, no replacement. Sort treated by
-> the score **before** matching. Do not force
-> a match outside the caliper. Report how
-> many treated were left unmatched.
+> neighbour, no replacement. Take the treated
+> in **ascending** score order. Do not force a
+> match outside the caliper. Report how many
+> treated were left unmatched.
 
 - <span class="ic ic-eye"></span> **What to watch**
   - **706 pairs. 256 treated patients found no match** — that is honesty, not failure
@@ -155,12 +156,13 @@ description: "A live demonstration of driving an AI coding agent from ten messy 
 > Hold the data fixed. Vary only the analytic
 > choices: 15 covariate sets × 8 adjustment
 > methods = 120 runs. Report the median, the
-> spread, and **what fraction lands outside
-> the range I was hoping for.**
+> spread, and **how many landed outside the
+> range I was hoping for.**
 
 - <span class="ic ic-eye"></span> **What to watch**
-  - Median **0.582**, range **0.480–0.716**; only **63%** land in 0.55–0.61
-  - That 63% belongs in the limitations, not in the abstract
+  - The median lands on **0.58** every time. The **spread does not** — about a
+    third of the runs fall outside 0.55–0.61
+  - Nothing crosses 1.0. The direction is solid; the third decimal is not
 
 <!-- _footer: "live-demo · Missions 5.1–5.2　·　Steegen S, Tuerlinckx F, Gelman A, Vanpaemel W. Increasing transparency through a multiverse analysis. <em>Perspect Psychol Sci</em>. 2016;11(5):702-712. doi:10.1177/1745691616658637" -->
 
@@ -198,7 +200,7 @@ description: "A live demonstration of driving an AI coding agent from ten messy 
 - → 1,800 patients, one table
 - → **HR 0.505** unadjusted
 - → **HR 0.578** matched
-- → 120 re-runs: **0.480–0.716**
+- → 120 re-runs: median **0.58**
 - → four reviewers, blind
 
 </div>

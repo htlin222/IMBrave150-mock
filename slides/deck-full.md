@@ -325,11 +325,12 @@ description: "Driving an AI coding agent end-to-end, from ten messy hospital CSV
 - <span class="ic ic-shuffle"></span> **Current step**
   - Data held fixed; only analytic choices vary
   - 15 covariate sets × 8 adjustment methods = **120 specifications**
-  - Median HR **0.582**, IQR 0.560–0.609, range 0.480–0.716
+  - Median HR **0.582**, IQR 0.560–0.609, range 0.480–0.716 *(this run)*
 - <span class="ic ic-message"></span> **Good prompt**
   - Enumerate the grid explicitly — the agent must not choose the sensitivity analyses that flatter the result
 - <span class="ic ic-alert"></span> **Report the honest number**
-  - Only **63%** of specifications land in 0.55–0.61
+  - Only **63%** of specifications land in 0.55–0.61 — and the range,
+    unlike the median, moves with implementation choices
   - That fraction belongs in the Limitations, not in the abstract
 
 <!-- _footer: "<sup>4</sup> Steegen S, Tuerlinckx F, Gelman A, Vanpaemel W. Increasing transparency through a multiverse analysis. <em>Perspect Psychol Sci</em>. 2016;11(5):702-712. doi:10.1177/1745691616658637" -->
