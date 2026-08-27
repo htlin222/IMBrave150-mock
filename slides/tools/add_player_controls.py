@@ -20,6 +20,9 @@ import re
 import sys
 
 SPEEDS = [1, 1.25, 1.5, 2, 3]
+# 1.5x is the default: the whole 64-minute recording plays in 42:45, which is
+# the slot it was built for, and nothing on screen becomes hard to read.
+DEFAULT_SPEED = 1.5
 
 CSS = """
 <style>
@@ -78,7 +81,7 @@ JS = """
 (function () {
   var MARKERS = __MARKERS__;
   var SPEEDS = __SPEEDS__;
-  var state = { speed: 1, playing: true };
+  var state = { speed: __DEFAULT_SPEED__, playing: true };
   var el = document.getElementById('player');
   var mk = window.__talkMount;   // (opts) -> player handle
   var player = window.__talkPlayer;
@@ -244,11 +247,12 @@ def main():
         f"    var o = Object.assign({{}}, {opts_arg}, extra || {{}});\n"
         f"    return AsciinemaPlayer.create({src_arg}, {el_arg}, o);\n"
         f"  }};\n"
-        f"  window.__talkPlayer = window.__talkMount({{}});")
+        f"  window.__talkPlayer = window.__talkMount({{speed: {DEFAULT_SPEED}}});")
     s = s[:m.start()] + boot + s[m.end():]
 
     js = (JS.replace("__MARKERS__", json.dumps(markers))
-            .replace("__SPEEDS__", json.dumps(SPEEDS)))
+            .replace("__SPEEDS__", json.dumps(SPEEDS))
+            .replace("__DEFAULT_SPEED__", json.dumps(DEFAULT_SPEED)))
     s = s.replace("</head>", CSS + "</head>", 1)
     s = s.replace("<body>", "<body>" + BAR, 1)
     if "<body>" not in html.read_text():          # some templates omit <body>
@@ -256,8 +260,8 @@ def main():
     s = s.replace("</body>", js + "</body>", 1)
 
     html.write_text(s)
-    print(f"{html.name}: speed control ({', '.join(str(x) + 'x' for x in SPEEDS)}) "
-          f"and {len(markers)} chapters")
+    print(f"{html.name}: speed control ({', '.join(str(x) + 'x' for x in SPEEDS)}), "
+          f"default {DEFAULT_SPEED}x, {len(markers)} chapters")
 
 
 if __name__ == "__main__":

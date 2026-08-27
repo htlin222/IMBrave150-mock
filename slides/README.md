@@ -142,6 +142,9 @@ between them is just terminal output.
 Play to the next marker, pause, talk, carry on. The page carries a control bar:
 speed (1× to 3×), a dropdown of all thirty chapters, and play/pause.
 
+**It opens at 1.5×, where the recording runs 42:45** — the slot it was built
+for, with no cutting. At 1× it is 64:08.
+
 asciinema-player takes `speed` only at construction and exposes no setter — its
 handle has just play, pause, seek, getCurrentTime, getDuration and dispose — and
 its documented `<`/`>` and `[`/`]` shortcuts do nothing in this build (measured:
@@ -155,9 +158,8 @@ make talk        # re-record everything (~65 min; needs a logged-in claude)
 make cast-html   # rebuild the players from the existing recordings
 ```
 
-Eleven segments, eighteen agent turns, thirty markers. It runs 64 minutes, which
-is longer than any slot it was built for — that is deliberate: you play chapters,
-not the file. `cast/RUNNING-ORDER.md` has a 20-minute route, a 45-minute route,
+Eleven segments, eighteen agent turns, thirty markers. It is 64 minutes at 1×
+and 42:45 at the default 1.5×, so a 45-minute slot needs no cuts at all. `cast/RUNNING-ORDER.md` has a 20-minute route, a 45-minute route,
 and the four moments worth stopping on. The prompts are
 deliberately open — *"tell me what you notice"* rather than *"do X"* — so the
 slides never print a result and the agent's own reasoning is the content. One

@@ -1,11 +1,15 @@
 # Running order — driving the recording on stage
 
-`cast/talk-full.html` is 64:08 and you are not going to play all of it. Open it,
-play to a marker, pause, talk, carry on.
+`cast/talk-full.html` opens at **1.5×**, where the whole thing runs **42:45**.
+That is the slot it was built for, so you can play all of it if you want to —
+or play to a marker, pause, talk, and carry on.
+
+At 1× it is 64:08; at 2×, 32:04; at 3×, 21:22.
 
 There is a control bar across the top:
 
-- **Speed** — 1×, 1.25×, 1.5×, 2×, 3×. Position is kept when you switch.
+- **Speed** — 1×, 1.25×, 1.5×, 2×, 3×, opening at 1.5×. Position is kept when
+  you switch.
 - **Chapter** — a dropdown of all thirty markers, plus ← → to step between them.
 - **Pause / Play** and the current time.
 
@@ -13,26 +17,27 @@ Keys, if you prefer them: `+` / `-` change speed, `n` / `p` step chapters, and
 the player's own space bar pauses. The player's built-in `[` `]` and `<` `>`
 shortcuts do **not** work in this build — that is why the bar exists.
 
-Most of the recording plays fine at **1.5×**; the stretches where the agent is
-thinking rather than printing take 2× without becoming unreadable.
+Drop to 1× for the moments you want the room to read carefully, and push to 2×
+through the stretches where the agent is thinking rather than printing.
 
-Three routes below. Times are where each marker starts in the recording.
+Three routes below. **Marker times are positions in the recording, which do not
+change with speed.** The durations are what you will actually spend at 1.5×.
 
 ---
 
 ## Route A — a 20-minute slot
 
-Roughly nine minutes of playback and eleven of you. It opens on the mess, spends
+About **six minutes** of playback at 1.5×, leaving fourteen for you. It opens on the mess, spends
 its budget on the one segment where a single word changes the answer, and ends
 on four agents working at once.
 
-| play from | to | mins | what the room sees |
+| play from | to | at 1.5× | what the room sees |
 |---|---|---|---|
-| 0:03 | 0:56 | 0:53 | Title, what to watch for, the disclaimer |
-| 0:56 | 1:22 | 0:26 | `bat` on three raw exports — three different header rows |
-| 13:00 | 18:32 | 5:32 | **The whole matching segment.** Plan, run, then "which direction did you sort?", then "which one do you publish?" |
-| 59:08 | 60:43 | 1:35 | Four reviewers opening at once |
-| 63:29 | end | 0:39 | Take home |
+| 0:03 | 0:56 | 0:35 | Title, what to watch for, the disclaimer |
+| 0:56 | 1:22 | 0:17 | `bat` on three raw exports — three different header rows |
+| 13:00 | 18:32 | 3:41 | **The whole matching segment.** Plan, run, then "which direction did you sort?", then "which one do you publish?" |
+| 59:08 | 60:43 | 1:03 | Four reviewers opening at once |
+| 63:29 | end | 0:26 | Take home |
 
 **Skip the 1:22 answer.** It is 3:56 and its content is a table you can describe
 in one sentence: three dialects, and one of them stores albumin in g/L.
@@ -45,29 +50,34 @@ and did not say which way, then let it play.
 
 ## Route B — a 45-minute slot
 
-About 39 minutes of playback. Everything except subgroups and the writing
-chapter, which is where the recording sprawls.
+At 1.5× the **whole recording** is 42:45, so the honest answer for a 45-minute
+slot is: play all of it and talk over the pauses. If you would rather have room
+to stop and discuss, this cut is **26 minutes** at 1.5× and leaves nineteen for
+you.
 
-| play from | to | mins | chapter |
+| play from | to | at 1.5× | chapter |
 |---|---|---|---|
-| 0:03 | 9:03 | 9:00 | Open, look at it, three dialects into one table |
-| 9:03 | 13:00 | 3:57 | The obvious comparison, and "do you believe it" |
-| 13:00 | 18:32 | 5:32 | Making the arms comparable — including the failure |
-| 18:32 | 24:21 | 5:49 | Survival, and why a curve is not a percentage |
-| 31:43 | 41:18 | 9:35 | Try to break your own result — 120 runs, then which are junk |
-| 59:08 | end | 5:00 | Four reviewers, and fixing one real defect |
+| 0:03 | 9:03 | 6:00 | Open, look at it, three dialects into one table |
+| 9:03 | 13:00 | 2:38 | The obvious comparison, and "do you believe it" |
+| 13:00 | 18:32 | 3:41 | Making the arms comparable — including the failure |
+| 18:32 | 24:21 | 3:53 | Survival, and why a curve is not a percentage |
+| 31:43 | 41:18 | 6:23 | Try to break your own result — 120 runs, then which are junk |
+| 59:08 | end | 3:20 | Four reviewers, and fixing one real defect |
 
 **Skipped:** 24:21–31:43 subgroups, 41:18–59:08 the writing chapter.
 
 ---
 
-## Route C — the whole thing, 64:08
+## Route C — the whole thing
 
-For the workshop version, or as the link you hand out afterwards. Nothing is
-cut. Be aware that 45:05–59:08 is a single fourteen-minute turn: the agent
-tagging every number in the Results with the file it came from. It is the most
-literal possible demonstration of "every number has a source" and the least
-watchable stretch in the recording. Play a minute of it, then skip to 59:08.
+42:45 at 1.5×, 64:08 at 1×. This is the default, and for a 45-minute slot it
+needs no cutting at all.
+
+One warning: 45:05–59:08 is a single fourteen-minute turn — the agent tagging
+every number in the Results with the file it came from. At 1.5× that is 9:22,
+still the longest stretch in the recording. It is the most literal possible
+demonstration of "every number has a source" and the least watchable thing in
+the hour. Push it to 2× (7:01), or play a minute and skip to 59:08.
 
 ---
 

@@ -832,13 +832,13 @@ var AsciinemaPlayer=function(A){"use strict";function e(A){return"number"==typeo
     var o = Object.assign({}, {autoPlay:true, controls:"auto", fit:"both"}, extra || {});
     return AsciinemaPlayer.create({data: data}, document.getElementById('player'), o);
   };
-  window.__talkPlayer = window.__talkMount({});
+  window.__talkPlayer = window.__talkMount({speed: 1.5});
 </script></div>
 <script>
 (function () {
   var MARKERS = [{"t": 3.0, "label": "\u25ae 00 \u00b7 What we are about to do"}, {"t": 30.0, "label": "\u25ae 01 \u00b7 Look at it before you touch it"}, {"t": 56.0, "label": "$ the raw files"}, {"t": 82.0, "label": "\u25b8 what do you notice"}, {"t": 318.0, "label": "\u25ae 02 \u00b7 Three dialects, one table"}, {"t": 345.0, "label": "\u25b8 build the table, your schema"}, {"t": 504.0, "label": "\u25b8 did you lose anyone"}, {"t": 543.0, "label": "\u25ae 03 \u00b7 The obvious comparison"}, {"t": 570.0, "label": "\u25b8 simplest comparison"}, {"t": 623.0, "label": "\u25b8 do you believe it"}, {"t": 780.0, "label": "\u25ae 04 \u00b7 Making the arms comparable"}, {"t": 807.0, "label": "\u25b8 handle it, plan first"}, {"t": 938.0, "label": "\u25b8 which direction did you sort"}, {"t": 1052.0, "label": "\u25b8 which one do you publish"}, {"t": 1112.0, "label": "\u25ae 05 \u00b7 Why a curve, not a percentage"}, {"t": 1139.0, "label": "\u25b8 survival, your choice of form"}, {"t": 1400.0, "label": "\u25b8 explain the gap"}, {"t": 1461.0, "label": "\u25ae 06 \u00b7 Subgroups test consistency"}, {"t": 1489.0, "label": "\u25b8 fix the list first"}, {"t": 1666.0, "label": "\u25b8 which subgroup benefits most"}, {"t": 1903.0, "label": "\u25ae 07 \u00b7 Try to break your own result"}, {"t": 1930.0, "label": "\u25b8 vary every choice"}, {"t": 2252.0, "label": "\u25b8 which runs are junk"}, {"t": 2478.0, "label": "\u25ae 08 \u00b7 Writing it down, from the log"}, {"t": 2505.0, "label": "\u25b8 methods from the scripts"}, {"t": 2705.0, "label": "\u25b8 results, every number sourced"}, {"t": 3548.0, "label": "\u25ae 09 \u00b7 Let it review its own work"}, {"t": 3576.0, "label": "\u25b8 four reviewers in parallel"}, {"t": 3643.0, "label": "\u25b8 real defects, fix one"}, {"t": 3809.0, "label": "\u25ae 10 \u00b7 What to take home"}];
   var SPEEDS = [1, 1.25, 1.5, 2, 3];
-  var state = { speed: 1, playing: true };
+  var state = { speed: 1.5, playing: true };
   var el = document.getElementById('player');
   var mk = window.__talkMount;   // (opts) -> player handle
   var player = window.__talkPlayer;
