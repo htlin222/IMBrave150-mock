@@ -130,7 +130,9 @@ jobs:
       # and the three PDFs. The player is committed already — it is a single
       # self-contained HTML file — so CI only assembles, it does not re-record.
       - name: Build the presenter bundle
-        run: ./scripts/make-slides-bundle.sh "${{ steps.v.outputs.version }}"
+        # `display` already has the `slides-` tag prefix stripped, so the zip is
+        # imbrave150-slides-v2.2.0.zip rather than …-slides-slides-v2.2.0.zip.
+        run: ./scripts/make-slides-bundle.sh "${{ steps.v.outputs.display }}"
 
       - name: Upload the PDFs and the bundle
         uses: actions/upload-artifact@v4
