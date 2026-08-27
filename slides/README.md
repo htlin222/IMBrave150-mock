@@ -261,14 +261,27 @@ the body (`<span class="ref">n</span>`), the `<sup>n</sup>` in that slide's
 References slide starts at 6, which `theme.css` maps with an
 `ol[start="6"]` counter rule — renumber both if you insert a reference.
 
+## The presenter bundle
+
+```bash
+./scripts/make-slides-bundle.sh v2.2.0
+```
+
+One zip — 4.6 MB — with the running order, the recording as a self-contained
+offline player, and all three PDFs. That is everything needed to give the talk
+on a machine with no clone, no network and no toolchain. The script asserts the
+PDFs and the player exist before packing, then unpacks the finished zip and
+checks the files are really in it, because a bundle that turns out to be empty
+is discovered at the worst possible moment.
+
 ## CI/CD
 
 `.github/workflows/slides.yml`:
 
 - **push to `main`** → rebuild all three PDFs, verify no slide overflows, upload
   them as a workflow artifact.
-- **push a tag `slides-v*`** → the same, then publish a GitHub Release with all
-  three PDFs attached.
+- **push a tag `slides-v*`** → the same, then publish a GitHub Release with the
+  presenter bundle and all three PDFs attached.
 
 ```bash
 git tag slides-v1.0.0 && git push origin slides-v1.0.0

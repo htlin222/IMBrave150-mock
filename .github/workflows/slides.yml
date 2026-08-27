@@ -126,11 +126,19 @@ jobs:
             echo "- decks: $(find dist -maxdepth 1 -name '*.pdf' | wc -l | tr -d ' ')"
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Upload the PDF
+      # One zip the presenter can carry: the running order, the offline player
+      # and the three PDFs. The player is committed already — it is a single
+      # self-contained HTML file — so CI only assembles, it does not re-record.
+      - name: Build the presenter bundle
+        run: ./scripts/make-slides-bundle.sh "${{ steps.v.outputs.version }}"
+
+      - name: Upload the PDFs and the bundle
         uses: actions/upload-artifact@v4
         with:
           name: imbrave150-slides-${{ steps.v.outputs.version }}
-          path: slides/dist/*.pdf
+          path: |
+            slides/dist/*.pdf
+            dist/imbrave150-slides-*.zip
           if-no-files-found: error
 
       - name: Publish release
@@ -140,13 +148,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: "Slides ${{ steps.v.outputs.display }}"
-          files: slides/dist/*.pdf
+          files: |
+            slides/dist/*.pdf
+            dist/imbrave150-slides-*.zip
           body: |
             **Mission by Mission** — driving an AI coding agent, live, from ten
             messy hospital exports to a result you can audit.
 
             | file | what it is |
             |---|---|
+            | `imbrave150-slides-*.zip` | **Start here.** Everything needed to present, offline: the running order, the 64-minute recording as a self-contained player, and all three PDFs. |
             | `imbrave150-deck.pdf` | **The talk.** 12 slides: five signposts around a live demo. |
             | `imbrave150-deck-backup.pdf` | The same, with recorded terminal output after each signpost, for when the demo will not cooperate. |
             | `imbrave150-deck-full.pdf` | Reference edition, 43 slides, for reading afterwards. |
