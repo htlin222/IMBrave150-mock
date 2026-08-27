@@ -21,9 +21,9 @@ REQUIRED=(
   "$SLIDES/dist/imbrave150-deck.pdf"
   "$SLIDES/dist/imbrave150-deck-backup.pdf"
   "$SLIDES/dist/imbrave150-deck-full.pdf"
-  "$SLIDES/cast/talk-full.html"
-  "$SLIDES/cast/talk-full.cast"
-  "$SLIDES/cast/RUNNING-ORDER.md"
+  "$SLIDES/cast/walk.html"
+  "$SLIDES/cast/walk.cast"
+  "$SLIDES/SPEAKER-NOTES.md"
 )
 for f in "${REQUIRED[@]}"; do
   [ -s "$f" ] || { echo "missing or empty: ${f#"$ROOT"/}"; echo "run: cd slides && make check && make cast-html"; exit 1; }
@@ -32,17 +32,19 @@ done
 mkdir -p "$STAGE" "$OUT"
 
 # ---- 上台當天真的會用到的三樣 ----
-cp "$SLIDES/cast/RUNNING-ORDER.md" "$STAGE/"
-cp "$SLIDES/cast/talk-full.html"   "$STAGE/talk.html"
+cp "$SLIDES/SPEAKER-NOTES.md" "$STAGE/"
+cp "$SLIDES/cast/walk.html"   "$STAGE/talk.html"
 cp "$SLIDES/dist/imbrave150-deck.pdf"        "$STAGE/deck.pdf"
 cp "$SLIDES/dist/imbrave150-deck-backup.pdf" "$STAGE/deck-backup.pdf"
 cp "$SLIDES/dist/imbrave150-deck-full.pdf"   "$STAGE/deck-reference.pdf"
 
 # ---- 來源，給想重建或引用的人 ----
 mkdir -p "$STAGE/source"
-cp "$SLIDES/cast/talk-full.cast"    "$STAGE/source/"
-cp "$SLIDES/cast/talk-markers.tsv"  "$STAGE/source/"
-[ -f "$SLIDES/cast/talk.html" ] && cp "$SLIDES/cast/talk.html" "$STAGE/source/talk-short.html"
+cp "$SLIDES/cast/walk.cast"         "$STAGE/source/"
+cp "$SLIDES/cast/walk-markers.tsv"  "$STAGE/source/"
+cp "$SLIDES/cast/RUNNING-ORDER.md"  "$STAGE/source/"
+# The long version: the same study with the methodological arguments in it.
+[ -f "$SLIDES/cast/talk-full.html" ] && cp "$SLIDES/cast/talk-full.html" "$STAGE/talk-long.html"
 
 cat > "$STAGE/START-HERE.md" <<'EOF'
 # Mission by Mission — presenter bundle
@@ -51,17 +53,18 @@ Everything needed to give the talk, offline. No clone, no network, no toolchain.
 
 | file | what it is |
 |---|---|
-| `RUNNING-ORDER.md` | **Read this first.** Three routes through the recording, and where to pause. |
-| `talk.html` | The recording. Double-click it; any browser, no internet. 64 minutes, 30 markers. |
+| `SPEAKER-NOTES.md` | **Read this first.** What to say, slide by slide and stop by stop. In Chinese. |
+| `talk.html` | The recording. Double-click it; any browser, no internet. 32:55, or 22 minutes at the default 1.5x. |
+| `talk-long.html` | The hour-long version, with the methodological arguments in it. For questions, and for handing out. |
 | `deck.pdf` | The 12-slide talk deck. |
 | `deck-backup.pdf` | The same slides with a still frame from a recorded session after each signpost, for when a live demo will not cooperate. |
 | `deck-reference.pdf` | The 43-slide reference edition, for handing out afterwards. |
-| `source/` | The raw `.cast`, the marker log, and the short 8-minute recording. |
+| `source/` | The raw `.cast`, the marker log, and the running order for the long version. |
 
 ## On the day
 
 1. Open `talk.html`. It plays offline.
-2. Follow `RUNNING-ORDER.md`: play to a marker, pause, talk, carry on.
+2. Follow `SPEAKER-NOTES.md`: five stops, one minute of talking at each.
 3. Markers are the dots on the progress bar — **click one to jump to it**.
    Clicking the terminal toggles play/pause. Bracket keys do not step between
    markers in this build, so use the mouse.
@@ -83,7 +86,7 @@ ZIP="$OUT/$NAME-$VERSION.zip"
 # 從解開後的成品再驗一次：講者拿到的東西真的不是空的。
 VERIFY="$(mktemp -d)"
 unzip -q "$ZIP" -d "$VERIFY"
-for f in START-HERE.md RUNNING-ORDER.md talk.html deck.pdf deck-backup.pdf deck-reference.pdf; do
+for f in START-HERE.md SPEAKER-NOTES.md talk.html deck.pdf deck-backup.pdf deck-reference.pdf; do
   [ -s "$VERIFY/$NAME/$f" ] || { echo "bundle is missing $f"; exit 1; }
 done
 grep -q "asciinema" "$VERIFY/$NAME/talk.html" || { echo "talk.html has no player in it"; exit 1; }

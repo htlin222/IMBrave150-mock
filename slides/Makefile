@@ -28,7 +28,7 @@ export CHROME_PATH
 PYTHON ?= $(if $(wildcard ../.venv/bin/python),../.venv/bin/python,python3)
 SKILL  ?= $(HOME)/.claude/skills/agent-demo-recorder
 
-.PHONY: all pdf deck html png watch clean check talk cast cast-html
+.PHONY: all pdf deck html png watch clean check walk talk cast cast-html
 
 all: pdf
 
@@ -66,10 +66,19 @@ check: png
 # One continuous agent session, driven prompt-by-prompt, recorded as terminal
 # text rather than video. `cast` re-records (~10 min, needs a logged-in claude);
 # `cast-html` just rebuilds the player from the existing recording.
-# The full 65-minute talk: slides, data and agent in one recording.
+# The walkthrough that gets presented: data, cleaning, exploring, analysis,
+# writing. Plain prompts, no methodological detours. ~33 min, 22 min at 1.5x.
+walk:
+	./tools/record_walkthrough.sh
+	$(PYTHON) tools/add_markers.py walk.cast walk-markers.tsv
+	$(PYTHON) tools/trim_cast.py cast/walk.cast 6.2
+	$(MAKE) cast-html
+
+# The long version, with the methodological arguments in it. ~64 min.
 talk:
 	./tools/record_talk.sh
 	$(PYTHON) tools/add_markers.py
+	$(PYTHON) tools/trim_cast.py cast/talk-full.cast 6.2
 	$(MAKE) cast-html
 
 # The short 8-minute version: five prompts, no slides.
@@ -83,7 +92,7 @@ cast:
 # API for. Regenerating without that second step silently ships a page with no
 # way to change speed, so the two always run together.
 cast-html:
-	@for c in talk-full talk; do \
+	@for c in walk talk-full talk; do \
 		[ -f "cast/$$c.cast" ] || continue; \
 		$(PYTHON) $(SKILL)/scripts/gen_html.py "cast/$$c.cast" --player --no-loop \
 			--title "Mission by Mission" -o "cast/$$c.html"; \

@@ -21,12 +21,15 @@ Koo Foundation Sun Yat-Sen Cancer Center (和信治癌中心醫院).
 | `deck.md` | **The talk. 12 slides.** Edit this one. |
 | `deck-backup.md` | Generated from `deck.md` — the same slides with a still frame from a real recorded agent session after each signpost, for when the live demo will not cooperate. Do not hand-edit; regenerate. |
 | `deck-full.md` | Reference edition, 43 slides, for reading after the talk. |
-| `cast/talk-full.cast` | **The whole talk, one session, 64 min** — slides, data and agent in one terminal. |
-| `cast/talk-full.html` | Self-contained offline player, with speed and chapter controls. Open it in any browser. |
+| `cast/walk.html` | **The recording that gets presented.** 32:55, or 22 min at the default 1.5x. Data, cleaning, exploring, analysis, writing — plain prompts, no detours. |
+| `SPEAKER-NOTES.md` | **Read before presenting.** What to say, in Chinese, for English slides. Five stops. |
+| `cast/talk-full.html` | The hour-long version, with the methodological arguments in it. For questions and for handing out. |
 | `cast/talk-markers.tsv` | Every slide, shell command and prompt, with the time it happened. |
 | `cast/RUNNING-ORDER.md` | **Read this before you present.** Three routes through the recording, and where to pause. |
 | `tools/add_player_controls.py` | Injects the speed buttons and chapter dropdown into the generated player. |
-| `talk/` | The presenterm decks shown inside the recording, and their theme. |
+| `walkthrough/` | The presenterm cards shown inside the walkthrough. |
+| `talk/` | The cards for the long version. |
+| `tools/trim_cast.py` | Cuts dead air off the front of a recording, carrying markers with it. |
 | `cast/talk.cast` | The earlier short version: five prompts, no slides, 8 min. |
 | `img/` | One still frame per signpost, cut from the per-segment recordings. |
 | `recordings/` | The five `.mp4` sessions the frames came from. |
@@ -154,12 +157,24 @@ runs the injector after the generator; a page regenerated without it looks fine
 and silently has no speed control, which the bundle script now checks for.
 
 ```bash
-make talk        # re-record everything (~65 min; needs a logged-in claude)
+make walk        # re-record the walkthrough (~33 min; needs a logged-in claude)
+make talk        # re-record the long version (~65 min)
 make cast-html   # rebuild the players from the existing recordings
 ```
 
-Eleven segments, eighteen agent turns, thirty markers. It is 64 minutes at 1×
-and 42:45 at the default 1.5×, so a 45-minute slot needs no cuts at all. `cast/RUNNING-ORDER.md` has a 20-minute route, a 45-minute route,
+Two recordings, from the same repository and the same data.
+
+**`walk.cast` — the one you present.** Five stages in a straight line: data,
+cleaning, exploring, analysis, writing. Fourteen turns, twenty-two markers,
+32:55 — 22 minutes at the default 1.5×. The prompts are deliberately plain,
+the kind anyone would type. There are no methodological arguments in it and no
+staged failures: the audience has never seen a terminal, and what is being
+taught is the shape of the work.
+
+**`talk-full.cast` — the long version.** The same study with the arguments
+kept in: what happens when a prompt is ambiguous, 120 analytic paths, four
+reviewers. Eighteen turns, thirty markers, 64 minutes. Hand it out; play from
+it if a question needs it. `cast/RUNNING-ORDER.md` has a 20-minute route, a 45-minute route,
 and the four moments worth stopping on. The prompts are
 deliberately open — *"tell me what you notice"* rather than *"do X"* — so the
 slides never print a result and the agent's own reasoning is the content. One

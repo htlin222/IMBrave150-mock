@@ -47,9 +47,35 @@ description: "A live demonstration of driving an AI coding agent from ten messy 
   - It reads your files, writes scripts, runs them, reads the error, tries again
   - It keeps going until a condition you set is met
 - <span class="ic ic-eye"></span> **So the hard part moves**
-  - Not *"can it write the code"* — it can
-  - But *"how do I know the answer it handed me is right"*
+  - Not _"can it write the code"_ — it can
+  - But _"how do I know the answer it handed me is right"_
 - <span class="ic ic-check"></span> That question is the whole talk
+
+---
+
+## What You Are Looking At
+
+<div class="columns">
+<div>
+
+### <span class="ic ic-terminal"></span> The screen
+
+- **Top** — what I typed, in plain English
+- **Middle** — what it decided to do, and the commands it ran
+- **Bottom** — the answer, and how long it took
+
+</div>
+<div>
+
+### <span class="ic ic-file"></span> The important part
+
+- It does not answer from memory
+- It **writes a file of instructions**, runs it, reads the result
+- That file stays on disk
+- Anyone can open it and check what was actually done
+
+</div>
+</div>
 
 ---
 
