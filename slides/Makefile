@@ -78,11 +78,16 @@ cast:
 	$(PYTHON) tools/add_markers.py talk.cast chapters.tsv
 	$(MAKE) cast-html
 
+# The generator makes a bare asciinema-player page; add_player_controls then
+# bolts on the speed buttons and the chapter dropdown, which the player has no
+# API for. Regenerating without that second step silently ships a page with no
+# way to change speed, so the two always run together.
 cast-html:
 	@for c in talk-full talk; do \
 		[ -f "cast/$$c.cast" ] || continue; \
 		$(PYTHON) $(SKILL)/scripts/gen_html.py "cast/$$c.cast" --player --no-loop \
 			--title "Mission by Mission" -o "cast/$$c.html"; \
+		$(PYTHON) tools/add_player_controls.py "cast/$$c.html" "cast/$$c.cast"; \
 	done
 	@ls -lh cast/*.cast cast/*.html | awk '{print "  " $$9 "  " $$5}'
 

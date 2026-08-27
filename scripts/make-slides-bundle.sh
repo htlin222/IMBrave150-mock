@@ -87,6 +87,9 @@ for f in START-HERE.md RUNNING-ORDER.md talk.html deck.pdf deck-backup.pdf deck-
   [ -s "$VERIFY/$NAME/$f" ] || { echo "bundle is missing $f"; exit 1; }
 done
 grep -q "asciinema" "$VERIFY/$NAME/talk.html" || { echo "talk.html has no player in it"; exit 1; }
+# The speed buttons and chapter dropdown are injected after the player is
+# generated, so a page can look complete and still have no way to change speed.
+grep -q 'id="talkbar"' "$VERIFY/$NAME/talk.html" || { echo "talk.html has no control bar; run: cd slides && make cast-html"; exit 1; }
 /bin/rm -rf "$VERIFY" "$(dirname "$STAGE")"
 
 echo "$ZIP"

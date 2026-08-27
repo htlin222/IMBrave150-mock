@@ -3,10 +3,18 @@
 `cast/talk-full.html` is 64:08 and you are not going to play all of it. Open it,
 play to a marker, pause, talk, carry on.
 
-The markers show as dots on the progress bar; **clicking one jumps to it**
-(tested). Clicking the terminal itself toggles play/pause, and the arrow keys
-seek. Bracket keys do *not* step between markers in this build, so drive it with
-the mouse rather than looking for a shortcut mid-talk.
+There is a control bar across the top:
+
+- **Speed** — 1×, 1.25×, 1.5×, 2×, 3×. Position is kept when you switch.
+- **Chapter** — a dropdown of all thirty markers, plus ← → to step between them.
+- **Pause / Play** and the current time.
+
+Keys, if you prefer them: `+` / `-` change speed, `n` / `p` step chapters, and
+the player's own space bar pauses. The player's built-in `[` `]` and `<` `>`
+shortcuts do **not** work in this build — that is why the bar exists.
+
+Most of the recording plays fine at **1.5×**; the stretches where the agent is
+thinking rather than printing take 2× without becoming unreadable.
 
 Three routes below. Times are where each marker starts in the recording.
 
@@ -69,8 +77,13 @@ watchable stretch in the recording. Play a minute of it, then skip to 59:08.
 out loud first, so the room notices it obeys.
 
 **15:38 — the ambiguity.** Your instruction said *sort the treated patients*.
-It did not say ascending or descending. The agent picked one. This is the
-single most useful ninety seconds in the recording.
+It did not say ascending or descending. What comes back is better than the
+question deserved: it runs 200 greedy shuffles, reports that the ordering alone
+moves the hazard ratio across **0.53–0.66**, then pushes back on the premise —
+the choice is not between two numbers, it is that a discretionary
+implementation detail was silently load-bearing. It ends by recommending
+overlap weighting, which has no ordering parameter at all, as the primary
+analysis. This is the single most useful two minutes in the recording.
 
 **37:32 — which runs are junk.** It volunteers that some of its own 120 runs
 are artefacts and gives the honest summary with them removed. Nobody asked it

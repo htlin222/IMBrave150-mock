@@ -22,9 +22,10 @@ Koo Foundation Sun Yat-Sen Cancer Center (和信治癌中心醫院).
 | `deck-backup.md` | Generated from `deck.md` — the same slides with a still frame from a real recorded agent session after each signpost, for when the live demo will not cooperate. Do not hand-edit; regenerate. |
 | `deck-full.md` | Reference edition, 43 slides, for reading after the talk. |
 | `cast/talk-full.cast` | **The whole talk, one session, 64 min** — slides, data and agent in one terminal. |
-| `cast/talk-full.html` | Self-contained offline player. Open it in any browser. |
+| `cast/talk-full.html` | Self-contained offline player, with speed and chapter controls. Open it in any browser. |
 | `cast/talk-markers.tsv` | Every slide, shell command and prompt, with the time it happened. |
 | `cast/RUNNING-ORDER.md` | **Read this before you present.** Three routes through the recording, and where to pause. |
+| `tools/add_player_controls.py` | Injects the speed buttons and chapter dropdown into the generated player. |
 | `talk/` | The presenterm decks shown inside the recording, and their theme. |
 | `cast/talk.cast` | The earlier short version: five prompts, no slides, 8 min. |
 | `img/` | One still frame per signpost, cut from the per-segment recordings. |
@@ -138,7 +139,16 @@ whole hour, so its context never resets; the slides run in a second window and
 the recording is a client attached to that session, which is why switching
 between them is just terminal output.
 
-Play to the next marker, pause, talk, carry on.
+Play to the next marker, pause, talk, carry on. The page carries a control bar:
+speed (1× to 3×), a dropdown of all thirty chapters, and play/pause.
+
+asciinema-player takes `speed` only at construction and exposes no setter — its
+handle has just play, pause, seek, getCurrentTime, getDuration and dispose — and
+its documented `<`/`>` and `[`/`]` shortcuts do nothing in this build (measured:
+the bracket keys seek to times that are not markers). So the bar implements
+speed by rebuilding the player at the same position, and `make cast-html` always
+runs the injector after the generator; a page regenerated without it looks fine
+and silently has no speed control, which the bundle script now checks for.
 
 ```bash
 make talk        # re-record everything (~65 min; needs a logged-in claude)
