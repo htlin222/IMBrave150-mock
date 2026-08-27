@@ -26,8 +26,9 @@ export CHROME_PATH
 # The overflow check needs Pillow. The repo venv has it; bare python3 usually
 # does not.
 PYTHON ?= $(if $(wildcard ../.venv/bin/python),../.venv/bin/python,python3)
+SKILL  ?= $(HOME)/.claude/skills/agent-demo-recorder
 
-.PHONY: all pdf talk html png watch clean check
+.PHONY: all pdf talk html png watch clean check cast cast-html
 
 all: pdf
 
@@ -60,6 +61,21 @@ png: $(PDFS)
 # an overfull slide, so this is the only way to catch one.
 check: png
 	@$(PYTHON) tools/check_overflow.py dist/png
+
+# --- the recorded session -------------------------------------------------
+# One continuous agent session, driven prompt-by-prompt, recorded as terminal
+# text rather than video. `cast` re-records (~10 min, needs a logged-in claude);
+# `cast-html` just rebuilds the player from the existing recording.
+cast:
+	./tools/record_cast.sh
+	$(PYTHON) tools/add_markers.py
+	$(MAKE) cast-html
+
+cast-html: cast/talk.cast
+	$(PYTHON) $(SKILL)/scripts/gen_html.py cast/talk.cast --player --no-loop \
+		--title "Mission by Mission — one agent session, end to end" \
+		-o cast/talk.html
+	@ls -lh cast/talk.cast cast/talk.html | awk '{print "  " $$9 "  " $$5}'
 
 watch:
 	$(MARP) deck.md --config .marprc.yml --watch --preview

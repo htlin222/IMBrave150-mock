@@ -21,7 +21,10 @@ Koo Foundation Sun Yat-Sen Cancer Center (和信治癌中心醫院).
 | `deck.md` | **The talk. 12 slides.** Edit this one. |
 | `deck-backup.md` | Generated from `deck.md` — the same slides with a still frame from a real recorded agent session after each signpost, for when the live demo will not cooperate. Do not hand-edit; regenerate. |
 | `deck-full.md` | Reference edition, 43 slides, for reading after the talk. |
-| `img/` | One still frame per signpost, cut from the recordings. |
+| `cast/talk.cast` | **The whole talk as one recorded agent session** — terminal text, not video. |
+| `cast/talk.html` | Self-contained offline player for it. Open it in any browser. |
+| `cast/chapters.tsv` | When each prompt was submitted. |
+| `img/` | One still frame per signpost, cut from the per-segment recordings. |
 | `recordings/` | The five `.mp4` sessions the frames came from. |
 | `tools/record_segments.sh` | Records the five segments as real Claude Code sessions and cuts the frames. |
 | `tools/make_backup_deck.py` | Builds `deck-backup.md` from `deck.md` + `img/`. |
@@ -123,6 +126,56 @@ URIs so the PDF has no network dependency. Available: `ic-database`,
 Slide classes, applied with `<!-- _class: … -->`: `title`, `section`,
 `statement`, `dense` (one notch smaller, for a legitimately full slide),
 `refs` (bibliography leading), `cols` (two columns).
+
+## The recorded session
+
+The whole talk, driven end to end as one continuous agent session: prompt, wait
+for the result, next prompt, wait, and so on for all five steps. Open
+`cast/talk.html` and drive it with the player controls instead of performing the
+demo live.
+
+```bash
+make cast        # re-record (~10 min; needs a logged-in claude)
+make cast-html   # just rebuild the player from the existing recording
+```
+
+It is a `.cast`, not a video, and that buys three things:
+
+- **Small.** 792 KB for 7 min 39 s of session, or 1.3 MB for the fully offline
+  player with the font and the recording embedded. The five per-segment MP4s in
+  `recordings/` are 12 MB for the same material.
+- **Real text.** asciinema-player draws the glyphs as DOM text, so you can
+  select and copy any command or number straight off the projected screen.
+  (This holds for the `--player` output only; converting the cast to GIF or MP4
+  gives you pixels.)
+- **Chapters.** `tools/record_cast.sh` logs the wall-clock time of every prompt
+  and `tools/add_markers.py` splices those in as markers, so the player's
+  timeline has one jump point per step:
+
+  | | | |
+  |---|---|---|
+  | 00:07 | 1 | Ten hospitals, three dialects |
+  | 02:35 | 2 | The unadjusted answer is lying |
+  | 03:34 | 3 | Make the two arms comparable |
+  | 04:56 | 4 | Try to break your own result |
+  | 06:51 | 5 | Let it review its own manuscript |
+
+The terminal is **105 columns** on purpose. The player scales the grid to its
+container, so a narrower terminal means bigger glyphs on a projector; 105 is
+about as narrow as Claude Code's tables render cleanly.
+
+One continuous session is also much faster than five separate ones — 7½ minutes
+against roughly 45, because the context carries over and the agent does not have
+to rediscover the data at every step.
+
+### Two things that will waste your evening
+
+- **Run tmux on a dedicated socket** (`tmux -L`). A long-lived tmux server hands
+  the nested session the environment it was started with, which may be months
+  old. The symptom is `Login expired · Please run /login` inside the TUI while
+  `claude -p` works fine from the same shell. `record_cast.sh` does this.
+- **Send the prompt text and Enter as two separate `send-keys`**, about a second
+  apart, or the composer reads the burst as a paste and swallows the submit.
 
 ## Recording the backup deck
 
