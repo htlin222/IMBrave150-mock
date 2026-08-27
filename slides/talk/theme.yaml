@@ -1,0 +1,46 @@
+# Monochrome terminal theme, to match the printed deck: white on near-black,
+# no colour anywhere, emphasis from weight and space only.
+extends: dark
+default:
+  colors:
+    background: "1e1e2e"
+    foreground: "e6e6e6"
+headings:
+  slide_title:
+    colors:
+      foreground: "ffffff"
+    padding_top: 1
+    padding_bottom: 1
+  h1:
+    prefix: ""
+    colors:
+      foreground: "ffffff"
+  h2:
+    prefix: ""
+    colors:
+      foreground: "ffffff"
+  h3:
+    prefix: ""
+    colors:
+      foreground: "b8b8b8"
+block_quote:
+  prefix: "  "
+  colors:
+    foreground: "e6e6e6"
+    prefix: "8a8a8a"
+intro_slide:
+  title:
+    colors:
+      foreground: "ffffff"
+  subtitle:
+    colors:
+      foreground: "b8b8b8"
+  author:
+    colors:
+      foreground: "b8b8b8"
+footer:
+  style: template
+  left: "Mission by Mission"
+  right: "{current_slide} / {total_slides}"
+  colors:
+    foreground: "6a6a6a"

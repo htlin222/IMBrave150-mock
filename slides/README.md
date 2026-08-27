@@ -21,9 +21,11 @@ Koo Foundation Sun Yat-Sen Cancer Center (和信治癌中心醫院).
 | `deck.md` | **The talk. 12 slides.** Edit this one. |
 | `deck-backup.md` | Generated from `deck.md` — the same slides with a still frame from a real recorded agent session after each signpost, for when the live demo will not cooperate. Do not hand-edit; regenerate. |
 | `deck-full.md` | Reference edition, 43 slides, for reading after the talk. |
-| `cast/talk.cast` | **The whole talk as one recorded agent session** — terminal text, not video. |
-| `cast/talk.html` | Self-contained offline player for it. Open it in any browser. |
-| `cast/chapters.tsv` | When each prompt was submitted. |
+| `cast/talk-full.cast` | **The whole talk, one session, 64 min** — slides, data and agent in one terminal. |
+| `cast/talk-full.html` | Self-contained offline player. Open it in any browser. |
+| `cast/talk-markers.tsv` | Every slide, shell command and prompt, with the time it happened. |
+| `talk/` | The presenterm decks shown inside the recording, and their theme. |
+| `cast/talk.cast` | The earlier short version: five prompts, no slides, 8 min. |
 | `img/` | One still frame per signpost, cut from the per-segment recordings. |
 | `recordings/` | The five `.mp4` sessions the frames came from. |
 | `tools/record_segments.sh` | Records the five segments as real Claude Code sessions and cuts the frames. |
@@ -127,17 +129,27 @@ Slide classes, applied with `<!-- _class: … -->`: `title`, `section`,
 `statement`, `dense` (one notch smaller, for a legitimately full slide),
 `refs` (bibliography leading), `cols` (two columns).
 
-## The recorded session
+## The recorded talk
 
-The whole talk, driven end to end as one continuous agent session: prompt, wait
-for the result, next prompt, wait, and so on for all five steps. Open
-`cast/talk.html` and drive it with the player controls instead of performing the
-demo live.
+Everything is inside one terminal recording: the slides (presenterm), the raw
+data (bat), and the agent working. The agent runs in one tmux window for the
+whole hour, so its context never resets; the slides run in a second window and
+the recording is a client attached to that session, which is why switching
+between them is just terminal output.
+
+Play to the next marker, pause, talk, carry on.
 
 ```bash
-make cast        # re-record (~10 min; needs a logged-in claude)
-make cast-html   # just rebuild the player from the existing recording
+make talk        # re-record everything (~65 min; needs a logged-in claude)
+make cast-html   # rebuild the players from the existing recordings
 ```
+
+Eleven segments, eighteen agent turns, thirty markers. The prompts are
+deliberately open — *"tell me what you notice"* rather than *"do X"* — so the
+slides never print a result and the agent's own reasoning is the content. One
+segment is a real failure and its recovery: the matching prompt does not say
+which direction to sort, the agent picks one, and the follow-up asks what
+happens if you pick the other.
 
 It is a `.cast`, not a video, and that buys three things:
 
