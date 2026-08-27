@@ -24,6 +24,7 @@ Koo Foundation Sun Yat-Sen Cancer Center (和信治癌中心醫院).
 | `cast/talk-full.cast` | **The whole talk, one session, 64 min** — slides, data and agent in one terminal. |
 | `cast/talk-full.html` | Self-contained offline player. Open it in any browser. |
 | `cast/talk-markers.tsv` | Every slide, shell command and prompt, with the time it happened. |
+| `cast/RUNNING-ORDER.md` | **Read this before you present.** Three routes through the recording, and where to pause. |
 | `talk/` | The presenterm decks shown inside the recording, and their theme. |
 | `cast/talk.cast` | The earlier short version: five prompts, no slides, 8 min. |
 | `img/` | One still frame per signpost, cut from the per-segment recordings. |
@@ -144,7 +145,10 @@ make talk        # re-record everything (~65 min; needs a logged-in claude)
 make cast-html   # rebuild the players from the existing recordings
 ```
 
-Eleven segments, eighteen agent turns, thirty markers. The prompts are
+Eleven segments, eighteen agent turns, thirty markers. It runs 64 minutes, which
+is longer than any slot it was built for — that is deliberate: you play chapters,
+not the file. `cast/RUNNING-ORDER.md` has a 20-minute route, a 45-minute route,
+and the four moments worth stopping on. The prompts are
 deliberately open — *"tell me what you notice"* rather than *"do X"* — so the
 slides never print a result and the agent's own reasoning is the content. One
 segment is a real failure and its recovery: the matching prompt does not say
