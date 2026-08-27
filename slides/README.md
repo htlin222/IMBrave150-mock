@@ -201,9 +201,12 @@ Each segment runs as a real Claude Code session under VHS, gets the slide's own
 prompt typed into it, and does the work for real. Three things this cost an
 hour each to learn, all encoded in the script:
 
-- **VHS cannot run in parallel.** Its `ttyd` binds a fixed port (7681), so a
-  second concurrent instance silently gets no terminal and the tape dies on the
-  startup wait with an unhelpful error.
+- **Record one segment at a time.** Four concurrent runs drove load average past
+  70; Claude Code's startup then outran the tape's startup wait and every tape
+  died on `Wait+Screen /shift\+tab/` with the command typed and no TUI on
+  screen. It is starvation, not a port clash — VHS gives each `ttyd` a random
+  port. A longer wait would let you parallelise, but four nested agents on one
+  laptop finish later than four in sequence.
 - **Use an absolute path to `claude`.** Inside tmux or ttyd, `PATH` may resolve
   to an older build, which gets SIGKILLed in a nested session.
 - **Dismiss the first-run dialogs by hand first.** A fresh install shows *"Try

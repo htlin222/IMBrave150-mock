@@ -7,10 +7,13 @@
 #
 # Three things this script encodes, each of which cost an hour to find:
 #
-#  1. VHS CANNOT RUN IN PARALLEL. Its ttyd binds a fixed port (7681), so a
-#     second concurrent instance silently gets no terminal and the tape dies on
-#     the startup wait. Segments run one at a time. Four at once also drove
-#     load average past 70, which pushed Claude Code's startup past any timeout.
+#  1. RECORD ONE SEGMENT AT A TIME. Four concurrent runs drove load average
+#     past 70, and Claude Code's startup then took longer than the tape's
+#     startup wait, so every tape died on `Wait+Screen /shift\+tab/` with the
+#     command typed but no TUI on screen. It is starvation, not a port clash:
+#     VHS gives each of its ttyd instances a random port, so they do not
+#     collide. Raising the wait would let you parallelise, but four nested
+#     agents on one laptop is slower end to end than four in sequence.
 #
 #  2. USE AN ABSOLUTE PATH TO claude. Inside tmux/ttyd, PATH may resolve to an
 #     older Homebrew build, which gets SIGKILLed in a nested session.
