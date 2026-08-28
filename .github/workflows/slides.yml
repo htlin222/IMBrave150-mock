@@ -181,11 +181,21 @@ jobs:
 
             ### While it is playing
 
-            The bar across the top has speed (1× to 3×), a dropdown of all
-            twenty-two chapters, and pause. Drop to 1× for anything you want
-            the room to read; push to 2× through the parts where the agent is
-            thinking rather than printing. Chapters are clicked, not
-            keyboard-stepped.
+            The bar across the top has speed (1× to 3×), a chapter dropdown,
+            play/pause and fullscreen. Three things are there for the room:
+
+            - **A chapter side pane** — the `☰` button, or `c`. All twenty-two
+              chapters listed, the current one highlighted, click to jump. The
+              page shifts left so it never covers the terminal. Use `f` for
+              fullscreen: that expands the whole page, so the pane survives it.
+              The player's own fullscreen button expands only the terminal.
+            - **Click anywhere to pause.** No hunting for a button.
+            - **Select terminal text, then "放大文字".** A popover appears above
+              the selection and the chosen lines fill the window at the largest
+              size that fits. `Esc` or `×` returns. This is for the back row.
+
+            Drop to 1× for anything you want the room to read; push to 2×
+            through the parts where the agent is thinking rather than printing.
 
             If someone asks something the walkthrough does not cover — how the
             matching works, what happens when a prompt is ambiguous, the 120

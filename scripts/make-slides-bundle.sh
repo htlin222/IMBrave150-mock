@@ -73,10 +73,21 @@ A 45-minute slot: 10 speaking, 25 playing and stopping, 10 closing.
 
 ## While it is playing
 
-The bar across the top has speed (1x to 3x), a dropdown of all twenty-two
-chapters, and pause. Drop to 1x for anything you want the room to read; push to
-2x through the parts where the agent is thinking rather than printing. Chapters
-are clicked, not keyboard-stepped.
+The bar across the top has speed (1x to 3x), a chapter dropdown, play/pause and
+fullscreen. Three things are there for the room:
+
+- **A chapter side pane** — the hamburger button, or `c`. All twenty-two
+  chapters listed, the current one highlighted, click to jump. The page shifts
+  left so it never covers the terminal. Use `f` for fullscreen: that expands the
+  whole page, so the pane survives it. The player's own fullscreen button
+  expands only the terminal.
+- **Click anywhere to pause.** No hunting for a button.
+- **Select terminal text, then the enlarge button.** A popover appears above the
+  selection and the chosen lines fill the window at the largest size that fits.
+  `Esc` or the close button returns. This is for the back row.
+
+Drop to 1x for anything you want the room to read; push to 2x through the parts
+where the agent is thinking rather than printing.
 
 If someone asks something the walkthrough does not cover — how the matching
 works, what happens when a prompt is ambiguous, the 120 analytic paths, the
