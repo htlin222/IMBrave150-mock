@@ -4,16 +4,16 @@ theme: mono-academic
 paginate: true
 size: 16:9
 lang: en
-title: "Mission by Mission — Backup"
-description: "Backup edition: the talk with a still frame from a recorded agent session after each signpost."
+title: "How I Ran a Study Without Writing Code"
+description: "How one clinician ran a whole study by asking an AI agent, and how he worked out whether to believe the answers."
 ---
 
 <!-- _class: title -->
 <!-- _paginate: false -->
 
-# Mission by Mission
+# How I Ran a Study Without Writing Code
 
-<p class="subtitle">Driving an AI coding agent, live — from ten messy hospital exports to a result you can audit.<br><em>Backup edition: every step shown as recorded session.</em></p>
+<p class="subtitle">Ten hospital exports, one AI agent, and the part that took me longest — working out whether to believe it.</p>
 
 <div class="byline">
 <div class="name">Hsieh-Ting Lin, MD　林協霆</div>
@@ -47,15 +47,41 @@ description: "Backup edition: the talk with a still frame from a recorded agent 
   - It reads your files, writes scripts, runs them, reads the error, tries again
   - It keeps going until a condition you set is met
 - <span class="ic ic-eye"></span> **So the hard part moves**
-  - Not *"can it write the code"* — it can
-  - But *"how do I know the answer it handed me is right"*
+  - Not _"can it write the code"_ — it can
+  - But _"how do I know the answer it handed me is right"_
 - <span class="ic ic-check"></span> That question is the whole talk
+
+---
+
+## What You Will Be Looking At
+
+<div class="columns">
+<div>
+
+### <span class="ic ic-terminal"></span> The screen
+
+- **Top** — what I typed, in plain English
+- **Middle** — what it decided to do, and the commands it ran
+- **Bottom** — the answer, and how long it took
+
+</div>
+<div>
+
+### <span class="ic ic-file"></span> The important part
+
+- It does not answer from memory
+- It **writes a file of instructions**, runs it, reads the result
+- That file stays on disk
+- Anyone can open it and check what was actually done
+
+</div>
+</div>
 
 ---
 
 <!-- _class: cols -->
 
-## The Difference One Sentence Makes
+## The Sentence I Had to Learn to Write
 
 <div class="columns">
 <div>
@@ -278,7 +304,7 @@ description: "Backup edition: the talk with a still frame from a recorded agent 
 
 ---
 
-## Four Habits Worth Stealing
+## Four Habits I Ended Up With
 
 - <span class="ic ic-target"></span> **Name the file and the fields**
   - "Save the results" cannot be checked. `naive_hr.json` with `hr`, `ci_low` can
@@ -296,7 +322,7 @@ description: "Backup edition: the talk with a still frame from a recorded agent 
 
 # Thank You
 
-<p class="subtitle">Every mission, prompt and acceptance script:<br>github.com/htlin222/IMBrave150-mock</p>
+<p class="subtitle">The data, the prompts and the checks I used:<br>github.com/htlin222/IMBrave150-mock</p>
 
 <div class="byline">
 <div class="name">Hsieh-Ting Lin, MD　林協霆</div>

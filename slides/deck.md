@@ -4,16 +4,16 @@ theme: mono-academic
 paginate: true
 size: 16:9
 lang: en
-title: "Mission by Mission"
-description: "A live demonstration of driving an AI coding agent from ten messy hospital exports to an auditable result."
+title: "How I Ran a Study Without Writing Code"
+description: "How one clinician ran a whole study by asking an AI agent, and how he worked out whether to believe the answers."
 ---
 
 <!-- _class: title -->
 <!-- _paginate: false -->
 
-# Mission by Mission
+# How I Ran a Study Without Writing Code
 
-<p class="subtitle">Driving an AI coding agent, live — from ten messy hospital exports to a result you can audit.</p>
+<p class="subtitle">Ten hospital exports, one AI agent, and the part that took me longest — working out whether to believe it.</p>
 
 <div class="byline">
 <div class="name">Hsieh-Ting Lin, MD　林協霆</div>
@@ -53,7 +53,7 @@ description: "A live demonstration of driving an AI coding agent from ten messy 
 
 ---
 
-## What You Are Looking At
+## What You Will Be Looking At
 
 <div class="columns">
 <div>
@@ -81,7 +81,7 @@ description: "A live demonstration of driving an AI coding agent from ten messy 
 
 <!-- _class: cols -->
 
-## The Difference One Sentence Makes
+## The Sentence I Had to Learn to Write
 
 <div class="columns">
 <div>
@@ -249,7 +249,7 @@ description: "A live demonstration of driving an AI coding agent from ten messy 
 
 ---
 
-## Four Habits Worth Stealing
+## Four Habits I Ended Up With
 
 - <span class="ic ic-target"></span> **Name the file and the fields**
   - "Save the results" cannot be checked. `naive_hr.json` with `hr`, `ci_low` can
@@ -267,7 +267,7 @@ description: "A live demonstration of driving an AI coding agent from ten messy 
 
 # Thank You
 
-<p class="subtitle">Every mission, prompt and acceptance script:<br>github.com/htlin222/IMBrave150-mock</p>
+<p class="subtitle">The data, the prompts and the checks I used:<br>github.com/htlin222/IMBrave150-mock</p>
 
 <div class="byline">
 <div class="name">Hsieh-Ting Lin, MD　林協霆</div>
