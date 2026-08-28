@@ -14,6 +14,29 @@ Koo Foundation Sun Yat-Sen Cancer Center (和信治癌中心醫院).
 > No real patient is represented, and nothing in it is evidence about
 > atezolizumab, bevacizumab or sorafenib.
 
+## Links
+
+**The terminal recording is the deliverable.** The PDFs exist to be presented
+around it; the bundle exists so it can be given offline. Everything else is the
+machinery that produced it.
+
+| | |
+|---|---|
+| **<https://imbrave150-talk.pages.dev/talk>** | **The walkthrough — 33 min, 22 at 1.5×.** This is the talk. |
+| <https://imbrave150-talk.pages.dev/talk-long> | The long version, 64 min, with the methodological arguments in it |
+| <https://imbrave150-talk.pages.dev/> | Landing page |
+| <https://imbrave150-talk.pages.dev/deck.pdf> | The 12-slide deck |
+| <https://imbrave150-talk.pages.dev/deck-reference.pdf> | 43-slide reference edition |
+| <https://imbrave150-talk.pages.dev/deck-backup.pdf> | Deck with recorded frames, for presenting without a browser |
+| [Releases](https://github.com/htlin222/IMBrave150-mock/releases) | `imbrave150-slides-*.zip` — everything, offline |
+
+Local equivalents: `cast/walk.html`, `cast/talk-full.html`, `dist/*.pdf`.
+
+Not published, and not in the bundle's public half: `SCRIPT.md` and
+`SPEAKER-NOTES.md`. Those are the presenter's lines.
+
+---
+
 ## Files
 
 | Path | What it is |

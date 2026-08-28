@@ -15,12 +15,51 @@ published trial.
 > statistical models tuned to the published summaries — use for teaching only,
 > never for clinical or research claims about the actual drugs.
 
+## Watch it · 看
+
+Everything below is one study — ten messy hospital exports turned into a
+written-up manuscript — shown three ways. **The terminal recording is the one
+that matters.**
+
+### ▶ The terminal recording — the real thing
+
+| | |
+|---|---|
+| **<https://imbrave150-talk.pages.dev/talk>** | **The walkthrough. 33 min, 22 at 1.5×.** Data → cleaning → exploring → analysis → writing, as one continuous agent session. Twenty-two chapters. |
+| <https://imbrave150-talk.pages.dev/talk-long> | The long version, 64 min: the same study with the arguments kept in — an ambiguous prompt moving the answer, 120 analytic paths, four independent reviewers. |
+
+This is a **`.cast`, not a video**: a stream of terminal text, so it is 2.6 MB
+rather than hundreds, the text stays selectable, and any line can be enlarged
+to fill the screen. Speed, chapters and fullscreen are in the bar at the top.
+
+Source: [`slides/cast/walk.cast`](slides/cast/walk.cast) ·
+recorded by [`slides/tools/record_walkthrough.sh`](slides/tools/record_walkthrough.sh)
+
+### The slides around it
+
+| | |
+|---|---|
+| <https://imbrave150-talk.pages.dev/> | Landing page for all of the above |
+| <https://imbrave150-talk.pages.dev/deck.pdf> | The 12-slide deck presented around the recording |
+| <https://imbrave150-talk.pages.dev/deck-reference.pdf> | 43-slide reference edition |
+| <https://imbrave150-talk.pages.dev/deck-backup.pdf> | The deck with a still frame from the recording after each signpost, for presenting without a browser |
+| [Releases](https://github.com/htlin222/IMBrave150-mock/releases) | `imbrave150-slides-*.zip` — the presenter bundle: recordings, slides and the rehearsal script, offline |
+
+### The older animated deck
+
+<https://imbrave150-demo.pages.dev> — the same story as an animated HTML slide
+deck ([`claude-demo/`](claude-demo/)). Made before the terminal recording
+existed; kept because it stands on its own, but the recording is what to watch.
+
+---
+
 ## Three ways to use this repo
 
 | | What it is |
 |---|---|
 | **`live-demo/`** | **A 9-chapter, 26-mission guide an AI agent executes live, one mission at a time.** Open the repo and say *"follow the ./live-demo mission by mission"*. Every mission has hard-number acceptance checks (`live-demo/verify/`), a gotcha list drawn from a real run, and a presenter runbook. Goes from 10 raw hospital CSVs to a typeset preprint PDF. |
-| **`claude-demo/`** | A self-contained animated HTML slide deck of the same story (~60 min). Open `claude-demo/index.html`. |
+| **`slides/`** | **The talk.** A recorded terminal session of the whole workflow, the decks presented around it, and a verbatim rehearsal script. Built and released by CI; live at <https://imbrave150-talk.pages.dev>. |
+| **`claude-demo/`** | A self-contained animated HTML slide deck of the same story (~60 min). Predates the recording. Open `claude-demo/index.html`. |
 | **the dataset itself** | Two teaching layers (below) — use the CSVs and scripts directly for coursework. |
 
 ## Two teaching layers
