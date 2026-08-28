@@ -44,6 +44,24 @@ def main():
         sys.exit(f"no script at {path}")
     text = path.read_text()
 
+    # Sections headed 可選 or 備用 are not in the running order — they are
+    # played only if there is time or a question asks for them — so counting
+    # them would overstate the talk.
+    main, optional = [], 0
+    for block in re.split(r"(?m)^(?=# )", text):
+        head = block.split("\n", 1)[0]
+        if re.match(r"#\s*(可選|備用)", head):
+            optional += 1
+            continue
+        main.append(block)
+    text = "".join(main)
+
+    # Everything before the first slide heading is a note to the presenter —
+    # timings, how to use the file — not lines to be spoken.
+    first = text.find("\n## ")
+    if first != -1:
+        text = text[first:]
+
     if "--sections" in sys.argv:
         parts = re.split(r"^## ", text, flags=re.M)[1:]
         print(f"{'section':38} {'chars':>6} {'pause':>7} {'slow':>7} {'fast':>7}")
@@ -57,6 +75,8 @@ def main():
 
     han, sil, n = measure(text)
     lo, hi = han / SLOW + sil / 60, han / FAST + sil / 60
+    if optional:
+        print(f"(excluding {optional} optional section(s) not in the running order)")
     print(f"spoken characters : {han}")
     print(f"stage directions  : {n}, asking for {sil:.0f}s of silence")
     print(f"delivery          : {fmt(hi)} brisk  \u2013  {fmt(lo)} careful")
