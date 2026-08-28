@@ -175,8 +175,10 @@ built for a projector:
   highlighted, click to jump. It overlays rather than pushing the page: shifting
   the layout made the terminal reflow on every toggle, which is worse on a
   projector than a covered right margin. Fullscreen (`f`) expands the whole page
-  and sizes the player to the largest 16:9 box that fits — the player's own
-  fullscreen button expands only the terminal and hides these controls.
+  and sizes the player to the largest 16:9 box that fits. The player's own
+  fullscreen button is hidden: it expanded only the terminal, hid these
+  controls, and resumed playback on the way in. Going fullscreen never changes
+  whether it is playing.
 - **Click anywhere to pause.** A drag is treated as a selection, not a click,
   so this does not fight the next one.
 - **Select text, then "放大文字".** A popover appears above the selection; the

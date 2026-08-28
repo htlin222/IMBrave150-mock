@@ -845,6 +845,12 @@ span.ap-marker-container:hover span.ap-marker {
      terminal reflow every time the list was opened or closed, which on a
      projector is far more distracting than a covered right margin. */
 
+  /* The player ships its own fullscreen button, which expands only the
+     terminal — hiding this bar and the chapter pane — and resumes playback on
+     the way in. There should be one way to go fullscreen, and it is ours, so
+     hide theirs. */
+  .ap-fullscreen-button { display: none !important; }
+
   /* --- fullscreen --------------------------------------------------------
      The generated page pins the player at min(94vw, 1100px), so going
      fullscreen made the window bigger and left the terminal exactly the size
@@ -1057,6 +1063,16 @@ var AsciinemaPlayer=function(A){"use strict";function e(A){return"number"==typeo
     var on = !!(document.fullscreenElement || document.webkitFullscreenElement);
     document.body.classList.toggle('fs', on);
     fsBtn.setAttribute('aria-pressed', String(on));
+    // Entering or leaving fullscreen must not change whether it is playing.
+    // The browser can resume on its own — F11, or the OS-level control — so
+    // put the state back rather than trusting it to be left alone.
+    setTimeout(function () {
+      try {
+        if (!state.playing) player.pause();
+        else player.play();
+      } catch (e) {}
+      paint();
+    }, 60);
   }
   document.addEventListener('fullscreenchange', onFsChange);
   document.addEventListener('webkitfullscreenchange', onFsChange);
