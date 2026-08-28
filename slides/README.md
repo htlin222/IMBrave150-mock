@@ -142,8 +142,20 @@ whole hour, so its context never resets; the slides run in a second window and
 the recording is a client attached to that session, which is why switching
 between them is just terminal output.
 
-Play to the next marker, pause, talk, carry on. The page carries a control bar:
-speed (1× to 3×), a dropdown of all thirty chapters, and play/pause.
+Play to the next marker, pause, talk, carry on. The page carries a control bar —
+speed (1× to 3×), a chapter dropdown, play/pause, fullscreen — and three things
+built for a projector:
+
+- **A chapter side pane** (`☰`, or `c`). Every chapter listed, the current one
+  highlighted, click to jump. The page shifts left so it never covers the
+  terminal. Fullscreen (`f`) expands the whole page rather than just the
+  terminal, so the pane survives it — the player's own fullscreen button does
+  not.
+- **Click anywhere to pause.** A drag is treated as a selection, not a click,
+  so this does not fight the next one.
+- **Select text, then "放大文字".** A popover appears above the selection; the
+  chosen lines fill the window at the largest size that fits, binary-searched
+  against the viewport. `Esc` or `×` returns. This is for the back row.
 
 **It opens at 1.5×, where the recording runs 42:45** — the slot it was built
 for, with no cutting. At 1× it is 64:08.
