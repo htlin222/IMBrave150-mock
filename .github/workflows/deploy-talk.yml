@@ -1,0 +1,86 @@
+name: Deploy talk site
+
+# Publish the talk — the two recordings and the PDFs — to Cloudflare Pages, so
+# there is a URL to present from if the laptop or the browser lets us down.
+#
+# Separate from deploy.yml, which serves the older animated deck at
+# imbrave150-demo. Different project, different content, different lifecycle.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "slides/**"
+      - ".github/workflows/deploy-talk.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: talk-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # The recordings are committed; the PDFs are not, so build them here.
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            chromium-browser poppler-utils fonts-noto-cjk || \
+          sudo apt-get install -y --no-install-recommends \
+            chromium poppler-utils fonts-noto-cjk
+          python3 -m pip install --quiet Pillow
+
+      - name: Resolve Chrome binary
+        id: chrome
+        run: |
+          for c in chromium-browser chromium google-chrome; do
+            if command -v "$c" >/dev/null 2>&1; then
+              echo "path=$(command -v "$c")" >> "$GITHUB_OUTPUT"; exit 0
+            fi
+          done
+          echo "No Chromium binary found" >&2; exit 1
+
+      - name: Build the PDFs
+        working-directory: slides
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.path }}
+        run: |
+          mkdir -p dist
+          for d in deck deck-backup deck-full; do
+            npx --yes @marp-team/marp-cli@4.0.0 "$d.md" \
+              --config .marprc.yml --pdf --no-sandbox \
+              -o "dist/imbrave150-$d.pdf"
+          done
+
+      - name: Assemble the site
+        run: ./slides/tools/build_site.sh
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: >-
+            pages deploy slides/site
+            --project-name=imbrave150-talk
+            --branch=main
+
+      - name: Report
+        run: |
+          {
+            echo "### Talk site deployed"
+            echo ""
+            echo "https://imbrave150-talk.pages.dev"
+          } >> "$GITHUB_STEP_SUMMARY"

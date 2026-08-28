@@ -19,6 +19,12 @@ hospitals_10sites.zip
 .idea/
 .vscode/
 
+# Cloudflare credentials. Ignored globally too, but a global gitignore does not
+# travel with a clone — this is the copy that matters.
+.env
+.env.*
+!.env.example
+
 # Cloudflare Pages / wrangler local cache & build artifacts
 .wrangler/
 
@@ -31,3 +37,8 @@ dist/
 
 # Built slide decks
 slides/dist/
+
+# The public site is assembled from the recordings and the built PDFs by
+# slides/tools/build_site.sh; only its landing page is source.
+slides/site/*
+!slides/site/index.html

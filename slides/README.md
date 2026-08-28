@@ -302,6 +302,23 @@ the body (`<span class="ref">n</span>`), the `<sup>n</sup>` in that slide's
 References slide starts at 6, which `theme.css` maps with an
 `ol[start="6"]` counter rule — renumber both if you insert a reference.
 
+## Online, as a fallback
+
+<https://imbrave150-talk.pages.dev> — the walkthrough, the long version and the
+three PDFs, served from Cloudflare Pages. If the laptop or the browser fails on
+the day, this is the URL to open.
+
+```bash
+./slides/tools/deploy_site.sh   # build the site and push it, from .env
+```
+
+Pushing anything under `slides/` to `main` redeploys it
+(`.github/workflows/deploy-talk.yml`), which builds the PDFs on the runner —
+the recordings are committed, the PDFs are not.
+
+The speaker script and notes are deliberately **not** published. They are the
+presenter's own lines, not part of the demo.
+
 ## The presenter bundle
 
 ```bash

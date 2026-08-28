@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Running a Study Without Writing Code</title>
+<meta name="description" content="A whole study run by asking an AI agent in plain sentences, and how to work out whether the answers can be believed. Synthetic data; not evidence about any drug.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>&#9654;</text></svg>">
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;600&family=IBM+Plex+Mono:wght@400&display=swap");
+  :root { --ink:#111; --paper:#fff; --dim:#5a5a5a; --rule:#d6d6d6; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#e8e8e8; --paper:#131318; --dim:#9a9a9a; --rule:#33333c; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; background:var(--paper); color:var(--ink);
+    font:400 17px/1.6 "IBM Plex Sans","Noto Sans TC",system-ui,sans-serif;
+    padding:6vh 5vw 12vh; display:flex; justify-content:center;
+  }
+  main { width:100%; max-width:760px; }
+  h1 {
+    font:600 40px/1.15 "IBM Plex Serif",Georgia,serif;
+    margin:0 0 12px; letter-spacing:-.015em;
+  }
+  .sub { color:var(--dim); font:400 20px/1.45 "IBM Plex Serif",Georgia,serif; margin:0 0 28px; }
+  .by { border-top:1px solid var(--ink); padding-top:16px; margin-bottom:40px; font-size:16px; }
+  .by b { font-weight:600; }
+  .by span { color:var(--dim); }
+  h2 {
+    font:600 13px/1 "IBM Plex Sans",sans-serif; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--dim);
+    margin:40px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--rule);
+  }
+  a.card {
+    display:block; text-decoration:none; color:inherit;
+    border:1px solid var(--rule); border-radius:8px;
+    padding:16px 18px; margin-bottom:12px;
+  }
+  a.card:hover { border-color:var(--ink); }
+  a.card .t { font-weight:600; font-size:18px; }
+  a.card .t .meta { font:400 14px "IBM Plex Mono",monospace; color:var(--dim); margin-left:10px; }
+  a.card .d { color:var(--dim); font-size:16px; margin-top:4px; }
+  .note {
+    border-left:2px solid var(--ink); padding:2px 0 2px 16px;
+    color:var(--dim); font-size:16px; margin:28px 0;
+  }
+  footer { margin-top:48px; padding-top:16px; border-top:1px solid var(--rule);
+           color:var(--dim); font-size:15px; }
+  footer a { color:inherit; }
+</style>
+</head>
+<body>
+<main>
+
+  <h1>Running a Study Without Writing Code</h1>
+  <p class="sub">Ten hospital exports, one AI agent, and the part that takes
+  longest — working out whether we can believe it.</p>
+
+  <div class="by">
+    <b>Hsieh-Ting Lin, MD　林協霆</b><br>
+    <span>Department of Medical Oncology　腫瘤內科部<br>
+    Koo Foundation Sun Yat-Sen Cancer Center　和信治癌中心醫院</span>
+  </div>
+
+  <h2>The recording</h2>
+
+  <a class="card" href="talk">
+    <div class="t">The walkthrough <span class="meta">33 min · 22 at 1.5×</span></div>
+    <div class="d">Data, cleaning, exploring, analysis, writing — five stages
+    in one continuous terminal session. Twenty-two chapters. This is the one
+    that was presented.</div>
+  </a>
+
+  <a class="card" href="talk-long">
+    <div class="t">The long version <span class="meta">64 min</span></div>
+    <div class="d">The same study with the arguments kept in: what happens when
+    a prompt is ambiguous, 120 analytic paths, four independent reviewers.</div>
+  </a>
+
+  <div class="note">
+    Both play in the browser with no plugin. The text is real text — select any
+    line and enlarge it. Speed, chapters and fullscreen are in the bar at the
+    top.
+  </div>
+
+  <h2>Slides</h2>
+
+  <a class="card" href="deck.pdf">
+    <div class="t">Deck <span class="meta">PDF · 12 slides</span></div>
+    <div class="d">What is presented around the recording.</div>
+  </a>
+
+  <a class="card" href="deck-reference.pdf">
+    <div class="t">Reference edition <span class="meta">PDF · 43 slides</span></div>
+    <div class="d">The full mission-by-mission walkthrough behind the talk.</div>
+  </a>
+
+  <a class="card" href="deck-backup.pdf">
+    <div class="t">Backup deck <span class="meta">PDF</span></div>
+    <div class="d">The slides with a still frame from the recording after each
+    signpost, for presenting without a browser.</div>
+  </a>
+
+  <div class="note">
+    <b>The data are entirely synthetic.</b> They are simulated from the
+    published summaries of a phase 3 trial. No real patient is represented, and
+    nothing here is evidence about atezolizumab, bevacizumab or sorafenib.
+  </div>
+
+  <footer>
+    Everything — the data, the prompts, the acceptance checks and the scripts
+    that made these recordings — is at
+    <a href="https://github.com/htlin222/IMBrave150-mock">github.com/htlin222/IMBrave150-mock</a>.
+  </footer>
+
+</main>
+</body>
+</html>
