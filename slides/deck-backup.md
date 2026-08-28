@@ -4,16 +4,16 @@ theme: mono-academic
 paginate: true
 size: 16:9
 lang: en
-title: "How I Ran a Study Without Writing Code"
-description: "How one clinician ran a whole study by asking an AI agent, and how he worked out whether to believe the answers."
+title: "Running a Study Without Writing Code"
+description: "A whole study run by asking an AI agent in plain sentences, and how to work out whether the answers can be believed."
 ---
 
 <!-- _class: title -->
 <!-- _paginate: false -->
 
-# How I Ran a Study Without Writing Code
+# Running a Study Without Writing Code
 
-<p class="subtitle">Ten hospital exports, one AI agent, and the part that took me longest — working out whether to believe it.</p>
+<p class="subtitle">Ten hospital exports, one AI agent, and the part that takes longest — working out whether we can believe it.</p>
 
 <div class="byline">
 <div class="name">Hsieh-Ting Lin, MD　林協霆</div>
@@ -81,7 +81,7 @@ description: "How one clinician ran a whole study by asking an AI agent, and how
 
 <!-- _class: cols -->
 
-## The Sentence I Had to Learn to Write
+## The Sentence Worth Learning to Write
 
 <div class="columns">
 <div>
@@ -304,7 +304,7 @@ description: "How one clinician ran a whole study by asking an AI agent, and how
 
 ---
 
-## Four Habits I Ended Up With
+## Four Habits Worth Keeping
 
 - <span class="ic ic-target"></span> **Name the file and the fields**
   - "Save the results" cannot be checked. `naive_hr.json` with `hr`, `ci_low` can
@@ -322,7 +322,7 @@ description: "How one clinician ran a whole study by asking an AI agent, and how
 
 # Thank You
 
-<p class="subtitle">The data, the prompts and the checks I used:<br>github.com/htlin222/IMBrave150-mock</p>
+<p class="subtitle">The data, the prompts and the checks:<br>github.com/htlin222/IMBrave150-mock</p>
 
 <div class="byline">
 <div class="name">Hsieh-Ting Lin, MD　林協霆</div>

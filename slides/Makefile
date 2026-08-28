@@ -14,6 +14,11 @@ PDFS    := $(patsubst %,dist/imbrave150-%.pdf,$(DECKS))
 THEME   := theme.css
 MARP    ?= npx --yes @marp-team/marp-cli@4.0.0
 
+# gtimeout on macOS (coreutils), timeout on Linux; empty if neither, in which
+# case the render simply is not capped.
+TIMEOUT ?= $(shell command -v gtimeout >/dev/null && echo "gtimeout 150" || \
+             (command -v timeout >/dev/null && echo "timeout 150"))
+
 # Marp drives a headless Chrome. On macOS the Homebrew `chromium` formula is
 # often a dangling symlink into an app that was never installed, so prefer a
 # real Google Chrome when one is present.
@@ -37,9 +42,18 @@ pdf: $(PDFS)
 # The talk deck alone — what you rebuild while editing.
 deck: dist/imbrave150-deck.pdf
 
+# Marp drives headless Chrome, and a Chrome left over from an interrupted run
+# will wedge the next one indefinitely — it hangs with no output rather than
+# failing. Reap strays first, then cap the render so a wedge fails the build in
+# two minutes instead of hanging the terminal.
+CHROME_REAP = -pkill -f "Google Chrome for Testing" 2>/dev/null;               pkill -f "chrome_crashpad" 2>/dev/null; sleep 1
+
 dist/imbrave150-%.pdf: %.md $(THEME) .marprc.yml
 	@mkdir -p dist
-	$(MARP) $< --config .marprc.yml --pdf -o $@
+	@$(CHROME_REAP)
+	@$(TIMEOUT) $(MARP) $< --config .marprc.yml --pdf -o $@ \
+		|| { echo "marp timed out or failed on $<; a stray Chrome is the usual cause"; \
+		     $(CHROME_REAP); exit 1; }
 	@echo "-> $@"
 
 # A self-contained HTML deck, for presenting without a PDF viewer.
