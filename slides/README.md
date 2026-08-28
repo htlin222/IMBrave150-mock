@@ -172,10 +172,11 @@ speed (1× to 3×), a chapter dropdown, play/pause, fullscreen — and three thi
 built for a projector:
 
 - **A chapter side pane** (`☰`, or `c`). Every chapter listed, the current one
-  highlighted, click to jump. The page shifts left so it never covers the
-  terminal. Fullscreen (`f`) expands the whole page rather than just the
-  terminal, so the pane survives it — the player's own fullscreen button does
-  not.
+  highlighted, click to jump. It overlays rather than pushing the page: shifting
+  the layout made the terminal reflow on every toggle, which is worse on a
+  projector than a covered right margin. Fullscreen (`f`) expands the whole page
+  and sizes the player to the largest 16:9 box that fits — the player's own
+  fullscreen button expands only the terminal and hides these controls.
 - **Click anywhere to pause.** A drag is treated as a selection, not a click,
   so this does not fight the next one.
 - **Select text, then "放大文字".** A popover appears above the selection; the

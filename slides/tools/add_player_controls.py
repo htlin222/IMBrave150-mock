@@ -76,6 +76,7 @@ CSS = """
     overflow-y: auto; transform: translateX(100%);
     transition: transform .18s ease-out;
     padding: 14px 0 24px;
+    box-shadow: -14px 0 34px rgba(0, 0, 0, .45);
   }
   #talkpane.open { transform: none; }
   #talkpane h3 {
@@ -92,10 +93,9 @@ CSS = """
   #talkpane .ch.stage { color: #f9e2af; }
   #talkpane .ch .t { color: #7f849c; font-variant-numeric: tabular-nums;
                      min-width: 3.6em; }
-  /* Opening the pane must not cover the right edge of the terminal, so shift
-     the whole centred column left by the pane's width while it is open. */
-  body { transition: padding-right .18s ease-out; }
-  body.pane-open { padding-right: 340px; }
+  /* The pane overlays; it does not push the page. Shifting the layout made the
+     terminal reflow every time the list was opened or closed, which on a
+     projector is far more distracting than a covered right margin. */
 
   /* --- fullscreen --------------------------------------------------------
      The generated page pins the player at min(94vw, 1100px), so going
@@ -110,9 +110,6 @@ CSS = """
     width: min(100vw, (100vh - 56px) * 16 / 9) !important;
     max-width: 100vw !important;
     border-radius: 0;
-  }
-  body.fs.pane-open #player {
-    width: min(calc(100vw - 340px), (100vh - 56px) * 16 / 9) !important;
   }
 
   /* --- selection popover and the zoom overlay ----------------------------
@@ -277,7 +274,6 @@ JS = r"""
   paneBtn.onclick = function () {
     var open = !pane.classList.contains('open');
     pane.classList.toggle('open', open);
-    document.body.classList.toggle('pane-open', open);
     paneBtn.setAttribute('aria-pressed', String(open));
     if (open) scrollPane();
   };
