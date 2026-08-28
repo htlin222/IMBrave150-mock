@@ -22,7 +22,9 @@ Koo Foundation Sun Yat-Sen Cancer Center (和信治癌中心醫院).
 | `deck-backup.md` | Generated from `deck.md` — the same slides with a still frame from a real recorded agent session after each signpost, for when the live demo will not cooperate. Do not hand-edit; regenerate. |
 | `deck-full.md` | Reference edition, 43 slides, for reading after the talk. |
 | `cast/walk.html` | **The recording that gets presented.** 32:55, or 22 min at the default 1.5x. Data, cleaning, exploring, analysis, writing — plain prompts, no detours. |
-| `SPEAKER-NOTES.md` | **Read before presenting.** What to say, in Chinese, for English slides. Five stops. |
+| `SCRIPT.md` | **The rehearsal script.** Every word, in Chinese, with stage directions. Reads to length. |
+| `SPEAKER-NOTES.md` | The same talk as notes rather than verbatim, if you would rather not read from a script. |
+| `tools/script_timing.py` | Measures how long the script takes, counting the pauses its directions ask for. |
 | `cast/talk-full.html` | The hour-long version, with the methodological arguments in it. For questions and for handing out. |
 | `cast/talk-markers.tsv` | Every slide, shell command and prompt, with the time it happened. |
 | `cast/RUNNING-ORDER.md` | **Read this before you present.** Three routes through the recording, and where to pause. |

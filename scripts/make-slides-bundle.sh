@@ -23,6 +23,7 @@ REQUIRED=(
   "$SLIDES/dist/imbrave150-deck-full.pdf"
   "$SLIDES/cast/walk.html"
   "$SLIDES/cast/walk.cast"
+  "$SLIDES/SCRIPT.md"
   "$SLIDES/SPEAKER-NOTES.md"
 )
 for f in "${REQUIRED[@]}"; do
@@ -32,7 +33,7 @@ done
 mkdir -p "$STAGE" "$OUT"
 
 # ---- 上台當天真的會用到的三樣 ----
-cp "$SLIDES/SPEAKER-NOTES.md" "$STAGE/"
+cp "$SLIDES/SCRIPT.md" "$SLIDES/SPEAKER-NOTES.md" "$STAGE/"
 cp "$SLIDES/cast/walk.html"   "$STAGE/talk.html"
 cp "$SLIDES/dist/imbrave150-deck.pdf"        "$STAGE/deck.pdf"
 cp "$SLIDES/dist/imbrave150-deck-backup.pdf" "$STAGE/deck-backup.pdf"
@@ -58,9 +59,10 @@ toolchain: it runs on a borrowed laptop.
 
 ## On the day
 
-1. **Read `SPEAKER-NOTES.md` first** (Chinese). The slides are in English and
-   the delivery is not; those notes are the bridge. They give you what to say
-   for the opening slides and at each of the five stops.
+1. **Rehearse from `SCRIPT.md`** (Chinese). It is verbatim, with stage
+   directions, and it reads to length: 19-22 minutes of speaking plus the
+   22-minute recording. `SPEAKER-NOTES.md` is the same talk as notes if you
+   would rather not read from a script.
 2. **Present the first five slides of `deck.pdf`** — about ten minutes. The
    fourth explains what a terminal is. Do not skip it if the room has never
    seen one.
@@ -100,7 +102,8 @@ recording after each signpost, so you can finish from the PDF.
 
 | file | what it is |
 |---|---|
-| `SPEAKER-NOTES.md` | **Read this first.** What to say, slide by slide and stop by stop. In Chinese. |
+| `SCRIPT.md` | **The rehearsal script.** Every word you say, in Chinese, with stage directions — （停頓）, （慢）, where to press play. Reading it aloud takes about as long as the talk. |
+| `SPEAKER-NOTES.md` | The same talk as notes rather than verbatim, if you would rather not read from a script. |
 | `talk.html` | The recording. 32:55, or 22 minutes at the default 1.5x. Double-click it; any browser, no internet. |
 | `deck.pdf` | The slides you present around it. |
 | `talk-long.html` | The hour-long version, with the methodological arguments in it. For questions, and for handing out. |
@@ -125,7 +128,7 @@ ZIP="$OUT/$NAME-$VERSION.zip"
 # 從解開後的成品再驗一次：講者拿到的東西真的不是空的。
 VERIFY="$(mktemp -d)"
 unzip -q "$ZIP" -d "$VERIFY"
-for f in START-HERE.md SPEAKER-NOTES.md talk.html deck.pdf deck-backup.pdf deck-reference.pdf; do
+for f in START-HERE.md SCRIPT.md SPEAKER-NOTES.md talk.html deck.pdf deck-backup.pdf deck-reference.pdf; do
   [ -s "$VERIFY/$NAME/$f" ] || { echo "bundle is missing $f"; exit 1; }
 done
 grep -q "asciinema" "$VERIFY/$NAME/talk.html" || { echo "talk.html has no player in it"; exit 1; }
