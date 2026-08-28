@@ -138,9 +138,12 @@ CSS = """
   }
   #talkzoom.open { display: flex; }
   #talkzoom pre {
-    margin: 0; color: #e6e6e6; white-space: pre-wrap; word-break: break-word;
+    margin: 0; color: #e6e6e6; white-space: pre-wrap;
+    overflow-wrap: anywhere; word-break: normal;
     font-family: "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
-    line-height: 1.35; text-align: left; max-width: 100%; max-height: 100%;
+    line-height: 1.3; text-align: left;
+    /* width is set by fitZoom; nothing here may clip the measurement */
+    overflow: visible;
   }
   #talkzoom .close {
     position: absolute; top: 18px; right: 22px; z-index: 71;
@@ -342,6 +345,7 @@ JS = r"""
   var zoom = document.getElementById('talkzoom');
   var ztext = document.getElementById('tz-text');
   var selected = '';
+  var openedAt = 0;
 
   function hidePop() { pop.style.display = 'none'; }
 
@@ -361,25 +365,53 @@ JS = r"""
     pop.style.top = Math.max(8, r.top - pop.offsetHeight - 10) + 'px';
   });
 
-  pop.onclick = function () {
+  // mousedown, not click: pressing the mouse collapses the selection, which
+  // fires selectionchange, which hides this element — so by the time click
+  // would fire there is nothing under the cursor. preventDefault on mousedown
+  // keeps the selection alive and the popover on screen.
+  pop.addEventListener('mousedown', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    openZoom();
+  });
+
+  function openZoom() {
     if (!selected.trim()) return;
     hidePop();
     if (state.playing) toggle();
     ztext.textContent = selected.replace(/\n{3,}/g, '\n\n').replace(/\s+$/, '');
     zoom.classList.add('open');
+    // The mouseup of the very click that opened this lands on the overlay,
+    // where the backdrop handler would read it as "close". Ignore anything
+    // that arrives before the button has been released.
+    openedAt = Date.now();
     fitZoom();
-  };
+  }
 
   // Binary-search the largest font size whose rendered block still fits.
+  //
+  // The width must be pinned before measuring. Left to itself the <pre> is a
+  // flex item the container will shrink, so scrollWidth comes back equal to the
+  // visible width however much text there is, the width test always passes, and
+  // the last line is quietly clipped. Fix the width, let the text wrap into it,
+  // and the only question left is height.
   function fitZoom() {
-    var maxW = zoom.clientWidth - 2 * (0.03 * window.innerWidth);
-    var maxH = zoom.clientHeight - (0.03 + 0.08) * window.innerHeight;
-    var lo = 10, hi = 220, best = 14;
-    for (var i = 0; i < 18; i++) {
+    var padX = Math.round(window.innerWidth * 0.03);
+    var padY = Math.round(window.innerHeight * 0.03);
+    var footer = Math.round(window.innerHeight * 0.08);
+    var availW = window.innerWidth - 2 * padX;
+    var availH = window.innerHeight - padY - footer;
+
+    ztext.style.width = availW + 'px';
+    ztext.style.maxWidth = 'none';
+    ztext.style.maxHeight = 'none';
+
+    var lo = 10, hi = 260, best = 12;
+    for (var i = 0; i < 20; i++) {
       var mid = (lo + hi) / 2;
       ztext.style.fontSize = mid + 'px';
-      if (ztext.scrollWidth <= maxW && ztext.scrollHeight <= maxH) { best = mid; lo = mid; }
-      else hi = mid;
+      // scrollHeight is the honest number once the width cannot move.
+      if (ztext.scrollHeight <= availH) { best = mid; lo = mid; } else { hi = mid; }
     }
     ztext.style.fontSize = Math.floor(best) + 'px';
   }
@@ -393,6 +425,7 @@ JS = r"""
   }
   document.getElementById('tz-close').onclick = closeZoom;
   zoom.addEventListener('mouseup', function (e) {
+    if (Date.now() - openedAt < 400) return;
     if (e.target === zoom) closeZoom();
   });
 
