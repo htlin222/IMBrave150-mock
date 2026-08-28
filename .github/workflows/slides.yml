@@ -154,24 +154,70 @@ jobs:
             slides/dist/*.pdf
             dist/imbrave150-slides-*.zip
           body: |
-            **Mission by Mission** — driving an AI coding agent, live, from ten
-            messy hospital exports to a result you can audit.
+            A talk about doing a whole study — ten messy hospital exports to a
+            written-up manuscript — by asking an AI agent in plain sentences,
+            and checking everything it hands back.
+
+            ## Presenting it
+
+            1. **Download `imbrave150-slides-*.zip` and unzip it.** That is
+               everything. No clone, no network, no toolchain — it runs on a
+               borrowed laptop.
+            2. **Read `SPEAKER-NOTES.md` first** (Chinese). The slides are in
+               English and the delivery is not; those notes are the bridge. They
+               give you what to say for the opening slides and at each of the
+               five stops.
+            3. **Open `deck.pdf`** and present the first five slides — about ten
+               minutes. The fourth one explains what a terminal is; do not skip
+               it if the room has never seen one.
+            4. **Open `talk.html`** and play. It opens at 1.5×, where the
+               recording runs 22 minutes. Stop five times, roughly one minute
+               each, at the points the notes mark.
+            5. **Close on the last two slides of `deck.pdf`** — about ten
+               minutes with discussion.
+
+            That is a 45-minute slot: 10 speaking, 25 playing and stopping,
+            10 closing.
+
+            ### While it is playing
+
+            The bar across the top has speed (1× to 3×), a dropdown of all
+            twenty-two chapters, and pause. Drop to 1× for anything you want
+            the room to read; push to 2× through the parts where the agent is
+            thinking rather than printing. Chapters are clicked, not
+            keyboard-stepped.
+
+            If someone asks something the walkthrough does not cover — how the
+            matching works, what happens when a prompt is ambiguous, the 120
+            analytic paths, the four reviewers — `talk-long.html` in the same
+            folder is the hour-long version with all of it in.
+
+            If the browser fails, `deck-backup.pdf` carries a still frame from
+            the recording after each signpost, so you can finish from the PDF.
+
+            ## What is in the zip
 
             | file | what it is |
             |---|---|
-            | `imbrave150-slides-*.zip` | **Start here.** Everything needed to present, offline: the running order, the 64-minute recording as a self-contained player, and all three PDFs. |
-            | `imbrave150-deck.pdf` | **The talk.** 12 slides: five signposts around a live demo. |
-            | `imbrave150-deck-backup.pdf` | The same, with recorded terminal output after each signpost, for when the demo will not cooperate. |
-            | `imbrave150-deck-full.pdf` | Reference edition, 43 slides, for reading afterwards. |
+            | `SPEAKER-NOTES.md` | What to say. Read this first. |
+            | `talk.html` | The recording. 32:55, or 22 min at 1.5×. Double-click it. |
+            | `deck.pdf` | The slides you present around it. |
+            | `talk-long.html` | The hour-long version, for questions and for handing out. |
+            | `deck-backup.pdf` | The slides with recorded frames in them, if the browser dies. |
+            | `deck-reference.pdf` | 43-slide reference edition, for afterwards. |
+            | `source/` | The raw recording and its marker log. |
+
+            The three PDFs are attached separately as well, if the zip is more
+            than you need.
 
             Hsieh-Ting Lin, MD (林協霆) · Department of Medical Oncology,
             Koo Foundation Sun Yat-Sen Cancer Center (和信治癌中心醫院).
 
             Built from `slides/` at ${{ github.sha }}. Every slide was checked
-            for overflow before release; every citation was verified against
-            Crossref; and every number came from a recorded run of the
+            for overflow before release, every citation was verified against
+            Crossref, and every number came from a recorded run of the
             `live-demo/` pipeline in this repository.
 
-            ⚠️ All data in the deck are synthetic. No real patient is
-            represented, and nothing here is evidence about atezolizumab,
-            bevacizumab or sorafenib.
+            ⚠️ All data are synthetic. No real patient is represented, and
+            nothing here is evidence about atezolizumab, bevacizumab or
+            sorafenib.

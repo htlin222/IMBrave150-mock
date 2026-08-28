@@ -49,25 +49,53 @@ cp "$SLIDES/cast/RUNNING-ORDER.md"  "$STAGE/source/"
 cat > "$STAGE/START-HERE.md" <<'EOF'
 # Mission by Mission — presenter bundle
 
-Everything needed to give the talk, offline. No clone, no network, no toolchain.
+A talk about doing a whole study — ten messy hospital exports to a written-up
+manuscript — by asking an AI agent in plain sentences, and checking everything
+it hands back.
+
+Everything needed to give it is in this folder. No clone, no network, no
+toolchain: it runs on a borrowed laptop.
+
+## On the day
+
+1. **Read `SPEAKER-NOTES.md` first** (Chinese). The slides are in English and
+   the delivery is not; those notes are the bridge. They give you what to say
+   for the opening slides and at each of the five stops.
+2. **Present the first five slides of `deck.pdf`** — about ten minutes. The
+   fourth explains what a terminal is. Do not skip it if the room has never
+   seen one.
+3. **Open `talk.html` and play.** It opens at 1.5x, where the recording runs
+   22 minutes. Stop five times, roughly a minute each, where the notes mark.
+4. **Close on the last two slides of `deck.pdf`** — about ten minutes with
+   discussion.
+
+A 45-minute slot: 10 speaking, 25 playing and stopping, 10 closing.
+
+## While it is playing
+
+The bar across the top has speed (1x to 3x), a dropdown of all twenty-two
+chapters, and pause. Drop to 1x for anything you want the room to read; push to
+2x through the parts where the agent is thinking rather than printing. Chapters
+are clicked, not keyboard-stepped.
+
+If someone asks something the walkthrough does not cover — how the matching
+works, what happens when a prompt is ambiguous, the 120 analytic paths, the
+four reviewers — `talk-long.html` is the hour-long version with all of it in.
+
+If the browser fails, `deck-backup.pdf` carries a still frame from the
+recording after each signpost, so you can finish from the PDF.
+
+## The files
 
 | file | what it is |
 |---|---|
 | `SPEAKER-NOTES.md` | **Read this first.** What to say, slide by slide and stop by stop. In Chinese. |
-| `talk.html` | The recording. Double-click it; any browser, no internet. 32:55, or 22 minutes at the default 1.5x. |
+| `talk.html` | The recording. 32:55, or 22 minutes at the default 1.5x. Double-click it; any browser, no internet. |
+| `deck.pdf` | The slides you present around it. |
 | `talk-long.html` | The hour-long version, with the methodological arguments in it. For questions, and for handing out. |
-| `deck.pdf` | The 12-slide talk deck. |
-| `deck-backup.pdf` | The same slides with a still frame from a recorded session after each signpost, for when a live demo will not cooperate. |
+| `deck-backup.pdf` | The same slides with a still frame from a recorded session after each signpost, for when the browser will not cooperate. |
 | `deck-reference.pdf` | The 43-slide reference edition, for handing out afterwards. |
 | `source/` | The raw `.cast`, the marker log, and the running order for the long version. |
-
-## On the day
-
-1. Open `talk.html`. It plays offline.
-2. Follow `SPEAKER-NOTES.md`: five stops, one minute of talking at each.
-3. Markers are the dots on the progress bar — **click one to jump to it**.
-   Clicking the terminal toggles play/pause. Bracket keys do not step between
-   markers in this build, so use the mouse.
 
 ## Everything on screen is synthetic
 
