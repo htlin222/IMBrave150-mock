@@ -342,8 +342,13 @@ Pushing anything under `slides/` to `main` redeploys it
 (`.github/workflows/deploy-talk.yml`), which builds the PDFs on the runner —
 the recordings are committed, the PDFs are not.
 
-The speaker script and notes are deliberately **not** published. They are the
-presenter's own lines, not part of the demo.
+The script is served at **<https://imbrave150-talk.pages.dev/speaker-note>** —
+rendered for reading from a phone at the lectern, with the stage directions
+dimmed. It is not linked from the landing page and carries `noindex`, but that
+is obscurity, not access control: anyone with the URL can read it. Put
+Cloudflare Access in front of it if that matters.
+
+`SPEAKER-NOTES.md` is not published at all.
 
 ## The presenter bundle
 

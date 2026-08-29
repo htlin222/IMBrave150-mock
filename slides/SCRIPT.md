@@ -906,6 +906,8 @@ repo 是公開的，裡面有一份逐關的教材，可以照著做一遍。
 - [ ] 備援一：瀏覽器掛掉就開 `deck-backup.pdf` 接著講
 - [ ] 備援二：整台電腦出事，用手機或現場電腦開
       **https://imbrave150-talk.pages.dev** —— 錄影跟投影片都在上面
+- [ ] 這份講稿在手機上：**https://imbrave150-talk.pages.dev/speaker-note**
+      （沒有從首頁連過去，但網址是公開的，不要貼給別人）
 
 ---
 
