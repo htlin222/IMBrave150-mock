@@ -24,6 +24,11 @@ cp "$HERE/dist/imbrave150-deck-backup.pdf" "$SITE/deck-backup.pdf"
 # Cloudflare Pages serves these at /talk and /talk-long and 308s the .html
 # form, so index.html links the extensionless paths.
 grep -q "talkpane" "$SITE/talk.html" || { echo "talk.html has no control bar"; exit 1; }
+# The speaker notes are not linked from the landing page — public site, the
+# presenter's own lines — but they are served, so they can be opened from a
+# phone at the lectern.
+python3 "$HERE/tools/build_notes.py"
+
 grep -q 'href="talk"' "$SITE/index.html" || { echo "index.html links the .html form; Pages will redirect"; exit 1; }
 echo "site assembled: $(du -sh "$SITE" | cut -f1)"
 ls -1 "$SITE"
