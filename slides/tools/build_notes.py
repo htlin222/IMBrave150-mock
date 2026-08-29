@@ -18,7 +18,8 @@ import subprocess
 import sys
 
 HERE = pathlib.Path(__file__).resolve().parent.parent
-OUT = HERE / "site" / "speaker-note"
+PAGES = [("SCRIPT.md", "speaker-note", "講稿 · Speaker notes"),
+         ("STRATEGY.md", "strategy", "戰略卡 · On-stage tactics")]
 
 CSS = """
 :root { --ink:#e9e9ec; --paper:#16161e; --dim:#8b8b98; --accent:#f9e2af;
@@ -59,16 +60,16 @@ li { margin-bottom:6px; }
 """
 
 
-def main():
-    src = HERE / "SCRIPT.md"
+def render(src_name, route, title):
+    src = HERE / src_name
     if not src.exists():
-        sys.exit(f"no script at {src}")
+        sys.exit(f"no source at {src}")
     try:
         body = subprocess.run(
             ["pandoc", "-f", "gfm", "-t", "html", str(src)],
             capture_output=True, text=True, check=True).stdout
     except FileNotFoundError:
-        sys.exit("pandoc is not installed, and it renders the speaker notes.\n"
+        sys.exit("pandoc is not installed, and it renders these pages.\n"
                  "  macOS:  brew install pandoc\n"
                  "  Debian: apt-get install -y pandoc")
     except subprocess.CalledProcessError as e:
@@ -78,22 +79,29 @@ def main():
     # rendered HTML so it applies inside paragraphs and list items alike.
     body = re.sub(r"（([^）]*)）", r'<span class="dir">（\1）</span>', body)
 
-    OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "index.html").write_text(
+    out = HERE / "site" / route
+    out.mkdir(parents=True, exist_ok=True)
+    other = [p for p in PAGES if p[1] != route][0]
+    (out / "index.html").write_text(
         "<!doctype html>\n<html lang=\"zh-Hant\">\n<head>\n"
         "<meta charset=\"utf-8\">\n"
         "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
         "<meta name=\"robots\" content=\"noindex, nofollow\">\n"
-        "<title>講稿 · Speaker notes</title>\n"
+        f"<title>{html.escape(title)}</title>\n"
         f"<style>{CSS}</style>\n</head>\n<body>\n<main>\n"
         "<div class=\"top\">"
         "<a href=\"/talk\">&larr; 錄影</a>"
-        "<a href=\"/\">首頁</a>"
+        f"<a href=\"/{other[1]}\">{html.escape(other[2].split(' · ')[0])}</a>"
         "<span class=\"now\">不對外公開，請勿分享連結</span>"
         "</div>\n"
         f"{body}\n</main>\n</body>\n</html>\n")
-    size = (OUT / "index.html").stat().st_size
-    print(f"speaker-note/index.html  {size // 1024} KB")
+    return route, (out / "index.html").stat().st_size
+
+
+def main():
+    for name, route, title in PAGES:
+        r, size = render(name, route, title)
+        print(f"{r}/index.html  {size // 1024} KB")
 
 
 if __name__ == "__main__":

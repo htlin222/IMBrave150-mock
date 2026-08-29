@@ -33,7 +33,7 @@ done
 mkdir -p "$STAGE" "$OUT"
 
 # ---- 上台當天真的會用到的三樣 ----
-cp "$SLIDES/SCRIPT.md" "$SLIDES/SPEAKER-NOTES.md" "$STAGE/"
+cp "$SLIDES/SCRIPT.md" "$SLIDES/STRATEGY.md" "$SLIDES/SPEAKER-NOTES.md" "$STAGE/"
 cp "$SLIDES/cast/walk.html"   "$STAGE/talk.html"
 cp "$SLIDES/dist/imbrave150-deck.pdf"        "$STAGE/deck.pdf"
 cp "$SLIDES/dist/imbrave150-deck-backup.pdf" "$STAGE/deck-backup.pdf"
@@ -102,6 +102,7 @@ recording after each signpost, so you can finish from the PDF.
 
 | file | what it is |
 |---|---|
+| `STRATEGY.md` | **Read this last, three minutes before going on.** What to cut, what never to cut, how to read the room, what to say when challenged. |
 | `SCRIPT.md` | **The rehearsal script.** Every word you say, in Chinese, with stage directions — （停頓）, （慢）, where to press play. Reading it aloud takes about as long as the talk. |
 | `SPEAKER-NOTES.md` | The same talk as notes rather than verbatim, if you would rather not read from a script. |
 | `talk.html` | The recording. 32:55, or 22 minutes at the default 1.5x. Double-click it; any browser, no internet. |

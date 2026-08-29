@@ -45,6 +45,7 @@ Not published, and not in the bundle's public half: `SCRIPT.md` and
 | `deck-backup.md` | Generated from `deck.md` — the same slides with a still frame from a real recorded agent session after each signpost, for when the live demo will not cooperate. Do not hand-edit; regenerate. |
 | `deck-full.md` | Reference edition, 43 slides, for reading after the talk. |
 | `cast/walk.html` | **The recording that gets presented.** 32:55, or 22 min at the default 1.5x. Data, cleaning, exploring, analysis, writing — plain prompts, no detours. |
+| `STRATEGY.md` | **The briefing card** — what to cut and in what order, what never to cut, how to read the room, answers to the challenges that will come. Also at `/strategy`. |
 | `SCRIPT.md` | **The rehearsal script.** Every word, in Chinese, with stage directions. Reads to length. |
 | `SPEAKER-NOTES.md` | The same talk as notes rather than verbatim, if you would rather not read from a script. |
 | `tools/script_timing.py` | Measures how long the script takes, counting the pauses its directions ask for. |
