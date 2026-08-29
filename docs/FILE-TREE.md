@@ -132,7 +132,7 @@ because otherwise this map does not match the directory you are looking at.
 | `│   │   ├── walk.cast` | **the walkthrough recording** · 33 min · 22 chapters · 2.6 MB |
 | `│   │   └── walk.html` | self-contained offline player for it |
 | `│   ├── img/` | still frames from the recording, one per signpost (5 files) |
-| `│   ├── recordings/` | the older per-segment MP4s, superseded by the `.cast` (5 files) |
+| `│   ├── recordings/` | per-segment MP4s of the same material — **kept deliberately** as a fallback for a room where the `.cast` player will not run (5 files) |
 | `│   ├── site/` | |
 | `│   │   └── index.html` | landing page; the rest of `site/` is assembled, not tracked |
 | `│   ├── stage/` | |

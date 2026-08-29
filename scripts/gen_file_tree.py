@@ -28,7 +28,7 @@ COLLAPSE = {
     "live-demo/reference-run/results": "the eight result tables from the reference run",
     "claude-demo/figures": "figures embedded in the animated deck",
     "slides/img": "still frames from the recording, one per signpost",
-    "slides/recordings": "the older per-segment MP4s, superseded by the `.cast`",
+    "slides/recordings": "per-segment MP4s of the same material — **kept deliberately** as a fallback for a room where the `.cast` player will not run",
     "slides/talk": "presenterm decks shown between prompts in the long recording",
     "slides/walkthrough": "presenterm decks shown between prompts in the walkthrough",
 }
