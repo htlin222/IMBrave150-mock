@@ -847,6 +847,16 @@ span.ap-marker-container:hover span.ap-marker {
      terminal reflow every time the list was opened or closed, which on a
      projector is far more distracting than a covered right margin. */
 
+  /* Windowed, the generated page caps the player at 1100px, so on a large or
+     retina display it sits small in the middle of the screen and the vertical
+     space goes unused. Size it the same way fullscreen does — the largest 16:9
+     box that fits under the bar — just with a margin so it does not touch the
+     edges. */
+  #player {
+    width: min(98vw, (100vh - 56px - 20px) * 16 / 9) !important;
+    max-width: 98vw !important;
+  }
+
   /* The player ships its own fullscreen button, which expands only the
      terminal — hiding this bar and the chapter pane — and resumes playback on
      the way in. There should be one way to go fullscreen, and it is ours, so
