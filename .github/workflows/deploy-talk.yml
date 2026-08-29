@@ -36,10 +36,11 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
+          # pandoc renders the speaker notes; the rest builds the PDFs.
           sudo apt-get install -y --no-install-recommends \
-            chromium-browser poppler-utils fonts-noto-cjk || \
+            chromium-browser poppler-utils fonts-noto-cjk pandoc || \
           sudo apt-get install -y --no-install-recommends \
-            chromium poppler-utils fonts-noto-cjk
+            chromium poppler-utils fonts-noto-cjk pandoc
           python3 -m pip install --quiet Pillow
 
       - name: Resolve Chrome binary

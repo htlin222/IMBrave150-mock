@@ -63,16 +63,16 @@ def main():
     src = HERE / "SCRIPT.md"
     if not src.exists():
         sys.exit(f"no script at {src}")
-    if not subprocess.run(["command", "-v", "pandoc"], shell=False,
-                          capture_output=True).returncode == 0:
-        pass  # `command -v` via subprocess is unreliable; just try pandoc below
-
     try:
         body = subprocess.run(
             ["pandoc", "-f", "gfm", "-t", "html", str(src)],
             capture_output=True, text=True, check=True).stdout
-    except (FileNotFoundError, subprocess.CalledProcessError) as e:
-        sys.exit(f"pandoc is needed to render the notes: {e}")
+    except FileNotFoundError:
+        sys.exit("pandoc is not installed, and it renders the speaker notes.\n"
+                 "  macOS:  brew install pandoc\n"
+                 "  Debian: apt-get install -y pandoc")
+    except subprocess.CalledProcessError as e:
+        sys.exit(f"pandoc failed on {src.name}: {e.stderr.strip()[:200]}")
 
     # Wrap the （…） stage directions so they can be dimmed. Done on the
     # rendered HTML so it applies inside paragraphs and list items alike.
