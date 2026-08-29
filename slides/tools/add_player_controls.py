@@ -180,7 +180,7 @@ BAR = """
   </div>
 </div>
 <div id="talkpane"><h3>Chapters</h3><div id="tb-panelist"></div></div>
-<div id="talkpop"><button id="tp-zoom">&#128269; \u653e\u5927\u6587\u5b57</button><button id="tp-copy">&#128203; \u8907\u88fd <small>y</small></button></div>
+<div id="talkpop"><button id="tp-zoom">&#128269; \u653e\u5927\u6587\u5b57</button><button id="tp-copy">&#128203; \u8907\u88fd <small>y</small></button><button id="tp-gemini">&#10024; Gemini</button></div>
 <div id="talkzoom">
   <button class="close" id="tz-close">&times;</button>
   <pre id="tz-text"></pre>
@@ -387,6 +387,24 @@ JS = r"""
   document.getElementById('tp-copy').addEventListener('mousedown', function (e) {
     e.preventDefault(); e.stopPropagation(); copySelected();
   });
+  document.getElementById('tp-gemini').addEventListener('mousedown', function (e) {
+    e.preventDefault(); e.stopPropagation(); askGemini();
+  });
+
+  // Hand the selection to Gemini in a new tab. mousedown is a user gesture, so
+  // this is not treated as a popup. The query string is the only channel, and
+  // browsers cap URLs, so a very long selection is trimmed on a word boundary.
+  function askGemini() {
+    var text = String(window.getSelection() || '') || selected;
+    text = text.replace(/\s+/g, ' ').trim();
+    if (!text) return;
+    if (text.length > 1500) {
+      text = text.slice(0, 1500).replace(/\s+\S*$/, '') + '\u2026';
+    }
+    window.open('https://gemini.google.com/app?q=' + encodeURIComponent(text),
+                '_blank', 'noopener');
+    hidePop();
+  }
 
   function copySelected() {
     // Read the live selection here rather than trusting the value stashed at
