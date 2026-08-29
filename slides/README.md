@@ -168,7 +168,10 @@ whole hour, so its context never resets; the slides run in a second window and
 the recording is a client attached to that session, which is why switching
 between them is just terminal output.
 
-Play to the next marker, pause, talk, carry on. The page carries a control bar —
+Play to the next marker, pause, talk, carry on. The control bar hides itself
+and slides back when the pointer nears the top of the window, so the recording
+is what is on screen; it also shows for a couple of seconds on load so it can
+be found. It carries —
 speed (1× to 3×), a chapter dropdown, play/pause, fullscreen — and three things
 built for a projector:
 

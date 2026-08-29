@@ -38,14 +38,21 @@ CSS = """
      margin around the recording that read as a rendering fault. */
   html, body { background: #1e1e2e; }
 
+  /* The bar hides itself and comes back when the pointer nears the top. On a
+     projector the recording is the content; a permanent strip of chrome above
+     it is just smaller text. It is an overlay, so the player gets the whole
+     height rather than the height minus a bar. */
   #talkbar {
-    align-self: stretch;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    transform: translateY(-101%);
+    transition: transform .16s ease-out;
     box-sizing: border-box;
     display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
     padding: 10px 16px; background: #1e1e2e; color: #cdd6f4;
     font: 500 15px/1.4 ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
     border-bottom: 1px solid #313244;
   }
+  body.bar-peek #talkbar, #talkbar:hover, #talkbar:focus-within { transform: none; }
   #talkbar .grp { display: flex; align-items: center; gap: 8px; }
   #talkbar .lbl { color: #7f849c; font-size: 13px; letter-spacing: .06em;
                   text-transform: uppercase; }
@@ -105,7 +112,7 @@ CSS = """
      box that fits under the bar — just with a margin so it does not touch the
      edges. */
   #player {
-    width: min(98vw, (100vh - 56px - 20px) * 16 / 9) !important;
+    width: min(98vw, (100vh - 20px) * 16 / 9) !important;
     max-width: 98vw !important;
   }
 
@@ -123,9 +130,10 @@ CSS = """
      A body class rather than :fullscreen alone, so the same rules apply
      whichever vendor prefix the browser reports. */
   body.fs { padding: 0; }
+  body { padding-top: 0; }
   body.fs #talkbar { border-bottom-color: #45475a; }
   body.fs #player {
-    width: min(100vw, (100vh - 56px) * 16 / 9) !important;
+    width: min(100vw, 100vh * 16 / 9) !important;
     max-width: 100vw !important;
     border-radius: 0;
   }
@@ -338,6 +346,26 @@ JS = r"""
       paint();
     }, 60);
   }
+  // Reveal the bar when the pointer is near the top, and for a moment on load
+  // so it is discoverable at all.
+  var peekTimer = null;
+  document.addEventListener('mousemove', function (e) {
+    var near = e.clientY < 64;
+    if (near) {
+      document.body.classList.add('bar-peek');
+      clearTimeout(peekTimer);
+    } else if (document.body.classList.contains('bar-peek')) {
+      clearTimeout(peekTimer);
+      peekTimer = setTimeout(function () {
+        if (!document.getElementById('talkbar').matches(':hover')) {
+          document.body.classList.remove('bar-peek');
+        }
+      }, 700);
+    }
+  });
+  document.body.classList.add('bar-peek');
+  setTimeout(function () { document.body.classList.remove('bar-peek'); }, 2600);
+
   document.addEventListener('fullscreenchange', onFsChange);
   document.addEventListener('webkitfullscreenchange', onFsChange);
 
