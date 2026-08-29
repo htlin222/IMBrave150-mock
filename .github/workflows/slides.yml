@@ -59,12 +59,20 @@ jobs:
       - name: Resolve Chrome binary
         id: chrome
         run: |
-          for c in chromium-browser chromium google-chrome; do
-            if command -v "$c" >/dev/null 2>&1; then
-              echo "path=$(command -v "$c")" >> "$GITHUB_OUTPUT"; exit 0
+          # Existing on PATH is not enough: on Ubuntu `chromium-browser` is
+          # often a snap wrapper that resolves fine and then fails to launch,
+          # which surfaces from Marp only as "Failed to launch the browser
+          # process". Ask each candidate for its version and take the first
+          # that actually answers.
+          for c in chromium google-chrome chromium-browser; do
+            p="$(command -v "$c" 2>/dev/null)" || continue
+            if v="$("$p" --version 2>/dev/null)"; then
+              echo "using $p ($v)"
+              echo "path=$p" >> "$GITHUB_OUTPUT"; exit 0
             fi
+            echo "$p exists but will not run; trying the next"
           done
-          echo "No Chromium binary found" >&2; exit 1
+          echo "No usable Chromium binary found" >&2; exit 1
 
       - name: Resolve version
         id: v
