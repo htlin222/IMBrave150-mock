@@ -1,0 +1,20 @@
+{
+  "estimand": "risk difference in death by 12 months (treat - control)",
+  "tau_months": 12.0,
+  "n": 1800,
+  "n_outcome_observed": 934,
+  "g_min_before_clip": 0.1182,
+  "g_max_before_clip": 0.9035,
+  "rd_true": -0.1541,
+  "risk_true_treat": 0.3022,
+  "risk_true_control": 0.4563,
+  "naive": -0.227,
+  "gcomp": -0.1505,
+  "iptw": -0.1458,
+  "aipw": -0.153,
+  "aipw_se": 0.0329,
+  "tmle": -0.151,
+  "tmle_se": 0.0329,
+  "tmle_ci_low": -0.2155,
+  "tmle_ci_high": -0.0865
+}

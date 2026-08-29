@@ -1,0 +1,11 @@
+{
+  "n": 1800,
+  "n_treat": 962,
+  "n_control": 838,
+  "events_treat": 231,
+  "events_control": 334,
+  "hr": 0.5048,
+  "ci_low": 0.4266,
+  "ci_high": 0.5972,
+  "p": 1.6392643786679172e-15
+}

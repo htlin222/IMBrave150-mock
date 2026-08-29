@@ -1,0 +1,62 @@
+cff-version: 1.2.0
+title: >-
+  IMbrave150-mock — a synthetic multi-hospital cohort, and a
+  reproducible agent-driven analysis of it
+message: >-
+  If you use this dataset, the course, or the recorded walkthrough,
+  please cite it as below. All data are synthetic; cite the original
+  trial (see references) for anything clinical.
+type: dataset
+authors:
+  - family-names: Lin
+    given-names: Hsieh-Ting
+    alias: 林協霆
+    affiliation: >-
+      Department of Medical Oncology, Koo Foundation Sun Yat-Sen Cancer
+      Center, Taipei, Taiwan
+repository-code: https://github.com/htlin222/IMBrave150-mock
+license: MIT
+keywords:
+  - synthetic data
+  - survival analysis
+  - propensity score matching
+  - target trial emulation
+  - reproducible research
+  - large language model agents
+  - medical education
+abstract: >-
+  A fully synthetic patient-level dataset that reproduces the published
+  summary statistics of the IMbrave150 phase-3 trial, distributed in two
+  teaching layers: a randomised cohort of 501 patients, and a confounded
+  real-world layer of 1,800 patients split across ten hospitals in three
+  incompatible EHR schemas. The repository also contains a 32-mission
+  guided course in which an AI coding agent performs the entire analysis
+  — harmonisation, propensity-score matching, survival analysis,
+  subgroups, a 120-specification curve, TMLE, and manuscript preparation
+  with machine-verified citations — together with the verbatim prompt
+  list, per-mission acceptance checks, and terminal recordings of
+  complete runs. No real patient is represented and nothing in it
+  constitutes evidence about any therapy.
+references:
+  - type: article
+    title: >-
+      Atezolizumab plus Bevacizumab in Unresectable Hepatocellular
+      Carcinoma
+    authors:
+      - family-names: Finn
+        given-names: Richard S.
+      - family-names: Qin
+        given-names: Shukui
+      - family-names: Ikeda
+        given-names: Masafumi
+    journal: New England Journal of Medicine
+    year: 2020
+    volume: "382"
+    issue: "20"
+    start: 1894
+    end: 1905
+    doi: 10.1056/NEJMoa1915745
+    notes: >-
+      The published trial the synthetic data are calibrated to. This
+      repository contains no data from it beyond its printed summary
+      statistics.

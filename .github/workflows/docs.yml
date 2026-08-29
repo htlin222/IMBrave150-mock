@@ -1,0 +1,56 @@
+name: Docs
+
+# The prompt list and the file tree are generated from the things they
+# describe — the recorder scripts, and `git ls-files`. A generated document
+# that has quietly gone stale is worse than no document, so this asserts they
+# are current rather than trusting anyone to remember.
+#
+# Both checks are pure Python with no dependencies; the job runs in seconds.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  generated-docs-are-current:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: docs/PROMPTS.md matches the recorder scripts
+        run: python3 scripts/extract_prompts.py --check
+
+      - name: docs/FILE-TREE.md matches git ls-files
+        run: python3 scripts/gen_file_tree.py --check
+
+      # A regenerated file that differs is easier to fix when you can see the
+      # diff, so print it rather than leaving the reader with "it is stale".
+      - name: Show what changed
+        if: failure()
+        run: |
+          python3 scripts/extract_prompts.py
+          python3 scripts/gen_file_tree.py
+          git --no-pager diff -- docs/
+
+      # The one file that must never be committed. `.gitignore` covers it, but
+      # a check that runs on every push is cheaper than the incident.
+      - name: No credentials in the tree
+        run: |
+          if git ls-files --error-unmatch .env >/dev/null 2>&1; then
+            echo "::error::.env is tracked — rotate that token now" && exit 1
+          fi
+          echo "no .env in the index"

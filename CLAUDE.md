@@ -59,6 +59,8 @@
 | `live-demo/` | **主要交付物。** 9 章 32 個 Mission 的逐關指南 + 驗收腳本。 |
 | `live-demo/README.md` | Agent 入口：規則、全域硬性約束、章節索引。**先讀這個。** |
 | `live-demo/verify/` | 驗收腳本。你只負責「跑」，**不要改**。 |
+| `live-demo/reference-run/` | 上一輪跑完的輸出快照（結果表 + 校驗碼）。**⛔ demo 期間不要讀**，那是答案。 |
+| `docs/` | 對外文件：`PROMPTS.md`（提示詞清單）、`PIPELINE.md`、`FILE-TREE.md`。前兩份由腳本產生，不要手改。 |
 | `live-demo/workspace/` | 你所有的產出都放這裡。**絕不動 repo 根目錄。** |
 | `claude-demo/` | 同一個故事的動畫投影片（備援用），與 demo 執行無關。 |
 | 根目錄的 `*.py` | **參考解。** 只有在 Mission 標示「🆘 卡住時」而且你已自己試過一次，才可以看。 |
@@ -66,7 +68,8 @@
 ## ⛔ 幾條硬規則
 
 1. **不要偷看根目錄的參考解**（`harmonize_hospitals.py`、`psm_imbrave150.py` 等），
-   除非該 Mission 明確允許。
+   除非該 Mission 明確允許。**`live-demo/reference-run/` 同理**——那是上一輪的完整
+   輸出快照，給跑完的人類對答案用的。
 2. **不要動 repo 根目錄的任何檔案。** 產出一律寫進 `live-demo/workspace/`。
 3. **不要憑印象寫數字。** 每個數字都要是這一輪真的跑出來的——手稿階段會被程式稽核。
 4. **不要憑記憶生成 DOI 或引用。** 一律 WebSearch 找到真文獻 → Crossref 驗證。

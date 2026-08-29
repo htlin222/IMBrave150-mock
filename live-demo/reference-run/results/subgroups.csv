@@ -1,0 +1,15 @@
+subgroup_var,subgroup_level,n,events,hr,ci_low,ci_high
+Overall,Overall,1412,449,0.5781,0.4786,0.6984
+Region,Asia excluding Japan,711,221,0.6137,0.4696,0.8021
+Region,Rest of World,701,228,0.5524,0.4229,0.7215
+ECOG PS,0,836,250,0.6095,0.4736,0.7844
+ECOG PS,1,576,199,0.5391,0.4053,0.7171
+AFP,>=400 ng/mL,560,212,0.5868,0.4469,0.7706
+AFP,<400 ng/mL,852,237,0.5442,0.4178,0.709
+Macrovascular invasion,Yes,543,201,0.6095,0.4608,0.8063
+Macrovascular invasion,No,869,248,0.5423,0.4194,0.7013
+BCLC stage,C,1177,378,0.592,0.4821,0.727
+BCLC stage,A-B,235,71,0.51,0.3142,0.8278
+Etiology,HBV,645,201,0.629,0.4753,0.8324
+Etiology,HCV,293,95,0.5548,0.3653,0.8425
+Etiology,Nonviral,474,153,0.5356,0.3868,0.7415

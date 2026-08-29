@@ -1,0 +1,10 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Watch the recorded walkthrough
+    url: https://imbrave150-talk.pages.dev/talk
+    about: >-
+      33 minutes, the whole study end to end. Often faster than asking what a
+      step was supposed to do.
+  - name: The prompt list
+    url: https://github.com/htlin222/IMBrave150-mock/blob/main/docs/PROMPTS.md
+    about: Every prompt that produced the results in this repository, verbatim.

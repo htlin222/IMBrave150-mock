@@ -62,6 +62,40 @@ existed; kept because it stands on its own, but the recording is what to watch.
 | **`claude-demo/`** | A self-contained animated HTML slide deck of the same story (~60 min). Predates the recording. Open `claude-demo/index.html`. |
 | **the dataset itself** | Two teaching layers (below) — use the CSVs and scripts directly for coursework. |
 
+## Reproduce it
+
+Everything here — the pooled cohort, the matched estimate, the figures, the
+manuscript — was produced by asking an agent in ordinary sentences. Those
+sentences are written down, and so is what came back.
+
+| | |
+|---|---|
+| **[`docs/PROMPTS.md`](docs/PROMPTS.md)** | **The prompt list, verbatim.** Three routes: 32 guided missions, or the 14 prompts of the walkthrough, or the 18 of the long version. Generated from the recorder scripts, so it cannot drift from what actually ran. |
+| [`docs/PIPELINE.md`](docs/PIPELINE.md) | What consumes what. How the synthetic data was manufactured, how ten exports become one estimate, and how the talk gets built and released. |
+| [`docs/FILE-TREE.md`](docs/FILE-TREE.md) | Every tracked file and what it is for, plus the directories that only exist after something runs. Generated from `git ls-files`. |
+| [`live-demo/reference-run/`](live-demo/reference-run/) | What one complete run produced: the eight result tables, and a checksum manifest of all 45 output files. Compare yours against it. |
+
+The fastest way in, if you have an agent to hand:
+
+```bash
+git clone https://github.com/htlin222/IMBrave150-mock && cd IMBrave150-mock
+make setup
+# then open it in Claude Code and say:
+#   follow the ./live-demo mission by mission
+```
+
+It executes one mission, runs that mission's acceptance check, tells you what
+it found, and stops. You say `next`. Thirty-two times, and you have a preprint.
+
+If you would rather skip the agent entirely, `make data && make analyze` runs
+the reference implementations in about a minute.
+
+**Your numbers will not match to the last digit, and should not.** An agent
+writes its own analysis code, and two runs make different defensible choices.
+What holds every time: the unadjusted hazard ratio is far too flattering, the
+matched one lands near 0.58, and none of 120 alternative specifications crosses
+1.0. The tolerances are enforced in [`live-demo/verify/`](live-demo/verify/).
+
 ## Two teaching layers
 
 1. **Randomised trial** (`imbrave150_simulated.csv`) — covariates balanced by
@@ -90,6 +124,10 @@ existed; kept because it stands on its own, but the recording is what to watch.
 | `robustness_multiverse.py` | 120 analytic specs → HR distribution figure |
 | `tmle_demo.py` | TMLE / AIPW (doubly robust) vs the true DGP estimand |
 
+That is the dataset layer. For every other file in the repository — the guided
+course, the recordings, the build tooling — see
+**[`docs/FILE-TREE.md`](docs/FILE-TREE.md)**.
+
 ## Quick start
 
 ```bash
@@ -106,7 +144,7 @@ Rscript psm_imbrave150.R
 Datasets are regenerated deterministically (fixed seeds), so `make data` on any
 machine reproduces the committed CSVs byte-for-byte.
 
-## Reproduction — simulated vs published
+## Does it reproduce the trial?
 
 | Endpoint | Simulated | Published (Finn 2020) |
 |----------|-----------|-----------------------|
@@ -149,3 +187,40 @@ see `DATA_DICTIONARY.md`.
    `cox.zph` in R).
 6. Build the ORR 2×2 table and test with a chi-square / Fisher test.
 7. Discuss coprimary endpoints and why medians can be "not reached".
+
+---
+
+## Using this repository
+
+**Licence.** [MIT](LICENSE) for the code and the documentation, and the same
+for the data — with the standing condition that the data are synthetic and may
+not be used to support a claim about any therapy.
+
+**Citation.** [`CITATION.cff`](CITATION.cff); GitHub renders a ready-made
+citation from it in the sidebar. Cite
+[Finn 2020](https://doi.org/10.1056/NEJMoa1915745) for anything clinical.
+
+**Contributing.** [`CONTRIBUTING.md`](CONTRIBUTING.md). Three rules matter more
+than the rest: no number that was not produced by a run, no citation that was
+not verified against Crossref, and never commit `.env`. Also
+[`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
+
+**A run that did not reproduce is the most useful issue you can file** — see
+the last section of `CONTRIBUTING.md` for what to include.
+
+## Provenance and limits
+
+- The dataset is simulated from the published *summary statistics* of Finn RS
+  et al., *N Engl J Med* 2020;382:1894–1905
+  ([10.1056/NEJMoa1915745](https://doi.org/10.1056/NEJMoa1915745)). No
+  patient-level data from that trial, or any other, was used or is contained
+  here.
+- The agreement with the published hazard ratio is **by construction**. It
+  demonstrates that the analysis recovers a known answer from a confounded
+  cohort; it is not independent evidence of anything.
+- The manuscript in [`slides/stage/manuscript.md`](slides/stage/manuscript.md)
+  is a genuine output of a genuine run, and says on its face that its subject
+  is synthetic. It is a demonstration of a writing and review workflow, not a
+  paper.
+- ⚠️ **No real patient is represented anywhere in this repository, and nothing
+  in it is evidence about atezolizumab, bevacizumab or sorafenib.**

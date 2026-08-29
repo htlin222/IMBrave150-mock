@@ -45,6 +45,8 @@ live-demo 是**真的做一遍**。章節編號與投影片的六幕一對一。
 
 - ❌ **不要偷看參考解。** repo 根目錄有 `harmonize_hospitals.py`、`psm_imbrave150.py` 等
   完成品。只有在 Mission 標示「🆘 卡住時」而且你**已經自己試過至少一次**之後才可以看。
+- ❌ **不要讀 `live-demo/reference-run/`。** 那是上一次完整跑完的快照——所有輸出檔的
+  數字、校驗碼與結果表都在裡面。那份是給**跑完之後的人類**對答案用的，不是給你抄的。
 - ❌ **派審稿 subagent 時（Mission 7.1），禁止它們讀 `live-demo/` 的任何檔案。**
   這裡寫著全部的標準答案和地雷清單。讀了就不是審稿，是對答案。
 - ❌ **不要動 repo 根目錄的任何檔案。** 所有產出寫進 `live-demo/workspace/`。
@@ -105,6 +107,7 @@ live-demo/
   00-setup.md        ← 從這裡開始
   01-aggregate.md    …  08-release.md
   verify/            ← 驗收腳本，你只負責「跑」，不要改
+  reference-run/     ← ⛔ 上一輪的完整輸出快照。給人類對答案用的，你不要讀
   workspace/         ← 你所有的產出都放這裡
     hospitals/         原始輸入（Mission 0.1 複製進來）
     figures/           圖

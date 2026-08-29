@@ -1,0 +1,28 @@
+{
+  "n": 1412,
+  "n_pairs": 706,
+  "os": {
+    "hr": 0.5781,
+    "ci_low": 0.4786,
+    "ci_high": 0.6984,
+    "logrank_p": 8.750970651804797e-09,
+    "deaths_treat_pct": 25.64,
+    "deaths_control_pct": 37.96,
+    "surv12_treat_pct": 71.13,
+    "median_treat": 21.3,
+    "surv12_control_pct": 55.67,
+    "median_control": 13.46
+  },
+  "pfs": {
+    "hr": 0.632,
+    "ci_low": 0.554,
+    "ci_high": 0.7208,
+    "logrank_p": 5.466528252434021e-12,
+    "deaths_treat_pct": 58.92,
+    "deaths_control_pct": 70.54,
+    "surv12_treat_pct": 31.5,
+    "median_treat": 6.79,
+    "surv12_control_pct": 14.8,
+    "median_control": 4.28
+  }
+}
