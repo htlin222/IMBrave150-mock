@@ -34,7 +34,9 @@ CSS = """
     align-items: center !important;
     justify-content: flex-start !important;
   }
-  body { background: #16161e; }
+  /* Match the terminal's own background. A darker page colour drew a black
+     margin around the recording that read as a rendering fault. */
+  html, body { background: #1e1e2e; }
 
   #talkbar {
     align-self: stretch;
@@ -122,11 +124,17 @@ CSS = """
      Terminal text is small on a projector. Select a line, blow it up. */
   #talkpop {
     position: fixed; z-index: 60; display: none;
-    background: #cdd6f4; color: #1e1e2e; border-radius: 6px;
-    padding: 7px 14px; font: 600 15px/1 ui-sans-serif, -apple-system, sans-serif;
-    cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.45);
-    white-space: nowrap;
+    background: #cdd6f4; border-radius: 6px; padding: 4px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.45); white-space: nowrap;
   }
+  #talkpop button {
+    background: none; border: 0; color: #1e1e2e; cursor: pointer;
+    font: 600 15px/1 ui-sans-serif, -apple-system, sans-serif;
+    padding: 6px 12px; border-radius: 4px;
+  }
+  #talkpop button:hover { background: rgba(30,30,46,.12); }
+  #talkpop button + button { border-left: 1px solid rgba(30,30,46,.22); }
+  #talkpop small { opacity: .55; font-weight: 500; margin-left: 3px; }
   #talkpop:after {
     content: ""; position: absolute; left: 50%; bottom: -6px; margin-left: -6px;
     border: 6px solid transparent; border-top-color: #cdd6f4; border-bottom: 0;
@@ -172,11 +180,11 @@ BAR = """
   </div>
 </div>
 <div id="talkpane"><h3>Chapters</h3><div id="tb-panelist"></div></div>
-<div id="talkpop">&#128269; \u653e\u5927\u6587\u5b57</div>
+<div id="talkpop"><button id="tp-zoom">&#128269; \u653e\u5927\u6587\u5b57</button><button id="tp-copy">&#128203; \u8907\u88fd <small>y</small></button></div>
 <div id="talkzoom">
   <button class="close" id="tz-close">&times;</button>
   <pre id="tz-text"></pre>
-  <div class="hint">Esc \u6216 \u00d7 \u96e2\u958b</div>
+  <div class="hint">q \u3001 Esc \u6216 \u00d7 \u96e2\u958b</div>
 </div>
 """
 
@@ -369,11 +377,45 @@ JS = r"""
   // fires selectionchange, which hides this element — so by the time click
   // would fire there is nothing under the cursor. preventDefault on mousedown
   // keeps the selection alive and the popover on screen.
-  pop.addEventListener('mousedown', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    openZoom();
+  // Bind each button separately. Matching on e.target inside one handler is
+  // fragile — the press can land on padding between the buttons, which is the
+  // popover itself, and the copy silently became a zoom.
+  pop.addEventListener('mousedown', function (e) { e.preventDefault(); e.stopPropagation(); });
+  document.getElementById('tp-zoom').addEventListener('mousedown', function (e) {
+    e.preventDefault(); e.stopPropagation(); openZoom();
   });
+  document.getElementById('tp-copy').addEventListener('mousedown', function (e) {
+    e.preventDefault(); e.stopPropagation(); copySelected();
+  });
+
+  function copySelected() {
+    // Read the live selection here rather than trusting the value stashed at
+    // selectionchange: preventDefault on mousedown keeps it alive, and the
+    // stored copy can be stale by the time a button is pressed.
+    var text = String(window.getSelection() || '') || selected;
+    if (!text.trim()) return;
+    var done = function () {
+      var btn = document.getElementById('tp-copy');
+      var was = btn.innerHTML;
+      btn.innerHTML = '\u2713 \u5df2\u8907\u88fd';
+      setTimeout(function () { btn.innerHTML = was; hidePop(); }, 900);
+    };
+    // The clipboard API needs a secure context, and this page is often opened
+    // straight off the filesystem, so keep the old path as a fallback.
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else { fallback(); }
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (err) {}
+      document.body.removeChild(ta);
+      done();
+    }
+  }
 
   function openZoom() {
     if (!selected.trim()) return;
@@ -420,8 +462,23 @@ JS = r"""
   });
 
   function closeZoom() {
+    var wasFs = document.body.classList.contains('fs');
     zoom.classList.remove('open');
     var s = window.getSelection(); if (s) s.removeAllRanges();
+    // Escape exits fullscreen at the browser level and cannot be cancelled, so
+    // when it was used to leave the enlarged text, put fullscreen back. The
+    // keypress is a user gesture, which is what requestFullscreen needs.
+    if (wasFs) {
+      // q does not drop fullscreen, so this is usually a no-op; it only fires
+      // when Escape was the key.
+      setTimeout(function () {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+          var el = document.documentElement;
+          try { (el.requestFullscreen || el.webkitRequestFullscreen).call(el); }
+          catch (err) {}
+        }
+      }, 0);
+    }
   }
   document.getElementById('tz-close').onclick = closeZoom;
   zoom.addEventListener('mouseup', function (e) {
@@ -447,15 +504,27 @@ JS = r"""
   // --- keys ----------------------------------------------------------------
   document.addEventListener('keydown', function (e) {
     if (e.target.tagName === 'SELECT') return;
-    if (e.key === 'Escape' && zoom.classList.contains('open')) { closeZoom(); e.preventDefault(); return; }
-    if (e.key === 'x' && zoom.classList.contains('open')) { closeZoom(); e.preventDefault(); return; }
-    if (zoom.classList.contains('open')) return;
+    // Cmd/Ctrl/Alt combinations belong to the browser and the OS. Without this
+    // guard Cmd+C matched the plain `c` shortcut and opened the chapter pane
+    // every time anyone copied.
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (zoom.classList.contains('open')) {
+      // q first: Escape exits fullscreen at the browser level and cannot be
+      // cancelled, so it needs the restore dance below. q needs nothing.
+      if (e.key === 'q' || e.key === 'x' || e.key === 'Escape') {
+        closeZoom(); e.preventDefault();
+      }
+      return;                       // nothing else reaches the page while zoomed
+    }
     var i = SPEEDS.indexOf(state.speed);
     if (e.key === '+' || e.key === '=') { setSpeed(SPEEDS[Math.min(SPEEDS.length - 1, i + 1)]); e.preventDefault(); }
     else if (e.key === '-' || e.key === '_') { setSpeed(SPEEDS[Math.max(0, i - 1)]); e.preventDefault(); }
     else if (e.key === 'n') { document.getElementById('tb-next').click(); e.preventDefault(); }
     else if (e.key === 'p') { document.getElementById('tb-prev').click(); e.preventDefault(); }
     else if (e.key === 'c') { paneBtn.click(); e.preventDefault(); }
+    else if (e.key === 'y') {          // yank the selection, vim-style
+      if (String(window.getSelection() || '').trim()) { copySelected(); e.preventDefault(); }
+    }
     else if (e.key === 'f') { document.getElementById('tb-fs').click(); e.preventDefault(); }
   });
 })();
