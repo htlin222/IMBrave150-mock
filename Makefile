@@ -1,6 +1,6 @@
 PY := .venv/bin/python
 
-.PHONY: setup data analyze figure docs check-docs reference-run clean
+.PHONY: setup data analyze figure docs check-docs reference-run screenshots clean
 
 setup:                ## create venv and install dependencies (uv)
 	uv venv .venv --python 3.12
@@ -26,6 +26,9 @@ docs:                 ## regenerate docs/PROMPTS.md and docs/FILE-TREE.md
 check-docs:           ## fail if the generated docs are stale (what CI runs)
 	python3 scripts/extract_prompts.py --check
 	python3 scripts/gen_file_tree.py --check
+
+screenshots:          ## regenerate docs/img/ (needs Chrome; frames come from walk.cast)
+	$(PY) scripts/make_screenshots.py
 
 reference-run:        ## snapshot a finished live-demo run for others to diff against
 	python3 scripts/make_reference_run.py

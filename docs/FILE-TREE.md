@@ -89,6 +89,14 @@ because otherwise this map does not match the directory you are looking at.
 | `│   ├── index.html` | the animated HTML deck (predates the recording) |
 | `│   └── README.md` | how to open and present it |
 | `├── docs/` | |
+| `│   ├── img/` | |
+| `│   │   ├── forest.png` | the subgroup forest plot from the reference run |
+| `│   │   ├── km-os.png` | matched-cohort survival curves from the reference run |
+| `│   │   ├── multiverse.png` | the 120-specification curve from the reference run |
+| `│   │   ├── recording-baseline.png` | real frame of the session at 9:20 — the baseline comparison |
+| `│   │   ├── recording-prompt.png` | real frame at 6:18 — a prompt as it is submitted |
+| `│   │   ├── recording-reasoning.png` | real frame at 17:55 — why IPTW and Cox disagree |
+| `│   │   └── social-preview.png` | the repo card, 1280×640 — upload it under Settings → Social preview |
 | `│   ├── FILE-TREE.md` | this file |
 | `│   ├── PIPELINE.md` | what consumes what, and what it produces |
 | `│   └── PROMPTS.md` | **the prompt list** — generated from the recorders |
@@ -118,7 +126,8 @@ because otherwise this map does not match the directory you are looking at.
 | `│   ├── gen_file_tree.py` | regenerates `docs/FILE-TREE.md` |
 | `│   ├── make-live-demo-bundle.sh` | the student download bundle |
 | `│   ├── make-slides-bundle.sh` | the offline presenter zip |
-| `│   └── make_reference_run.py` | snapshots a finished run into `live-demo/reference-run/` |
+| `│   ├── make_reference_run.py` | snapshots a finished run into `live-demo/reference-run/` |
+| `│   └── make_screenshots.py` | regenerates `docs/img/` — real frames of the recording, and the repo card |
 | `├── slides/` | |
 | `│   ├── cast/` | |
 | `│   │   ├── chapters.tsv` | chapter titles |
@@ -194,4 +203,4 @@ because otherwise this map does not match the directory you are looking at.
 
 ---
 
-167 tracked files. Regenerate with `python3 scripts/gen_file_tree.py`.
+175 tracked files. Regenerate with `python3 scripts/gen_file_tree.py`.

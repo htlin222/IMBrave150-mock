@@ -65,6 +65,13 @@ NOTES: dict[str, str] = {
     "docs/PROMPTS.md": "**the prompt list** — generated from the recorders",
     "docs/PIPELINE.md": "what consumes what, and what it produces",
     "docs/FILE-TREE.md": "this file",
+    "docs/img/social-preview.png": "the repo card, 1280×640 — upload it under Settings → Social preview",
+    "docs/img/recording-baseline.png": "real frame of the session at 9:20 — the baseline comparison",
+    "docs/img/recording-prompt.png": "real frame at 6:18 — a prompt as it is submitted",
+    "docs/img/recording-reasoning.png": "real frame at 17:55 — why IPTW and Cox disagree",
+    "docs/img/km-os.png": "matched-cohort survival curves from the reference run",
+    "docs/img/multiverse.png": "the 120-specification curve from the reference run",
+    "docs/img/forest.png": "the subgroup forest plot from the reference run",
 
     # --- the guided course ----------------------------------------------
     "live-demo/README.md": "**agent entry point** — pacing protocol, hard constraints, chapter index",
@@ -126,6 +133,7 @@ NOTES: dict[str, str] = {
     "scripts/extract_prompts.py": "regenerates `docs/PROMPTS.md` from the recorders",
     "scripts/gen_file_tree.py": "regenerates `docs/FILE-TREE.md`",
     "scripts/make_reference_run.py": "snapshots a finished run into `live-demo/reference-run/`",
+    "scripts/make_screenshots.py": "regenerates `docs/img/` — real frames of the recording, and the repo card",
     "scripts/make-live-demo-bundle.sh": "the student download bundle",
     "scripts/make-slides-bundle.sh": "the offline presenter zip",
     "scripts/bundle-START-HERE.md": "the first thing in that bundle",

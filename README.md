@@ -15,6 +15,12 @@ published trial.
 > statistical models tuned to the published summaries — use for teaching only,
 > never for clinical or research claims about the actual drugs.
 
+[![The recorded session: a covariate-by-covariate baseline comparison, asked for in one plain-English sentence](docs/img/recording-baseline.png)](https://imbrave150-talk.pages.dev/talk)
+
+<sup>A real frame of the recorded session, 9:20 in. The sentence that produced
+that table is still in the composer at the bottom. **[Play the whole
+thing →](https://imbrave150-talk.pages.dev/talk)**</sup>
+
 ## Watch it · 看
 
 Everything below is one study — ten messy hospital exports turned into a
@@ -89,6 +95,15 @@ it found, and stops. You say `next`. Thirty-two times, and you have a preprint.
 
 If you would rather skip the agent entirely, `make data && make analyze` runs
 the reference implementations in about a minute.
+
+| | |
+|---|---|
+| ![Kaplan–Meier overall survival in the matched cohort, hazard ratio 0.578](docs/img/km-os.png) | ![Specification curve: 120 analyses, none crossing a hazard ratio of 1.0](docs/img/multiverse.png) |
+| The matched estimate — the one that lands on the published 0.58. | All 120 alternative analyses. The conclusion does not depend on which one you pick. |
+
+Both came out of the run in
+[`live-demo/reference-run/`](live-demo/reference-run/), not out of the
+reference scripts.
 
 **Your numbers will not match to the last digit, and should not.** An agent
 writes its own analysis code, and two runs make different defensible choices.
